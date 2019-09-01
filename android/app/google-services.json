@@ -1,0 +1,103 @@
+{
+  "project_info": {
+    "project_number": "342129083929",
+    "firebase_url": "https://homecare-f7c5b.firebaseio.com",
+    "project_id": "homecare-f7c5b",
+    "storage_bucket": "homecare-f7c5b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342129083929:android:e531c6c6b0acad05",
+        "android_client_info": {
+          "package_name": "com.afacar.evdebakim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "342129083929-j3tgim6aa0kvkbnprd2s0vqpsf4f4klo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.afacar.evdebakim",
+            "certificate_hash": "c2df4c094f4031f4bfb92f61be589ee66ed66723"
+          }
+        },
+        {
+          "client_id": "342129083929-q0pq066p7908517o368a6aahfus1qd6k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.afacar.evdebakim",
+            "certificate_hash": "cfa04f44f5a7f9127d036c5dc20b4d43a243f748"
+          }
+        },
+        {
+          "client_id": "342129083929-obe2456ks1nd78e8d5fmile0610a6tqp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.afacar.evdebakim",
+            "certificate_hash": "16435b6584bb84ceb61e74131a83fa6c9fc493c2"
+          }
+        },
+        {
+          "client_id": "342129083929-6orm8q5k208qjgmauc004un38t4s42cl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.afacar.evdebakim",
+            "certificate_hash": "17a7eb156782c3a5d16a09d3561c5b826ab92ba7"
+          }
+        },
+        {
+          "client_id": "342129083929-6hetrra5b5kac4lbdmk5of7gp93k7ph0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.afacar.evdebakim",
+            "certificate_hash": "5c409c0cbb803c6b787bd30357e038cf9536ac5e"
+          }
+        },
+        {
+          "client_id": "342129083929-mtcs6gtt9b9405pdouh7s4p29rleqq5d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.afacar.evdebakim",
+            "certificate_hash": "4feb91c6d57cb04998959a43d394677ddb2eb676"
+          }
+        },
+        {
+          "client_id": "342129083929-n57dl0574a4ri2omhuchqssgvfthnsre.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.afacar.evdebakim",
+            "certificate_hash": "20bd6aae7c767e40d228601c1d2f2aa06d873544"
+          }
+        },
+        {
+          "client_id": "342129083929-rbq9ebbkk3shouroe0gljqed6jr6t5jo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFlxCCwZRAnCWv0oTBHq80dGB04Si2GyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "342129083929-rbq9ebbkk3shouroe0gljqed6jr6t5jo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "342129083929-tce52cfh08foutp5b4r72701j47pu2ru.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.afacar.evdebakim"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
