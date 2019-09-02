@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "384797318674-ee6k7tpcsmcutvhp6ndc1m6jqa5gf8gc.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.afacar.consultme",
-            "certificate_hash": "5c409c0cbb803c6b787bd30357e038cf9536ac5e"
-          }
-        },
-        {
           "client_id": "384797318674-8darev5lr4j7n5cuo6pnh2p13tl2pvhh.apps.googleusercontent.com",
           "client_type": 3
         }
