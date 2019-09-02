@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from 'react-native-elements';
 
-export default LoginIcon = (props) => {
+export const LoginIcon = (props) => {
   return (
     <Icon
       type='material-community'

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-import LoginIcon from '../components/common/Icons';
+import {LoginIcon} from '../components/common/Icons';
+import { Button } from 'react-native-elements';
 
 class ConsultantListScreen extends Component {
 
     static navigationOptions = ({ navigation }) => ({
-        title: `Consultants`,
+        title: `Danışman listesi`,
         headerTitleStyle: { textAlign: 'center', alignSelf: 'center' },
         headerStyle: {
             backgroundColor: 'white',
@@ -14,11 +15,13 @@ class ConsultantListScreen extends Component {
 
         headerRight: (
             <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
                     <View style={{ flexDirection: 'row', alignSelf: 'flex-end', alignItems: 'center', marginRight: 10 }}>
-                        <LoginIcon size={24}/>
+                        <Button 
+                        onPress={() => navigation.navigate('LoginScreen')}
+                        type='clear'
+                        icon={<LoginIcon size={24} /> }
+                        />
                     </View>
-                </TouchableOpacity>
             </View>
         )
     });
