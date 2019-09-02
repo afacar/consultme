@@ -21,7 +21,7 @@ class HomeScreen extends Component {
                             name='settings-outline' />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('ConsulterListScreen')}>
+                <TouchableOpacity onPress={() => navigation.navigate('ConsultantListScreen')}>
                     <View style={{ flexDirection: 'row', alignSelf: 'flex-end', alignItems: 'center', marginRight: 10 }}>
                         <Icon
                             type='material-community'

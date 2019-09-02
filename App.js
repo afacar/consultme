@@ -1,69 +1,30 @@
 
+import React from 'react';
 
-import React, { Fragment } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
+import { Provider } from 'react-redux';
 import AppNavigator from './src/navigation/AppNavigator';
 
-const App = () => {
-  return (
-      <AppNavigator />
-  );
-};
+import store from './src/appstate/store';
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-    flex: 1
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+import firebase from 'react-native-firebase';
+
+const App = () => {
+  var firebaseConfig = {
+    apiKey: "AIzaSyDA_ZyUXiOgD_xiici7mblZKOhuz-wNP3E",
+    authDomain: "consultme-cb5ad.firebaseapp.com",
+    databaseURL: "https://consultme-cb5ad.firebaseio.com",
+    projectId: "consultme-cb5ad",
+    storageBucket: "consultme-cb5ad.appspot.com",
+    messagingSenderId: "384797318674",
+    appId: "1:384797318674:web:88fd84a89629934f"
+  };
+  // Initialize Firebase
+  if (!firebase.apps.length)
+    firebase.initializeApp(firebaseConfig)
+  return (
+    <Provider store={store} >
+      <AppNavigator />
+    </Provider>);
+};
 
 export default App;

@@ -1,4 +1,4 @@
-package com.consultme;
+package com.afacar.consultme;
 
 import com.facebook.react.ReactActivity;
 

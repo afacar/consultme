@@ -7,8 +7,8 @@ import FirstTimeNavigator from './FirstTimeNavigator';
 const AppNavigator = createSwitchNavigator({
 
     SplashScreen,
+    FirstTimeNavigator,
     MainNavigator,
-    FirstTimeNavigator
 },
     {
         initialRouteName: 'SplashScreen'

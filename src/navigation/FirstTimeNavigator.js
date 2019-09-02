@@ -1,13 +1,13 @@
 import { createStackNavigator } from 'react-navigation';
 
 import LoginScreen from '../screens/LoginScreen';
-import ConsulterListScreen from '../screens/ConsulterListScreen';
+import ConsultantListScreen from '../screens/ConsultantListScreen';
 
 
 export default MainNavigator = createStackNavigator({
-    ConsulterListScreen,
+    ConsultantListScreen,
     LoginScreen
 }, {
-        initialRouteName: 'ConsulterListScreen'
+        initialRouteName: 'ConsultantListScreen'
     }
 );
