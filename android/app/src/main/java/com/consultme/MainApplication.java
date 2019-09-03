@@ -8,7 +8,9 @@ import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.ReactApplication;
 import io.invertase.firebase.RNFirebasePackage;
-import io.invertase.firebase.auth.RNFirebaseAuthPackage; // <-- Add this line
+import io.invertase.firebase.auth.RNFirebaseAuthPackage; 
+import io.invertase.firebase.storage.RNFirebaseStoragePackage; 
+import io.invertase.firebase.database.RNFirebaseDatabasePackage; 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -30,7 +32,9 @@ public class MainApplication extends Application implements ReactApplication {
       List<ReactPackage> packages = new PackageList(this).getPackages();
       // Packages that cannot be autolinked yet can be added manually here, for example:
       // packages.add(new MyReactNativePackage());
+      packages.add(new RNFirebaseStoragePackage());
       packages.add(new RNFirebaseAuthPackage());
+      packages.add(new RNFirebaseDatabasePackage()); 
       return packages;
     }
 
