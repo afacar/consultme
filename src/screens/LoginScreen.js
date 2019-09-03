@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Alert, ActivityIndicator } from 'react-native';
 
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import * as actions from '../appstate/actions';
 
-
+import * as Styles from '../Constants/Styles'
 import { LoginPhoneNumberComponent, NameComponent, ProfileEmptyPictureComponent, ProfilePictureChosenComponent, PhoneNumberVerificationComponent } from '../components/common';
 class LoginScreen extends Component {
 
@@ -17,7 +17,7 @@ class LoginScreen extends Component {
             backgroundColor: 'white',
         },
     });
-
+    unsubscribe = null;
     state = {
         phoneNumberEntered: false,
         profile: {
@@ -32,6 +32,7 @@ class LoginScreen extends Component {
         nameEntered: false,
         numberEntered: false,
         picChosen: false,
+        completedRegistration: false,
         loading: false,
     }
 
@@ -39,6 +40,8 @@ class LoginScreen extends Component {
 
     componentDidMount() {
         this._isMounted = true
+        this.unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+        });
     }
 
     renderMessage() {
@@ -47,42 +50,49 @@ class LoginScreen extends Component {
         if (!message.length) return null;
 
         return (
-            <Text style={{ padding: 5, backgroundColor: '#000', color: '#fff' }}>{message}</Text>
+            <Text style={{ padding: 5, color: 'red' }}>{message}</Text>
         );
     }
 
-    finishUserCreation = () => {
-        this.props.createNewUserProfile(this.state.profile);
+    finishUserCreation = async () => {
+        this._isMounted && this.setState({
+            loading:true
+        })
+        await this.props.createNewUserProfile(this.state.profile);
+        this.setState({
+            completedRegistration: true,
+            loading: false,
+        })
+        this.props.navigation.navigate('SplashScreen');
     }
 
     signIn = async () => {
         console.log("Number ", number)
         const { number } = this.state.profile;
-        this.setState({ disabled: true })
+        this.setState({ disabled: true , loading: true})
         this.setState({ message: 'Kod SMS ile yollanıyor ...' });
         firebase.auth().signInWithPhoneNumber(number)
             .then(confirmResult => {
-                this._isMounted && this.setState({ confirmResult, message: 'Kod yollandı!' })
+                this._isMounted && this.setState({ confirmResult, loading: false, phoneNumberEntered: true, message: ''})
             })
-            .catch(error => this.setState({ message: `Telefon numarası Hata mesajı: ${error.message}` }));
+            .catch(error => this.setState({ message: `Telefon numarası Hata mesajı: ${error.message}`, loading: false }));
     };
 
     onNameChanged = (name) => {
-        console.log("name", name)
         this.setState({
+            message: '',
             profile: { ...this.state.profile, name: name }
         })
     }
 
     onNumberChanged = (number) => {
-        console.log("Number", number)
         this.setState({
+            message: '',
             profile: { ...this.state.profile, number: number }
         })
     }
 
     validateName = () => {
-        console.log("VN")
         this.setState({
             loading: true
         })
@@ -91,25 +101,48 @@ class LoginScreen extends Component {
                 loading: false,
                 nameEntered: true
             })
+        }else {
+            this._isMounted &&
+            this.setState({
+                loading: false,
+                message: 'İsim boş bırakılamaz'
+            })
         }
     }
 
     verifyPhoneNumber = () => {
-        this.setState({
-            phoneNumberVerified: true,
-        })
+        const { verificationCode, confirmResult } = this.state;
+        this._isMounted && this.setState({loading: true})
+        if (confirmResult && verificationCode.length) {
+            confirmResult.confirm(verificationCode)
+                .then(() => {
+                    this._isMounted && this.setState({
+                        phoneNumberVerified: true,
+                        loading: false,
+                        message: ''
+                    })
+                })
+                .catch(error => {
+                    this.setState({ message: `Hatalı kod mesajı: ${error.message}` })
+                });
+        }else {
+            this.setState({ message: 'Doğrulama kodu boş bırakılamaz'})
+        }
     }
 
     onVerificationCodeChanged = (number) => {
         this.setState({
+            message: '',
             verificationCode: number,
         })
     }
 
     confirmNumber = () => {
         const { number } = this.state.profile;
-        if (number.length < 10) {
-            this.setState({ message: 'Geçerli bir numara giriniz...' });
+        if (number.length == 0)
+            this.setState({ message: 'Numara boş bırakılamaz' });
+        else if (number.length < 10) {
+            this.setState({ message: 'Geçerli bir numara giriniz ' });
         } else {
             Alert.alert('Aşağıda girmiş olduğunuz telefon numarasını onaylayacağız.', `${this.state.profile.number}` + '\n Numaranızı onaylıyor musunuz?',
                 [
@@ -127,21 +160,25 @@ class LoginScreen extends Component {
 
     renderLoginComponent = () => {
         if (!this.state.phoneNumberEntered) {
-            return <LoginPhoneNumberComponent phoneNumber={this.state.profile.number} onNumberChanged={this.onNumberChanged} onNextPressed={this.confirmNumber} />
+            return <LoginPhoneNumberComponent phoneNumber={this.state.profile.number} onNumberChanged={this.onNumberChanged} disabled={this.state.loading} onNextPressed={this.confirmNumber} />
         } else if (!this.state.phoneNumberVerified && this.state.phoneNumberEntered) {
-            return <PhoneNumberVerificationComponent verificationCode={this.state.verificationCode} onNextPressed={this.verifyPhoneNumber} onVerificationCodeChanged={this.onVerificationCodeChanged} />
+            return <PhoneNumberVerificationComponent verificationCode={this.state.verificationCode} onNextPressed={this.verifyPhoneNumber} disabled={this.state.loading} onVerificationCodeChanged={this.onVerificationCodeChanged} />
         }
         else if (this.state.phoneNumberVerified && !this.state.nameEntered) {
-            return <NameComponent name={this.state.profile.name} onNameChanged={this.onNameChanged} onNextPressed={this.validateName} />
+            return <NameComponent name={this.state.profile.name} disabled={this.state.loading} onNameChanged={this.onNameChanged} onNextPressed={this.validateName} />
         }
         else if (!this.state.picChosen) {
-            return <ProfileEmptyPictureComponent avatarPressed={this.openPicker} onNextPressed={this.finishUserCreation} />
+            return <ProfileEmptyPictureComponent avatarPressed={this.openPicker} disabled={this.state.loading} onNextPressed={this.finishUserCreation} />
         } else if (this.state.picChosen) {
-            return <ProfilePictureChosenComponent uri={this.state.profile.photoURL} avatarPressed={this.openPicker} onNextPressed={this.finishUserCreation}/>
+            return <ProfilePictureChosenComponent uri={this.state.profile.photoURL} disabled={this.state.loading} avatarPressed={this.openPicker} onNextPressed={this.finishUserCreation} />
         }
     }
 
-
+    renderLoading = () => {
+        if ( this.state.loading ){
+            return <ActivityIndicator size='large' style={Styles.loader} />
+        } 
+    }
 
 
     render() {
@@ -149,6 +186,7 @@ class LoginScreen extends Component {
             <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
                 {this.renderLoginComponent()}
                 {this.renderMessage()}
+                {this.renderLoading()}
                 {/* <Text>
                     Consult Me telefon numaranızı doğrulamanız için size kod gönderecektir. Lütfen, numaranızı girin.
                 </Text>
@@ -166,14 +204,16 @@ class LoginScreen extends Component {
     }
 
     openPicker = () => {
-        console.log("Picker requested")
-        // More info on all the options is below in the API Reference... just some common use cases shown here
         const options = {
-            title: 'Fotoğraf Seç',
+            title: 'Fotoğraf Yükle',
+            chooseFromLibraryButtonTitle: 'Fotoğraflarımdan seç',
+            takePhotoButtonTitle: 'Kamerayı aç',
+            mediaType: 'photo',
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
                 allowsEditing: true,
+                cameraRoll: true
             },
         };
 
@@ -203,7 +243,6 @@ class LoginScreen extends Component {
 
     handleState = (newState) => {
         this.setState(prevState => {
-            console.log('handleState prevState and newState', prevState, newState);
             let profile = prevState.profile;
             for (var key in newState) {
                 if (newState.hasOwnProperty(key)) {
@@ -216,7 +255,6 @@ class LoginScreen extends Component {
                 }
                 prevState.profile = profile;
                 prevState.picChosen = true;
-                console.log('handleState new prevState', prevState);
                 return prevState;
             }
         });
@@ -224,6 +262,9 @@ class LoginScreen extends Component {
 
     componentWillUnmount() {
         this._isMounted = false;
+        if (!this.state.completedRegistration)
+            firebase.auth().signOut();
+        if ( this.unsubscribe) this.unsubscribe();
     }
 }
 

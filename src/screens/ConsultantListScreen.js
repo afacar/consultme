@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-import {LoginIcon} from '../components/common/Icons';
+import { LoginIcon } from '../components/common/Icons';
 import { Button } from 'react-native-elements';
+import * as actions from '../appstate/actions/auth_actions'
+import { connect } from 'react-redux'
 
 class ConsultantListScreen extends Component {
 
@@ -14,20 +16,35 @@ class ConsultantListScreen extends Component {
         },
 
         headerRight: (
-            <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                    <View style={{ flexDirection: 'row', alignSelf: 'flex-end', alignItems: 'center', marginRight: 10 }}>
-                        <Button 
-                        onPress={() => navigation.navigate('LoginScreen')}
-                        type='clear'
-                        icon={<LoginIcon size={24} /> }
-                        />
+            // navigation.state.params.user ?
+                // (
+                    <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignSelf: 'flex-end', alignItems: 'center', marginRight: 10 }}>
+                            <Button
+                                onPress={() => navigation.navigate('LoginScreen')}
+                                type='clear'
+                                icon={<LoginIcon size={24} />}
+                                />
+                        </View>
                     </View>
-            </View>
+                // )
+                // :
+                // (
+                //     <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                //         <View style={{ flexDirection: 'row', alignSelf: 'flex-end', alignItems: 'center', marginRight: 10 }}>
+                //             <Button
+                //                 onPress={() => navigation.navigate('LoginScreen')}
+                //                 type='clear'
+                //                 title={'Arama butonu'}
+                //             />
+                //             />
+                //         </View>
+                //     </View>
+                // )
         )
     });
 
     componentDidMount() {
-        console.log("ConsultantListScreen mounted");
     }
     render() {
         return (
@@ -38,4 +55,11 @@ class ConsultantListScreen extends Component {
     }
 }
 
-export default ConsultantListScreen;
+const mapStateToProps = ({ auth }) => {
+    console.log("auth", auth)
+    const { user } = auth
+    console.log("User", user);
+    return user
+}
+
+export default connect(mapStateToProps, actions)(ConsultantListScreen);

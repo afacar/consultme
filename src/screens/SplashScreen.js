@@ -11,15 +11,21 @@ class SplashScreen extends Component {
 
     componentDidMount() {
         const firebaseUser = firebase.auth().currentUser;
-        var user = null;
+        var user = {
+            name: '',
+            number: '',
+            photo: '',
+        };
         if (firebaseUser) {
+            console.log("FU", firebaseUser)
             user.name = firebaseUser.displayName;
             user.number = firebaseUser.phoneNumber;
             user.photo = firebaseUser.photoURL;
         }
         this.props.saveUser(user);
-        if (user) {
+        if (user.name) {
             console.log('user found')
+            this.props.navigation.setParams('user', user)
             this.props.navigation.navigate('HomeScreen');
         }
         else {
@@ -35,10 +41,6 @@ class SplashScreen extends Component {
             </View>
         )
     }
-}
-
-const mapStateToProps = ({ auth }) => {
-    return {}
 }
 
 export default connect(null, actions)(SplashScreen);
