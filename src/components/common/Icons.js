@@ -8,7 +8,7 @@ export const LoginIcon = (props) => {
       name='login'
       onPress={props.onPress || null}
       size={props.size || 33}
-      color={props.color || 'green'}
+      color={props.disabled ? 'grey'  : props.color ||'green'}
       containerStyle={[props.containerStyle, { alignSelf: 'center', paddingRight: 10 }]}
     />
   );
