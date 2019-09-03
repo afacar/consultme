@@ -41,6 +41,13 @@ class LoginScreen extends Component {
     componentDidMount() {
         this._isMounted = true
         this.unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                this._isMounted && this.setState({
+                    phoneNumberVerified: true,
+                    loading: false,
+                    message: ''
+                });
+            }
         });
     }
 
@@ -56,7 +63,7 @@ class LoginScreen extends Component {
 
     finishUserCreation = async () => {
         this._isMounted && this.setState({
-            loading:true
+            loading: true
         })
         await this.props.createNewUserProfile(this.state.profile);
         this.setState({
@@ -69,11 +76,11 @@ class LoginScreen extends Component {
     signIn = async () => {
         console.log("Number ", number)
         const { number } = this.state.profile;
-        this.setState({ disabled: true , loading: true})
+        this.setState({ disabled: true, loading: true })
         this.setState({ message: 'Kod SMS ile yollanıyor ...' });
         firebase.auth().signInWithPhoneNumber(number)
             .then(confirmResult => {
-                this._isMounted && this.setState({ confirmResult, loading: false, phoneNumberEntered: true, message: ''})
+                this._isMounted && this.setState({ confirmResult, loading: false, phoneNumberEntered: true, message: '' })
             })
             .catch(error => this.setState({ message: `Telefon numarası Hata mesajı: ${error.message}`, loading: false }));
     };
@@ -101,18 +108,18 @@ class LoginScreen extends Component {
                 loading: false,
                 nameEntered: true
             })
-        }else {
+        } else {
             this._isMounted &&
-            this.setState({
-                loading: false,
-                message: 'İsim boş bırakılamaz'
-            })
+                this.setState({
+                    loading: false,
+                    message: 'İsim boş bırakılamaz'
+                })
         }
     }
 
     verifyPhoneNumber = () => {
         const { verificationCode, confirmResult } = this.state;
-        this._isMounted && this.setState({loading: true})
+        this._isMounted && this.setState({ loading: true })
         if (confirmResult && verificationCode.length) {
             confirmResult.confirm(verificationCode)
                 .then(() => {
@@ -123,10 +130,10 @@ class LoginScreen extends Component {
                     })
                 })
                 .catch(error => {
-                    this.setState({ message: `Hatalı kod mesajı: ${error.message}` })
+                    this.setState({ message: `Hatalı kod mesajı: ${error.message}`, loading: false })
                 });
-        }else {
-            this.setState({ message: 'Doğrulama kodu boş bırakılamaz'})
+        } else {
+            this.setState({ message: 'Doğrulama kodu boş bırakılamaz' })
         }
     }
 
@@ -175,9 +182,9 @@ class LoginScreen extends Component {
     }
 
     renderLoading = () => {
-        if ( this.state.loading ){
+        if (this.state.loading) {
             return <ActivityIndicator size='large' style={Styles.loader} />
-        } 
+        }
     }
 
 
@@ -264,7 +271,7 @@ class LoginScreen extends Component {
         this._isMounted = false;
         if (!this.state.completedRegistration)
             firebase.auth().signOut();
-        if ( this.unsubscribe) this.unsubscribe();
+        if (this.unsubscribe) this.unsubscribe();
     }
 }
 

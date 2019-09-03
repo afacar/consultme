@@ -3,14 +3,21 @@ import { View, Text } from 'react-native';
 
 class SettingsScreen extends Component {
 
+    static navigationOptions = ({ navigation }) => ({
+        title: `Ayarlar`,
+        headerTitleStyle: { textAlign: 'center', alignSelf: 'center' },
+        headerStyle: {
+            backgroundColor: 'white',
+        },
+    });
 
     componentDidMount() {
-        console.log("SplashScreen mounted");
+        console.log("SettingsScreen mounted");
     }
 
     render() {
         return (
-            <View style={{flex: 1, justifyContent: 'center'}}>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
                 <Text>SettingsScreen</Text>
             </View>
         )

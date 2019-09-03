@@ -48,6 +48,7 @@ export class PhoneNumberVerificationComponent extends Component {
                         style={{ flex: 2 }}
                         key='phone_number'
                         label='Kodu girin'
+                        autoFocus={true}
                         placeholder='123456'
                         onChangeText={(value) => { this.props.onVerificationCodeChanged(value) }}
                         value={this.props.verificationCode || ''}
