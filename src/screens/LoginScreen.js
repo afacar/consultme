@@ -62,15 +62,30 @@ class LoginScreen extends Component {
     }
 
     finishUserCreation = async () => {
-        this._isMounted && this.setState({
+        
+        this.setState({
             loading: true
         })
+        if (this.state.profile.name) {
+            this.setState({
+                loading: false,
+                nameEntered: true
+            })
+        } else {
+            this._isMounted &&
+                this.setState({
+                    loading: false,
+                    message: 'İsim boş bırakılamaz'
+                })
+        }
+        
         await this.props.createNewUserProfile(this.state.profile);
         this.setState({
             completedRegistration: true,
             loading: false,
         })
         this.props.navigation.navigate('SplashScreen');
+        
     }
 
     signIn = async () => {
@@ -97,24 +112,6 @@ class LoginScreen extends Component {
             message: '',
             profile: { ...this.state.profile, number: number }
         })
-    }
-
-    validateName = () => {
-        this.setState({
-            loading: true
-        })
-        if (this.state.profile.name) {
-            this.setState({
-                loading: false,
-                nameEntered: true
-            })
-        } else {
-            this._isMounted &&
-                this.setState({
-                    loading: false,
-                    message: 'İsim boş bırakılamaz'
-                })
-        }
     }
 
     verifyPhoneNumber = () => {
@@ -166,19 +163,18 @@ class LoginScreen extends Component {
     }
 
     renderLoginComponent = () => {
-        if (!this.state.phoneNumberEntered) {
-            return <LoginPhoneNumberComponent phoneNumber={this.state.profile.number} onNumberChanged={this.onNumberChanged} disabled={this.state.loading} onNextPressed={this.confirmNumber} />
-        } else if (!this.state.phoneNumberVerified && this.state.phoneNumberEntered) {
-            return <PhoneNumberVerificationComponent verificationCode={this.state.verificationCode} onNextPressed={this.verifyPhoneNumber} disabled={this.state.loading} onVerificationCodeChanged={this.onVerificationCodeChanged} />
-        }
-        else if (this.state.phoneNumberVerified && !this.state.nameEntered) {
-            return <NameComponent name={this.state.profile.name} disabled={this.state.loading} onNameChanged={this.onNameChanged} onNextPressed={this.validateName} />
-        }
-        else if (!this.state.picChosen) {
-            return <ProfileEmptyPictureComponent avatarPressed={this.openPicker} disabled={this.state.loading} onNextPressed={this.finishUserCreation} />
-        } else if (this.state.picChosen) {
-            return <ProfilePictureChosenComponent uri={this.state.profile.photoURL} disabled={this.state.loading} avatarPressed={this.openPicker} onNextPressed={this.finishUserCreation} />
-        }
+      //  if (!this.state.phoneNumberEntered) {
+       //     return <LoginPhoneNumberComponent phoneNumber={this.state.profile.number} onNumberChanged={this.onNumberChanged} disabled={this.state.loading} onNextPressed={this.confirmNumber} />
+      //  } else if (!this.state.phoneNumberVerified && this.state.phoneNumberEntered) {
+      //     return <PhoneNumberVerificationComponent verificationCode={this.state.verificationCode} onNextPressed={this.verifyPhoneNumber} disabled={this.state.loading} onVerificationCodeChanged={this.onVerificationCodeChanged} />
+      //  }
+      //  else if (this.state.phoneNumberVerified && !this.state.nameEntered) {
+      //  }
+      //  else if (!this.state.picChosen) {
+            return <ProfileEmptyPictureComponent name={this.state.profile.name} onNameChanged={this.onNameChanged} avatarPressed={this.openPicker} disabled={this.state.loading} onNextPressed={this.finishUserCreation}  />
+      //  } else if (this.state.picChosen) {
+      //      return <ProfilePictureChosenComponent name={this.state.profile.name} onNameChanged={this.onNameChanged} uri={this.state.profile.photoURL} disabled={this.state.loading} avatarPressed={this.openPicker} onNextPressed={this.finishUserCreation} />
+       // }
     }
 
     renderLoading = () => {
@@ -194,18 +190,6 @@ class LoginScreen extends Component {
                 {this.renderLoginComponent()}
                 {this.renderMessage()}
                 {this.renderLoading()}
-                {/* <Text>
-                    Consult Me telefon numaranızı doğrulamanız için size kod gönderecektir. Lütfen, numaranızı girin.
-                </Text>
-                <CardItem>
-                    <Input
-                        key='phone_number'
-                        label='Numaranızı girin'
-                        placeholder='+90 535 ...'
-                        onChangeText={value => this.setState({ phoneNumber: value })}
-                        value={this.state.phoneNumber}
-                    />
-                </CardItem> */}
             </View>
         )
     }
