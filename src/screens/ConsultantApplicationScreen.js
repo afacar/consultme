@@ -128,7 +128,8 @@ class ConsultantApplicationScreen extends Component {
                     interest,
                     address,
                     subBranch,
-                    subscriptionPrice
+                    subscriptionPrice,
+                    type:'subscription'
                 }
                 this.setState({
                     disabled: true,
@@ -162,7 +163,8 @@ class ConsultantApplicationScreen extends Component {
                     address,
                     textPrice,
                     audioPrice,
-                    videoPrice
+                    videoPrice,
+                    type:'session'
                 }
                 this.setState({
                     disabled: true,
