@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { CardItem } from './CardItem';
 import { Input, Button, Avatar, Card, Icon } from 'react-native-elements';
 import { LoginIcon, VerifyIcon, NextIcon } from '../common/Icons';
@@ -121,7 +121,7 @@ export class ProfileEmptyPictureComponent extends Component {
                         showEditButton={true}
                     />
                 </View>
-                <View style={styles.container}>
+                <View style={{ alignItems: 'center', flexDirection: 'column' }}>
                     <Input
                         style={{ flex: 2 }}
                         key='name'
@@ -161,7 +161,7 @@ export class ProfilePictureChosenComponent extends Component {
                         rounded={true}
                         source={{ uri: this.props.uri }}
                     />
-                    <View style={styles.container}>
+                    <View style={{ alignItems: 'center', flexDirection: 'column' }}>
                         <Input
                             style={{ flex: 2 }}
                             key='name'
@@ -175,8 +175,11 @@ export class ProfilePictureChosenComponent extends Component {
                             type='clear'
                             disabled={this.props.disabled || false}
                             onPress={() => { this.props.onNextPressed() }}
-                            icon={<VerifyIcon size={24} disabled={this.props.disabled} />}
+                            title='Kayıt işlemini tamamla'
                         />
+                        <TouchableOpacity onPress={() => { this.props.onTextPressed() }}>
+                            <Text style={{ fontSize: 18, color: 'green' }}>Danışmak olmak için buraya tıklayınız.</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>

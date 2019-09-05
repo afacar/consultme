@@ -144,7 +144,7 @@ class ConsultantApplicationScreen extends Component {
         } else if (sessionOpened) {
             const { textPrice, audioPrice, videoPrice } = this.state;
             if (!textPrice) {
-                this.setState({ errorMessage: 'Abonelik ücreti boş bıraklamaz' })
+                this.setState({ errorMessage: 'Mesaj ücreti boş bıraklamaz' })
             } else if (!videoPrice) {
                 this.setState({ errorMessage: 'Görüntülü arama ücreti boş bıraklamaz. En az ücret 0.5tl.' })
             } else if (!audioPrice) {

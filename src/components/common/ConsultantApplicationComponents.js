@@ -210,15 +210,23 @@ export class ApplicationSecondComponent extends Component {
 
 export class ApplicationThirdComponent extends Component {
 
+
+    renderLoading = () => {
+        if (this.props.loading)
+            return (
+                <ActivityIndicator size='large' style={styles.screenCenter} color='green' />
+            )
+    }
+
     render() {
         return (
             <ScrollView style={{ flex: 1 }}>
                 <Text style={styles.welcomeText}>{this.props.loading ? 'Danışmanlık başvurunuz alınıyor. Lütfen bekleyiniz.' : 'Başvurunuz alınmıştır'}</Text>
-                <ActivityIndicator size='large' style={styles.screenCenter} color='green' />
+                {this.renderLoading()}
                 <Button
                     type='solid'
                     title='Uygulamaya dön'
-                    disabled={!this.props.loading}
+                    disabled={this.props.loading}
                     titleStyle={{ color: 'white' }}
                     onPress={() => { this.props.onThirdComponentFinished() }}
                 />
