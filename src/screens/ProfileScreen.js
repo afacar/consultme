@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 class ProfileScreen extends Component {
 
     static navigationOptions = ({ navigation }) => ({
-        title: `Profil ayarlarım`,
+        title: `Profil Ayarlarım`,
         headerTitleStyle: { textAlign: 'center', alignSelf: 'center' },
         headerStyle: {
             backgroundColor: 'white',
