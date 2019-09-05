@@ -65,15 +65,30 @@ class LoginScreen extends Component {
     }
 
     finishUserCreation = async () => {
-        this._isMounted && this.setState({
+        
+        this.setState({
             loading: true
         })
+        if (this.state.profile.name) {
+            this.setState({
+                loading: false,
+                nameEntered: true
+            })
+        } else {
+            this._isMounted &&
+                this.setState({
+                    loading: false,
+                    message: 'İsim boş bırakılamaz'
+                })
+        }
+        
         await this.props.createNewUserProfile(this.state.profile);
         this.setState({
             completedRegistration: true,
             loading: false,
         })
         this.props.navigation.navigate('SplashScreen');
+        
     }
 
     signIn = async () => {
@@ -100,24 +115,6 @@ class LoginScreen extends Component {
             message: '',
             profile: { ...this.state.profile, number: number }
         })
-    }
-
-    validateName = () => {
-        this.setState({
-            loading: true
-        })
-        if (this.state.profile.name) {
-            this.setState({
-                loading: false,
-                nameEntered: true
-            })
-        } else {
-            this._isMounted &&
-                this.setState({
-                    loading: false,
-                    message: 'İsim boş bırakılamaz'
-                })
-        }
     }
 
     verifyPhoneNumber = () => {
@@ -204,18 +201,6 @@ class LoginScreen extends Component {
                 {this.renderLoginComponent()}
                 {this.renderMessage()}
                 {this.renderLoading()}
-                {/* <Text>
-                    Consult Me telefon numaranızı doğrulamanız için size kod gönderecektir. Lütfen, numaranızı girin.
-                </Text>
-                <CardItem>
-                    <Input
-                        key='phone_number'
-                        label='Numaranızı girin'
-                        placeholder='+90 535 ...'
-                        onChangeText={value => this.setState({ phoneNumber: value })}
-                        value={this.state.phoneNumber}
-                    />
-                </CardItem> */}
             </View>
         )
     }

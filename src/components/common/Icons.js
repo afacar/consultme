@@ -13,3 +13,30 @@ export const LoginIcon = (props) => {
     />
   );
 }
+
+export const VerifyIcon = (props) => {
+  return (
+    <Icon
+      type='antdesign'
+      name='checksquareo'
+      onPress={props.onPress || null}
+      size={props.size || 33}
+      color={props.color || 'green'}
+      containerStyle={[props.containerStyle, { alignSelf: 'center', paddingRight: 10 }]}
+    />
+  );
+}
+
+
+export const NextIcon = (props) => {
+  return (
+    <Icon
+      type='antdesign'
+      name='rightcircleo'
+      onPress={props.onPress || null}
+      size={props.size || 33}
+      color={props.color || 'green'}
+      containerStyle={[props.containerStyle, { alignSelf: 'center', paddingRight: 10 }]}
+    />
+  );
+}
