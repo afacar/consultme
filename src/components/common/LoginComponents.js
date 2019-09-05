@@ -3,6 +3,8 @@ import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { CardItem } from './CardItem';
 import { Input, Button, Avatar, Card, Icon } from 'react-native-elements';
 import { LoginIcon, VerifyIcon, NextIcon } from '../common/Icons';
+import { Switch } from 'react-native-gesture-handler';
+import SwitchExample from './Switch.js'
 
 export class LoginPhoneNumberComponent extends Component {
     render() {
@@ -108,11 +110,11 @@ export class ProfileEmptyPictureComponent extends Component {
 
     render() {
         return (
-            <View style={{ margin: 10, alignItems: 'center', flex: 1 }}>
-                <Text style={{ textAlign: 'left', fontSize: 18, color: 'black', marginBottom: 5 }}>
+            <View style={{ margin: 10, alignItems: 'center', flexDirection: 'column', flex: 1 }}>
+                <Text style={{ fontSize: 18, color: 'black', marginBottom: 5 }}>
                     Lütfen profil resminizi seçin.
                 </Text>
-                <View style={{ margin: 10, alignItems: 'center', flexDirection: 'column' }} >
+                <View style={{ margin: 10, alignItems: 'center' }} >
                     <Avatar
                         size="xlarge"
                         onPress={() => { this.props.avatarPressed() }}
@@ -121,25 +123,34 @@ export class ProfileEmptyPictureComponent extends Component {
                         showEditButton={true}
                     />
                 </View>
-                <View style={{ alignItems: 'center', flexDirection: 'column' }}>
+                <View style={styles.container}>
                     <Input
-                        style={{ flex: 2 }}
-                        key='name'
-                        label='İsminizi girin'
-                        placeholder='İsim Soyisim'
-                        value={this.props.name || ''}
-                        onChangeText={(value) => { this.props.onNameChanged(value) }}
+                        style = {{ flex: 1 }}
+                        key ='name'
+                        label ='İsminizi girin'
+                        placeholder = 'İsim Soyisim'
+                        value = {this.props.name || ''}
+                        onChangeText = {(value) => { this.props.onNameChanged(value) }}
                     />
                     <Button
-                        style={{ flex: 1 }}
+                        style = {{ flex: 1 }}
                         type='clear'
                         disabled={this.props.disabled || false}
-                        onPress={() => { this.props.onNextPressed() }}
-                        title='Kayıt işlemini tamamla'
+                        onPress={() => {
+                            if (this.props.switch1Value) {
+                                this.props.onTextPressed()
+                            }
+                            else { this.props.onNextPressed() }
+                        }}
+                        icon = {<NextIcon size={24} disabled={this.props.disabled} />}
                     />
-                    <TouchableOpacity onPress={() => { this.props.onTextPressed() }}>
-                        <Text style={{ fontSize: 18, color: 'green' }}>Danışmak olmak için buraya tıklayınız.</Text>
-                    </TouchableOpacity>
+
+                </View>
+                <View style = {{ margin: 18, alignItems: 'center', flexDirection: 'row'}} >
+                    <Text style = {{ textAlign: 'center', fontSize: 18, color: 'green' }}>Danışman: </Text>
+                    <SwitchExample
+                        toggleSwitch1 = {this.props.toggleSwitch1}
+                        switch1Value = {this.props.switch1Value} />
                 </View>
             </View>
         );
@@ -150,41 +161,51 @@ export class ProfilePictureChosenComponent extends Component {
 
     render() {
         return (
-            <View style={{ margin: 10, alignItems: 'center', flex: 1 }}>
-                <Text style={{ textAlign: 'left', fontSize: 18, color: 'black', marginBottom: 5 }}>
-                    Lütfen profil resminizi seçin.
-                </Text>
-                <View style={{ margin: 10, alignItems: 'center', flexDirection: 'column' }} >
-                    <Avatar
-                        size="xlarge"
-                        onPress={() => { this.props.avatarPressed() }}
-                        rounded={true}
-                        source={{ uri: this.props.uri }}
-                    />
-                    <View style={{ alignItems: 'center', flexDirection: 'column' }}>
-                        <Input
-                            style={{ flex: 2 }}
-                            key='name'
-                            label='İsminizi girin'
-                            placeholder='İsim Soyisim'
-                            value={this.props.name || ''}
-                            onChangeText={(value) => { this.props.onNameChanged(value) }}
-                        />
-                        <Button
-                            style={{ flex: 1 }}
-                            type='clear'
-                            disabled={this.props.disabled || false}
-                            onPress={() => { this.props.onNextPressed() }}
-                            title='Kayıt işlemini tamamla'
-                        />
-                        <TouchableOpacity onPress={() => { this.props.onTextPressed() }}>
-                            <Text style={{ fontSize: 18, color: 'green' }}>Danışmak olmak için buraya tıklayınız.</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+            <View style={{ margin: 10, alignItems: 'center', flexDirection: 'column', flex: 1 }}>
+            <Text style={{ fontSize: 18, color: 'black', marginBottom: 5 }}>
+                Lütfen profil resminizi seçin.
+            </Text>
+            <View style={{ margin: 10, alignItems: 'center' }} >
+                <Avatar
+                    size="xlarge"
+                    onPress={() => { this.props.avatarPressed() }}
+                    rounded={true}
+                    source={{ uri: this.props.uri }}
+                    showEditButton={true}
+                />
             </View>
-        );
-    }
+            <View style={styles.container}>
+                <Input
+                    style = {{ flex: 1 }}
+                    key ='name'
+                    label ='İsminizi girin'
+                    placeholder = 'İsim Soyisim'
+                    value = {this.props.name || ''}
+                    onChangeText = {(value) => { this.props.onNameChanged(value) }}
+                />
+                <Button
+                    style = {{ flex: 1 }}
+                    type='clear'
+                    disabled={this.props.disabled || false}
+                    onPress={() => {
+                        if ( this.props.switch1Value) {
+                            this.props.onTextPressed()
+                        }
+                        else { this.props.onNextPressed() }
+                    }}
+                    icon = {<NextIcon size={24} disabled={this.props.disabled} />}
+                />
+
+            </View>
+            <View style = {{ margin: 18, alignItems: 'center', flexDirection: 'row'}} >
+                <Text style = {{ textAlign: 'center', fontSize: 18, color: 'green' }}>Danışman: </Text>
+                <SwitchExample
+                    toggleSwitch1 = {this.props.toggleSwitch1}
+                    switch1Value = {this.props.switch1Value} />
+            </View>
+        </View>
+    );
+}
 }
 
 

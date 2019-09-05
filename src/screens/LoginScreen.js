@@ -35,6 +35,7 @@ class LoginScreen extends Component {
         picChosen: false,
         completedRegistration: false,
         loading: false,
+        switch1Value: false
     }
 
     _isMounted = false;
@@ -52,6 +53,10 @@ class LoginScreen extends Component {
                 });
             }
         });
+    }
+
+    toggleSwitch1 = (value) => {
+        this.setState({ switch1Value: value })
     }
 
     renderMessage() {
@@ -187,12 +192,13 @@ class LoginScreen extends Component {
         }
         else if (!this.state.picChosen) {
             return <ProfileEmptyPictureComponent name={this.state.profile.name} onNameChanged={this.onNameChanged}
-                avatarPressed={this.openPicker} disabled={this.state.loading}
-                onNextPressed={this.finishUserCreation} onTextPressed={this.becomeConsultant} />
+                avatarPressed={this.openPicker} disabled={this.state.loading} toggleSwitch1={this.toggleSwitch1}
+                onNextPressed={this.finishUserCreation} onTextPressed={this.becomeConsultant} switch1Value={this.state.switch1Value} />
         } else if (this.state.picChosen) {
             return <ProfilePictureChosenComponent name={this.state.profile.name} onNameChanged={this.onNameChanged}
                 uri={this.state.profile.photoURL} disabled={this.state.loading} avatarPressed={this.openPicker}
-                onNextPressed={this.finishUserCreation} onTextPressed={this.becomeConsultant} />
+                onNextPressed={this.finishUserCreation} onTextPressed={this.becomeConsultant}
+                switch1Value={this.state.switch1Value} toggleSwitch1={this.toggleSwitch1} />
         }
     }
 
