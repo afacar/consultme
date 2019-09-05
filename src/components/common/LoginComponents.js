@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { CardItem } from './CardItem';
 import { Input, Button, Avatar } from 'react-native-elements';
 import { LoginIcon } from '../common/Icons';
-
 export class LoginPhoneNumberComponent extends Component {
     render() {
         return (
-            <View style={{ margin: 10, alignItems: 'center', flex: 1}}>
+            <View style={{ margin: 10, alignItems: 'center', flex: 1 }}>
                 <Text style={{ textAlign: 'left', fontSize: 18, color: 'black', marginBottom: 5 }}>
                     Consult Me telefon numaranızı doğrulamanız için size kod gönderecektir. Lütfen, numaranızı girin.
                 </Text>
@@ -26,7 +25,7 @@ export class LoginPhoneNumberComponent extends Component {
                         type='clear'
                         onPress={() => { this.props.onNextPressed() }}
                         icon={<LoginIcon size={24} disabled={this.props.disabled} />}
-                        />
+                    />
                 </View>
                 <Text style={{ textAlign: 'justify', fontSize: 12, color: 'grey', marginBottom: 5 }}>
                     Carrier SMS charges may apply.
@@ -39,7 +38,7 @@ export class LoginPhoneNumberComponent extends Component {
 export class PhoneNumberVerificationComponent extends Component {
     render() {
         return (
-            <View style={{ margin: 10, alignItems: 'center', flex: 1}}>
+            <View style={{ margin: 10, alignItems: 'center', flex: 1 }}>
                 <Text style={{ textAlign: 'left', fontSize: 18, color: 'black', marginBottom: 5 }}>
                     Telefonunuza gönderilen kodu girin.
                 </Text>
@@ -59,7 +58,7 @@ export class PhoneNumberVerificationComponent extends Component {
                         type='clear'
                         onPress={() => { this.props.onNextPressed() }}
                         icon={<LoginIcon size={24} disabled={this.props.disabled} />}
-                        />
+                    />
                 </View>
                 <Text style={{ textAlign: 'justify', fontSize: 12, color: 'grey', marginBottom: 5 }}>
                     Carrier SMS charges may apply.
@@ -72,7 +71,7 @@ export class PhoneNumberVerificationComponent extends Component {
 export class NameComponent extends Component {
     render() {
         return (
-            <View style={{ margin: 10, alignItems: 'center', flex: 1}}>
+            <View style={{ margin: 10, alignItems: 'center', flex: 1 }}>
                 <View style={{ flexDirection: 'column' }} >
                     <Input
                         style={{ flex: 2 }}
@@ -88,7 +87,7 @@ export class NameComponent extends Component {
                         type='clear'
                         onPress={() => { this.props.onNextPressed() }}
                         icon={<LoginIcon size={24} disabled={this.props.disabled} />}
-                        />
+                    />
                 </View>
                 <Text style={{ textAlign: 'justify', fontSize: 12, color: 'grey', marginBottom: 5 }}>
                     Carrier SMS charges may apply.
@@ -102,7 +101,7 @@ export class ProfileEmptyPictureComponent extends Component {
 
     render() {
         return (
-            <View style={{ margin: 10, alignItems: 'center', flex: 1}}>
+            <View style={{ margin: 10, alignItems: 'center', flex: 1 }}>
                 <Text style={{ textAlign: 'left', fontSize: 18, color: 'black', marginBottom: 5 }}>
                     Lütfen profil resminizi seçin.
                 </Text>
@@ -117,8 +116,11 @@ export class ProfileEmptyPictureComponent extends Component {
                     type='clear'
                     disabled={this.props.disabled || false}
                     onPress={() => { this.props.onNextPressed() }}
-                    icon={<LoginIcon size={24} disabled={this.props.disabled} />}
+                    title='Kayıt işlemini tamamla'
                 />
+                <TouchableOpacity onPress={() => { this.props.onTextPressed() }}>
+                    <Text style={{ fontSize: 18, color: 'green' }}>Danışmak olmak için buraya tıklayınız.</Text>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -128,7 +130,7 @@ export class ProfilePictureChosenComponent extends Component {
 
     render() {
         return (
-            <View style={{ margin: 10, alignItems: 'center', flex: 1}}>
+            <View style={{ margin: 10, alignItems: 'center', flex: 1 }}>
                 <Text style={{ textAlign: 'left', fontSize: 18, color: 'black', marginBottom: 5 }}>
                     Lütfen profil resminizi seçin.
                 </Text>
@@ -143,8 +145,11 @@ export class ProfilePictureChosenComponent extends Component {
                     type='clear'
                     disabled={this.props.disabled || false}
                     onPress={() => { this.props.onNextPressed() }}
-                    icon={<LoginIcon size={24} disabled={this.props.disabled} />}
+                    title='Kayıt işlemini tamamla'
                 />
+                <TouchableOpacity onPress={() => { this.props.onTextPressed() }}>
+                    <Text style={{ fontSize: 18, color: 'green' }}>Danışmak olmak için buraya tıklayınız.</Text>
+                </TouchableOpacity>
             </View>
         );
     }

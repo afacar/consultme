@@ -25,6 +25,7 @@ class LoginScreen extends Component {
             number: '',
             photoURL: '',
             path: '',
+            uid: ''
         },
         message: '',
         verificationCode: '',
@@ -42,10 +43,12 @@ class LoginScreen extends Component {
         this._isMounted = true
         this.unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
             if (user) {
+                console.log("LS user", user)
                 this._isMounted && this.setState({
                     phoneNumberVerified: true,
                     loading: false,
-                    message: ''
+                    message: '',
+                    profile: {...this.state.profile, uid: user.uid}
                 });
             }
         });
@@ -82,7 +85,7 @@ class LoginScreen extends Component {
             .then(confirmResult => {
                 this._isMounted && this.setState({ confirmResult, loading: false, phoneNumberEntered: true, message: '' })
             })
-            .catch(error => this.setState({ message: `Telefon numarası Hata mesajı: ${error.message}`, loading: false }));
+            .catch(error => this.setState({ message: `Telefon numarası Hata mesajı: ${error.message}`, loading: false, disabled: false }));
     };
 
     onNameChanged = (name) => {
@@ -165,6 +168,13 @@ class LoginScreen extends Component {
         }
     }
 
+    becomeConsultant = async () => {
+        console.log("LS Prof", this.state.profile)
+        this.props.saveUser(this.state.profile)
+        this.props.createNewUserProfile(this.state.profile)
+        this.props.navigation.navigate('ConsultantApplicationScreen');
+    }
+
     renderLoginComponent = () => {
         if (!this.state.phoneNumberEntered) {
             return <LoginPhoneNumberComponent phoneNumber={this.state.profile.number} onNumberChanged={this.onNumberChanged} disabled={this.state.loading} onNextPressed={this.confirmNumber} />
@@ -175,9 +185,9 @@ class LoginScreen extends Component {
             return <NameComponent name={this.state.profile.name} disabled={this.state.loading} onNameChanged={this.onNameChanged} onNextPressed={this.validateName} />
         }
         else if (!this.state.picChosen) {
-            return <ProfileEmptyPictureComponent avatarPressed={this.openPicker} disabled={this.state.loading} onNextPressed={this.finishUserCreation} />
+            return <ProfileEmptyPictureComponent avatarPressed={this.openPicker} disabled={this.state.loading} onNextPressed={this.finishUserCreation} onTextPressed={this.becomeConsultant} />
         } else if (this.state.picChosen) {
-            return <ProfilePictureChosenComponent uri={this.state.profile.photoURL} disabled={this.state.loading} avatarPressed={this.openPicker} onNextPressed={this.finishUserCreation} />
+            return <ProfilePictureChosenComponent uri={this.state.profile.photoURL} disabled={this.state.loading} avatarPressed={this.openPicker} onNextPressed={this.finishUserCreation} onTextPressed={this.becomeConsultant}/>
         }
     }
 

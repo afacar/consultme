@@ -13,6 +13,7 @@ class SplashScreen extends Component {
         const firebaseUser = firebase.auth().currentUser;
         var user = {
             name: '',
+            uid: '',
             number: '',
             photo: '',
         };
@@ -21,6 +22,7 @@ class SplashScreen extends Component {
             user.name = firebaseUser.displayName;
             user.number = firebaseUser.phoneNumber;
             user.photo = firebaseUser.photoURL;
+            user.uid = firebase.uid;
         }
         this.props.saveUser(user);
         if (user.name) {

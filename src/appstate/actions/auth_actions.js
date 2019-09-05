@@ -22,7 +22,7 @@ export const createNewUserProfile = (profile) => async (dispatch) => {
     if (path) {
         await firebase.storage().ref('profilePics').child(_user.uid).putFile(path)
         profile.photoURL = await firebase.storage().ref().child("profilePics").child(_user.uid).getDownloadURL();
-    }else {
+    } else {
         profile.photoURL = 'https://firebasestorage.googleapis.com/v0/b/consultme-cb5ad.appspot.com/o/profilePics%2Fdefault_profile_pic.png?alt=media&token=d333eb8d-5e18-48ca-962c-6a2f538bd654'
     }
     delete profile.path;
@@ -38,4 +38,22 @@ export const createNewUserProfile = (profile) => async (dispatch) => {
 export const saveUser = (user) => (dispatch) => {
     console.log("Saving user", user)
     return dispatch({ type: AUTH, payload: user })
+}
+
+export const createNewConsultant = (user, consultationDetails) => async () => {
+    console.log("User", user)
+    // create consultant profile
+    var consultantProfile = {
+        name: user.name,
+        photo: user.photo,
+        number: user.number,
+        uid: user.uid,
+        consultationDetails
+    }
+    if (!consultantProfile.photo) {
+        consultantProfile.photoURL = 'https://firebasestorage.googleapis.com/v0/b/consultme-cb5ad.appspot.com/o/profilePics%2Fdefault_profile_pic.png?alt=media&token=d333eb8d-5e18-48ca-962c-6a2f538bd654'
+    }
+    // save into pendingConsultants
+    let url = `pendingConsultants/${user.uid}`
+    await firebase.database().ref(url).update(consultantProfile);
 }
