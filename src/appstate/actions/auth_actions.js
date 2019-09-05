@@ -56,4 +56,5 @@ export const createNewConsultant = (user, consultationDetails) => async () => {
     // save into pendingConsultants
     let url = `pendingConsultants/${user.uid}`
     firebase.database().ref(url).update(consultantProfile);
+    firebase.database().ref('users').child(`${user.uid}/isProvider`).set(true);
 }
