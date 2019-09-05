@@ -127,7 +127,8 @@ class ConsultantApplicationScreen extends Component {
                     subBranch,
                     interest,
                     address,
-                    subBranch
+                    subBranch,
+                    subscriptionPrice
                 }
                 this.setState({
                     disabled: true,
