@@ -5,6 +5,10 @@ import * as actions from '../appstate/actions/auth_actions'
 import { connect } from 'react-redux'
 import ConsultantListScreenHeaderRight from '../components/common/Headers';
 
+import * as styles from '../Constants/Styles';
+import { FlatList } from 'react-native-gesture-handler';
+import ConsultantCard from '../components/common/ConsultantCard';
+
 class ConsultantListScreen extends Component {
 
     static navigationOptions = ({ navigation }) => ({
@@ -20,18 +24,32 @@ class ConsultantListScreen extends Component {
 
     componentDidMount() {
     }
+
+    extractKeyForFlatlist = (item, index) => {
+        return item.uid
+    }
+
+    renderConsultant = ({item}) => {
+        return <ConsultantCard consultant={item}/>
+    }
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>List of all Consultants will be here</Text>
+            <View style={styles.fullScreen}>
+                <FlatList
+                data={this.props.state.consultants} 
+                extraData={this.props.state.consultants}
+                keyExtractor={this.extractKeyForFlatlist} 
+                renderItem={this.renderConsultant}
+                />
             </View>
         )
     }
 }
 
-const mapStateToProps = ({ auth }) => {
-    const { user } = auth
-    return user
+const mapStateToProps = (state) => {
+    const {user} = state.auth;
+    const {consultants} = state.app;
+    return {state: { user, consultants }  }
 }
 
 export default connect(mapStateToProps, actions)(ConsultantListScreen);

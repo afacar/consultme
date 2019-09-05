@@ -10,7 +10,8 @@ export const screenCenter = ({
 
 export const fullScreen = ({
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    margin: 10,
 })
 
 export const welcomeText = ({

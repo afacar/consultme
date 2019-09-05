@@ -10,7 +10,7 @@ class ConsultantListScreenHeaderRight extends Component {
         return (
             this.props.user.uid ? (
                 <Button
-                    onPress={() => this.props.navigation.navigate('LoginScreen')}
+                    // onPress={() => this.props.navigation.navigate('LoginScreen')}
                     type='clear'
                     title={'Arama butonu'}
                 />
@@ -27,9 +27,7 @@ class ConsultantListScreenHeaderRight extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
-    console.log("auth", auth)
     const { user } = auth
-    console.log("User", user);
     return {user}
 }
 
