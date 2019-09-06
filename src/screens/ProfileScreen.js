@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
-import ProfileForm from '../components/form/ProfileForm';
+import ProfileForm from "../components/Forms/ProfileForm";
 
 class ProfileScreen extends Component {
 
