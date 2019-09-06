@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
     consultantCard: {
         height: MODAL_HEIGHT,
         margin: 15,
-        paddingBottom:5, 
         backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR,
         borderRadius: 20
     },
