@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { Button } from 'react-native-elements';
-import { NextIcon } from './Icons';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button, Card, Avatar } from 'react-native-elements';
+import { InformationIcon } from './Icons';
 
 
 class ConsultantCard extends Component {
@@ -32,54 +32,79 @@ class ConsultantCard extends Component {
         }
     }
 
+    renderPricingType = () => {
+        const { consultationDetails } = this.props.consultant;
+        if (consultationDetails.type == 'subscription') {
+            return (
+                <Text>
+                    {'Payment Type: ' + 'Subscription'}
+                </Text>
+
+            )
+        } else {
+            return (
+                <Text>
+                    {'Payment Type: ' + 'Session'}
+                </Text>
+            )
+        }
+    }
+
     render() {
         const { consultant } = this.props;
         const { consultationDetails } = consultant;
         return (
-
-
-        
-
-            <View>
-            
-            <Button
-            style={{ flex: 1 }}
-            disabled={this.props.disabled || false}
-            type = 'solid'
-            icon={<NextIcon size={24} disabled={this.props.disabled} />}
-        />
+            <Card
+            containerStyle = {styles.container}>
                 
-                <Text>
-                    {'Name: ' + consultant.name}
-                </Text>
-                <Text>
-                    {'Number: ' + consultant.number}
-                </Text>
-                <Text>
-                    {'PhotoUrl: ' + consultant.photoURL}
-                </Text>
-                <Text>
-                    {'User Id: ' + consultant.uid}
-                </Text>
-                <Text>
-                    {'Address: ' + consultationDetails.address}
-                </Text>
-                <Text>
-                    {'Branch: ' + consultationDetails.branch}
-                </Text>
-                <Text>
-                    {'Interest: ' + consultationDetails.interest}
-                </Text>
-                <Text>
-                    {'SubBranch: ' + consultationDetails.subBranch}
-                </Text>
-                {this.renderPricing()}
+                <View style={{ flex: 1, alignItems: 'center', flexDirection: 'row', margin: 5 }}>
+
+                    <Avatar
+                        size="large"
+                        rounded={true}
+                        source={{ uri: consultant.photoURL }}
+                    />
+                    <View style={{ flex: 1, alignItems: 'flex-start', flexDirection: 'column', margin: 5, paddingLeft: 15 }}>
+                        <Text style={{ marginTop: 10, textAlign: 'left', fontSize: 20, color: 'black', marginBottom: 5 }}>
+                            { consultant.name}
+                        </Text>
+                        <Text>
+                            {'Branch: ' + consultationDetails.branch}
+                        </Text>
+                        <Text>
+                            {'Address: ' + consultationDetails.address}
+                        </Text>
+                        {this.renderPricingType()}
+                    </View>
+                </View>
+                <View style={{
+                    position: 'absolute',
+                    right: -18,
+                    top: -21}}>
+
+                    <Button
+                        disabled={this.props.disabled || false}
+                        style={{ flex: 1 }}
+                        type='clear'
+                        icon={<InformationIcon size={29} disabled={this.props.disabled} />}
+                    />
+
+                </View>
+            </Card>
 
 
-            
-            </View>
         )
     }
 }
 
+const styles = StyleSheet.create ({
+    container: {
+       borderWidth: 2,
+       borderRadius: 21,
+       backgroundColor: '#f2f2f2',
+       borderColor: 'grey'
+  
+       
+    }
+ })
 export default (ConsultantCard)
