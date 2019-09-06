@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { Button } from 'react-native-elements';
+import { NextIcon } from './Icons';
 
 
 class ConsultantCard extends Component {
@@ -34,7 +36,19 @@ class ConsultantCard extends Component {
         const { consultant } = this.props;
         const { consultationDetails } = consultant;
         return (
+
+
+        
+
             <View>
+            
+            <Button
+            style={{ flex: 1 }}
+            disabled={this.props.disabled || false}
+            type = 'solid'
+            icon={<NextIcon size={24} disabled={this.props.disabled} />}
+        />
+                
                 <Text>
                     {'Name: ' + consultant.name}
                 </Text>
@@ -61,6 +75,8 @@ class ConsultantCard extends Component {
                 </Text>
                 {this.renderPricing()}
 
+
+            
             </View>
         )
     }
