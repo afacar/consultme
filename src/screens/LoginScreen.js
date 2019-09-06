@@ -6,7 +6,7 @@ import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import * as actions from '../appstate/actions';
 
-import * as Styles from '../Constants/Styles'
+import styles from '../Constants/Styles';
 import { LoginPhoneNumberComponent, NameComponent, ProfileEmptyPictureComponent, ProfilePictureChosenComponent, PhoneNumberVerificationComponent } from '../components/common';
 class LoginScreen extends Component {
 
@@ -204,7 +204,7 @@ class LoginScreen extends Component {
 
     renderLoading = () => {
         if (this.state.loading) {
-            return <ActivityIndicator size='large' style={Styles.loader} />
+            return <ActivityIndicator size='large' style={styles.screenCenter} />
         }
     }
 
