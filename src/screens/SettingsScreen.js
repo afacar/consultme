@@ -16,7 +16,7 @@ class SettingsScreen extends Component {
                         key='profile'
                         title='Profil Ayarları'
                         titleStyle={{ fontSize: 21 }}
-                        //onPress={() => this.navigateNextScreen('profile')}
+                        onPress={() => this.navigateNextScreen('profile')}
                         leftIcon={{ color: '#0066ff', type: 'font-awesome', name: 'user-md' }}
                         rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
                         containerStyle={styles.btn}
@@ -27,7 +27,7 @@ class SettingsScreen extends Component {
                         key='wallet'
                         title='Cüzdanım'
                         titleStyle={{ fontSize: 21 }}
-                        //onPress={() => this.navigateNextScreen('consultancy')}
+                        onPress={() => this.navigateNextScreen('wallet')}
                         leftIcon={{ color: '#009933', type: 'material', name: 'settings-phone' }}
                         rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
                         containerStyle={styles.btn}
@@ -38,7 +38,7 @@ class SettingsScreen extends Component {
                         key='archive'
                         title='Arşiv'
                         titleStyle={{ fontSize: 21 }}
-                        //onPress={() => this.navigateNextScreen('archive')}
+                        onPress={() => this.navigateNextScreen('archive')}
                         leftIcon={{ color: '#cc3300', type: 'material', name: 'archive' }}
                         rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
                         containerStyle={styles.btn}
