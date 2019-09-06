@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
+import * as styles from '../../Constants/Styles';
 
 export class CardItem extends Component {
   state = { hasError: false };
@@ -20,41 +20,12 @@ export class CardItem extends Component {
       );
     }
     return (
-      <View style={[styles.rowStyle, this.props.style]}>
-        {this.props.label && <Text style={styles.labelStyle}>{this.props.label}</Text>}
-        <View style={styles.contentStyle}>
+      <View style={[styles.cardItemRowStyle, this.props.style]}>
+        {this.props.label && <Text style={styles.cardItemLabelStyle}>{this.props.label}</Text>}
+        <View style={styles.cardItemContentStyle}>
           {this.props.children}
         </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  rowStyle: {
-    borderWidth: 0,
-    padding: 5,
-    backgroundColor: '#fff',
-    justifyContent: 'flex-start',
-    flexDirection: 'column',
-    borderColor: '#ddd',
-    position: 'relative'
-  },
-  columnStyle: {
-    borderWidth: 0,
-    padding: 5,
-    backgroundColor: '#fff',
-    justifyContent: 'flex-start',
-    flexDirection: 'row',
-    borderColor: '#ddd',
-    position: 'relative'
-  },
-  contentStyle: {
-    flexDirection: 'row',
-  },
-  labelStyle: {
-    fontWeight: "bold",
-    alignContent: "center",
-    paddingRight: 30,
-  },
-});

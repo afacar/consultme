@@ -53,3 +53,17 @@ export const InformationIcon = (props) => {
     />
   );
 }
+
+export const SaveIcon = (props) => {
+  return (
+    <Icon
+      type='font-awesome'
+      name='save'
+      onPress={props.onPress || null}
+      size={props.size || 33}
+      color={props.color || 'green'}
+      containerStyle={[props.containerStyle, { alignSelf: 'center' }]}
+    />
+  );
+}
+
