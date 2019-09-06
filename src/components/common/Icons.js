@@ -40,3 +40,16 @@ export const NextIcon = (props) => {
     />
   );
 }
+
+export const InformationIcon = (props) => {
+  return (
+    <Icon
+      type='font-awesome'
+      name='info-circle'
+      onPress={props.onPress || null}
+      size={props.size || 33}
+      color={props.color || 'green'}
+      containerStyle={[props.containerStyle, { alignSelf: 'center' }]}
+    />
+  );
+}
