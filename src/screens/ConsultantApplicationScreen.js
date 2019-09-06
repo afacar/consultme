@@ -4,7 +4,7 @@ import { ScrollView, Text, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 
 import * as actions from '../appstate/actions/index';
-import * as styles from '../Constants/Styles';
+import styles from '../Constants/Styles';
 
 import { ApplicationFirstComponent, ApplicationSecondComponent, ApplicationThirdComponent } from '../components/common';
 
