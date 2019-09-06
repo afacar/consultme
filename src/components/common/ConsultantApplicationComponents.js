@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { ListPicker, CardItem } from './index'
-import * as styles from '../../Constants/Styles';
+import styles from "../../Constants/Styles";
 import { Input, Button, Card } from 'react-native-elements';
 
 export class ApplicationFirstComponent extends Component {
