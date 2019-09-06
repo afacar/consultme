@@ -33,7 +33,7 @@ class ConsultantFullInfoModal extends Component {
     render() {
         console.log("Incoming consultant ", JSON.stringify(this.props.consultant))
         return (
-            <Modal visible={this.props.visible} transparent={true} animationType='slide'>
+            <Modal visible={this.props.visible} transparent={true} animationType='fade'>
                 <ScrollView style={styles.consultantCard}>
                     <View style={styles.consultantCardAvatarContainer}>
                         <Avatar
@@ -54,7 +54,7 @@ class ConsultantFullInfoModal extends Component {
                         />
                     </Card>
 
-                    <Card style={{ flex: 1, borderWidth: 1 }}>
+                    <Card style={{ flex: 1, borderWidth: 1, marginBottom: 10 }}>
                         <Button
                             type='outline'
                             title='Kapat'
