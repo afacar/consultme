@@ -117,7 +117,6 @@ export class ProfileEmptyPictureComponent extends Component {
                 <View style={{ margin: 10, alignItems: 'center' }} >
                     <Avatar
                         size="xlarge"
-                        onPress={() => { this.props.avatarPressed() }}
                         rounded={true}
                         icon={{ name: 'account', type: 'material-community' }}
                         showEditButton={true}

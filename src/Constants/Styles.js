@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     consultantCard: {
         height: MODAL_HEIGHT,
         margin: 15,
-        paddingBottom:5, 
+        paddingBottom: 5,
         backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR,
         borderRadius: 20
     },
@@ -42,7 +42,42 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 5,
         left: 5
-    }
+    },
+    buttonStyle: {
+        flex: 1,
+        padding: 1,
+        borderRadius: 20,
+        justifyContent: 'center',
+        marginHorizontal: '20%'
+    },
+
+    cardItemRowStyle: {
+        borderWidth: 0,
+        padding: 5,
+        backgroundColor: '#fff',
+        justifyContent: 'flex-start',
+        flexDirection: 'column',
+        borderColor: '#ddd',
+        position: 'relative'
+      },
+      cardItemColumnStyle: {
+        borderWidth: 0,
+        padding: 5,
+        backgroundColor: '#fff',
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
+        borderColor: '#ddd',
+        position: 'relative'
+      },
+      cardItemContentStyle: {
+        flexDirection: 'row',
+      },
+      cardItemLabelStyle: {
+        fontWeight: "bold",
+        alignContent: "center",
+        paddingRight: 30,
+      }
+
 })
 
 export default styles;
