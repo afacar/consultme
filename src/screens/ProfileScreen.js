@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { ScrollView, KeyboardAvoidingView } from 'react-native';
+import ProfileForm from "../components/form/ProfileForm";
 
 class ProfileScreen extends Component {
 
@@ -15,13 +16,21 @@ class ProfileScreen extends Component {
         console.log("ProfileScreen mounted");
     }
 
+
+
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-                <Text>ProfileScreen</Text>
-            </View>
+            <ScrollView>
+            <KeyboardAvoidingView>
+              <ProfileForm
+                navigate={this.props.navigation.navigate}
+              />
+            </KeyboardAvoidingView>
+          </ScrollView>
         )
     }
 }
 
 export default ProfileScreen;
+
+     
