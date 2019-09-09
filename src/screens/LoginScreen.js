@@ -8,6 +8,7 @@ import * as actions from '../appstate/actions';
 
 import styles from '../Constants/Styles';
 import { LoginPhoneNumberComponent, NameComponent, ProfileEmptyPictureComponent, ProfilePictureChosenComponent, PhoneNumberVerificationComponent } from '../components/common';
+import ProfileForm from '../components/Forms/ProfileForm';
 class LoginScreen extends Component {
 
     static navigationOptions = ({ navigation }) => ({
@@ -77,7 +78,7 @@ class LoginScreen extends Component {
         if (this.state.profile.name) {
             this.setState({
                 loading: false,
-                nameEntered: true
+                nameEntered: true,
             })
         } else {
             this._isMounted &&
@@ -190,7 +191,7 @@ class LoginScreen extends Component {
         } else if (!this.state.phoneNumberVerified && this.state.phoneNumberEntered) {
             return <PhoneNumberVerificationComponent verificationCode={this.state.verificationCode} onNextPressed={this.verifyPhoneNumber} disabled={this.state.loading} onVerificationCodeChanged={this.onVerificationCodeChanged} />
         }
-        else if (!this.state.picChosen) {
+        else if (!this.state.nameEntered) {
             return <ProfileEmptyPictureComponent name={this.state.profile.name} onNameChanged={this.onNameChanged}
                 avatarPressed={this.openPicker} disabled={this.state.loading} toggleSwitch1={this.toggleSwitch1}
                 onNextPressed={this.finishUserCreation} onTextPressed={this.becomeConsultant} switch1Value={this.state.switch1Value} />

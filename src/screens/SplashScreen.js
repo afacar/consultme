@@ -9,20 +9,27 @@ import { connect } from 'react-redux';
 class SplashScreen extends Component {
 
 
-    componentDidMount = async() => {
+    componentDidMount = async () => {
         const firebaseUser = firebase.auth().currentUser;
         var user = {
             name: '',
             uid: '',
             number: '',
-            photo: '',
+            photoURL: '',
+            isProvider: false,
         };
         if (firebaseUser) {
             console.log("FU", firebaseUser)
             user.name = firebaseUser.displayName;
             user.number = firebaseUser.phoneNumber;
-            user.photo = firebaseUser.photoURL;
+            user.photoURL = firebaseUser.photoURL;
             user.uid = firebaseUser.uid;
+
+            //Todo change into firebase user isProvider
+            firebase.database().ref('users').child(user.uid).child('isProvider').once('value', snapshot => {
+                if (snapshot.exists())
+                    user.isProvider = snapshot.val();
+            })
         }
         console.log("Splash Screen did mount")
         await this.props.fetchConsultants((consultant) => {
