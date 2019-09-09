@@ -13,23 +13,6 @@ import ConsultantInfoForm from "../Forms/ConsultantInfoForm";
 
 class ConsultantFullInfoModal extends Component {
 
-    renderPricing = () => {
-        const type = this.props.consultant.type;
-        if (type == 'subscription') {
-            return (
-                <Text>Aylık abonelik ücreti</Text>
-            )
-        } else if (type == 'session') {
-            return (
-                <View>
-                    <Text>Mesaj ücreti</Text>
-                    <Text>Sesli konuşma ücreti</Text>
-                    <Text>Görüntülü arama ücreti</Text>
-                </View>
-            )
-        }
-    }
-
     render() {
         console.log("Incoming consultant ", JSON.stringify(this.props.consultant))
         return (
