@@ -4,24 +4,27 @@ import {
 import firebase from 'react-native-firebase';
 
 export const fetchConsultants = (callback) => async (dispatch) => {
-    let url = 'pendingConsultants/';
+    const user = firebase.auth().currentUser;
+    let url = 'verifiedConsultants/';
     console.log("Fetching consultants...")
     firebase.database().ref(url).limitToFirst(25).on('child_changed', consultantSnap => {
         console.log("New consultant ", consultantSnap.val());
-        callback(consultantSnap.val());
+        if (consultantSnap.val().uid !== user.uid)
+            callback(consultantSnap.val());
     })
     firebase.database().ref(url).limitToFirst(25).on('child_added', consultantSnap => {
         console.log("New consultant ", consultantSnap.val());
-        callback(consultantSnap.val());
+        if (consultantSnap.val().uid !== user.uid)
+            callback(consultantSnap.val());
     })
 }
 
 export const startConsultancy = (user, consultant, callback) => async (dispatch) => {
     const userId = user.uid;
     const cId = consultant.uid;
-    let consultationID = userId + '-' + cId;
     let systemNewConsultationRef = `consultations/${cId}/${userId}/`;
-    let userNewConsultationRef = `users/${userId}/consultations`;
+    let userNewConsultationRef = `users/${userId}/consultationsFrom`;
+    let consultantNewConsultationRef = `users/${cId}/consultationsTo`
 
     var db = firebase.database();
     db.ref(systemNewConsultationRef).once('value', async (consultationSnap) => {
@@ -42,4 +45,5 @@ export const startConsultancy = (user, consultant, callback) => async (dispatch)
         };
     })
     db.ref(userNewConsultationRef).child(`${cId}`).set(true);
+    db.ref(consultantNewConsultationRef).child(`${userId}`).set(true);
 }

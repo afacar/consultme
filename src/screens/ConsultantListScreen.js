@@ -11,6 +11,9 @@ import ConsultantCard from '../components/Cards/ConsultantCard';
 import ConsultantFullInfoModal from '../components/Modals/ConsultantFullInfoModal';
 import styles from '../Constants/Styles';
 
+// TODO don't show the consultants which the user is having consultation.
+// TODO don't show the consultant himself
+
 class ConsultantListScreen extends Component {
 
     static navigationOptions = ({ navigation }) => ({
@@ -59,7 +62,13 @@ class ConsultantListScreen extends Component {
                     onPress: () => { },
                     style: 'cancel',
                 },
-                { text: 'Onaylıyorum', onPress: () => this.props.startConsultancy(this.props.state.user, consultant)},
+                { text: 'Onaylıyorum', onPress: () => this.props.startConsultancy(this.props.state.user, consultant, (status)=>{
+                    if ( status == 'new'){
+
+                    }else if ( status == 'continue'){
+                        
+                    }
+                })},
             ]
         )
     }
