@@ -4,38 +4,95 @@ import { Card } from 'react-native-elements';
 
 export default class ConsultantInfoForm extends Component {
 
-    renderPricing = (textType) => {
-        if (textType === 'text') {
-            const type = this.props.consultant.consultationDetails.type;
-            if (type == 'subscription') {
-                return (
-                    <Text>Aylık abonelik ücreti</Text>
-                )
-            } else if (type == 'session') {
-                return (
-                    <View>
-                        <Text>Mesaj ücreti</Text>
-                        <Text>Sesli konuşma ücreti</Text>
-                        <Text>Görüntülü arama ücreti</Text>
+    renderPricing = () => {
+        const { consultant } = this.props;
+        const type = this.props.consultant.consultationDetails.type;
+
+        if (type == 'subscription') {
+            return (
+                <Card>
+                    <View
+                        style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'flex-start'
+                        }}>
+                            <Text>Aylık abonelik ücreti</Text>
+                        </View>
+
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'flex-start'
+                        }}>
+                            <Text>{consultant.consultationDetails.subscriptionPrice + " tl"}</Text>
+                        </View>
                     </View>
-                )
-            }
-        } else if (textType == 'value') {
-            const { consultant } = this.props;
-            const type = consultant.consultationDetails.type;
-            if (type == 'subscription') {
-                return (
-                    <Text>{consultant.subscriptionPrice}</Text>
-                )
-            } else if (type == 'session') {
-                return (
-                    <View>
-                        <Text>{consultant.consultationDetails.textPrice + "(tl/300 karakter)"}</Text>
-                        <Text>{consultant.consultationDetails.audioPrice + "(tl/dk)"}</Text>
-                        <Text>{consultant.consultationDetails.videoPrice + "(tl/dk)"}</Text>
-                    </View>
-                )
-            }
+                </Card>
+            )
+        } else if (type == 'session') {
+            return (
+                <Card>
+                        <View
+                            style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>Mesaj ücreti</Text>
+                            </View>
+
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>{consultant.consultationDetails.textPrice + " (tl/300 karakter)"}</Text>
+                            </View>
+                        </View>
+
+             
+                        <View
+                            style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>Sesli konuşma ücreti</Text>
+                            </View>
+
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>{consultant.consultationDetails.audioPrice + " (tl/dk)"}</Text>
+                            </View>
+                        </View>
+                      
+                        <View
+                            style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>Görüntülü arama ücreti</Text>
+                            </View>
+
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>{consultant.consultationDetails.videoPrice + " (tl/dk)"}</Text>
+                            </View>
+                        </View>
+                </Card>
+            )
         }
     }
 
@@ -48,7 +105,7 @@ export default class ConsultantInfoForm extends Component {
                 )
             } else if (textType == 'value') {
                 return (
-                    <Text>{consultant.subBranch}</Text>
+                    <Text>{consultant.consultationDetails.subBranch}</Text>
                 )
             }
         }
@@ -74,27 +131,117 @@ export default class ConsultantInfoForm extends Component {
         return (
             <Card>
 
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                    <View style={{ flex: 1 }}>
-                        <Text>İsim</Text>
-                        <Text>Branş</Text>
-                        {this.renderSubBranch('text')}
-                        {this.renderInterest('text')}
-                        <Text>İş adresi</Text>
-                        {this.renderPricing('text')}
-                    </View>
+                <View style={{ flex: 1, flexDirection: 'column' }}>
 
-                    <View style={{ flex: 1 }}>
-                        <Text>{consultant.name}</Text>
-                        <Text>{consultant.consultationDetails.branch}</Text>
-                        {this.renderSubBranch('value')}
-                        {this.renderInterest('value')}
-                        <Text>{consultant.consultationDetails.address}</Text>
-                        {this.renderPricing('value')}
-                    </View>
+                    <Card>
+                        <View
+                            style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>İsim</Text>
+                            </View>
+
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>{consultant.name}</Text>
+                            </View>
+                        </View>
+                    </Card>
+
+                    <Card>
+                        <View
+                            style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>Branş</Text>
+                            </View>
+
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>{consultant.consultationDetails.branch}</Text>
+                            </View>
+                        </View>
+                    </Card>
+
+                    <Card>
+                        <View
+                            style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                {this.renderSubBranch('text')}
+                            </View>
+
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                {this.renderSubBranch('value')}
+                            </View>
+                        </View>
+                    </Card>
+
+                    <Card>
+                        <View
+                            style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                {this.renderInterest('text')}
+                            </View>
+
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                {this.renderInterest('value')}
+                            </View>
+                        </View>
+                    </Card>
+
+                    <Card>
+                        <View
+                            style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>İş adresi</Text>
+                            </View>
+
+                            <View style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Text>{consultant.consultationDetails.address}</Text>
+                            </View>
+                        </View>
+                    </Card>
+                    
+                    {this.renderPricing()}
 
                 </View>
-            </Card>
+            </Card >
         )
     }
 }
