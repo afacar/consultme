@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, Alert, ActivityIndicator, Platform } from 'react-native';
 
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
@@ -225,12 +225,14 @@ class LoginScreen extends Component {
             title: 'Fotoğraf Yükle',
             chooseFromLibraryButtonTitle: 'Fotoğraflarımdan seç',
             takePhotoButtonTitle: 'Kamerayı aç',
+            cancelButtonTitle: 'Kapat',
             mediaType: 'photo',
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
                 allowsEditing: true,
-                cameraRoll: true
+                cameraRoll: true,
+                path: Platform.OS == 'ios' ? 'Documents/ConsultMe Images/ProfilePictures' : 'Pictures/ ConsultMe Images/ProfilePictures'
             },
         };
 

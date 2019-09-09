@@ -56,8 +56,8 @@ export const createNewConsultant = (user, consultationDetails) => async () => {
     if (!consultantProfile.photoURL) {
         consultantProfile.photoURL = strings.DEFAULT_PROFILE_PIC
     }
-    // save into pendingConsultants
-    let url = `pendingConsultants/${user.uid}`
+    // save into verifiedConsultants
+    let url = `verifiedConsultants/${user.uid}`
     firebase.database().ref(url).update(consultantProfile);
     firebase.database().ref('users').child(`${user.uid}/isProvider`).set(true);
 }
@@ -87,7 +87,20 @@ export const saveProfile = (user, callback) => async () => {
 
         // update consultant 
         if (user.isProvider) {
-            let url = `pendingConsultants/${user.uid}`
+            delete user.isProvider;
+            let url = `verifiedConsultants/${user.uid}`
+
+            firebase.database().ref(`users/${user.uid}/consultationTo`).once('child_added', patientSnap => {
+                const patientID = patientSnap.key();
+                firebase.database().ref(`consultations/${user.uid}/${patientID}/consultant`).update(user);
+            })
+
+            firebase.database().ref(`users/${user.uid}/consultationFrom`).once('child_added', consultantSnap => {
+                const consultantId = consultantSnap.key();
+                firebase.database().ref(`consultations/${consultantId}/${user.uid}/user`).update(user);
+            })
+
+            await firebase.database().ref('verifiedConsultants').child(user.uid).update(user)
             await firebase.database().ref(url).update(user);
             console.log("1")
         }

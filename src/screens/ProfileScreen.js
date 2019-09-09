@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { ScrollView, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, Platform } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 
 import ProfileForm from "../components/Forms/ProfileForm";
 import * as actions from '../appstate/actions';
+import strings from '../Constants/Strings';
+import { thisExpression } from '@babel/types';
 
 const saveButtonDefaultTitle = 'Profilini düzenle'
 const saveButtonEnabledTitle = 'Kaydet';
@@ -45,12 +47,18 @@ class ProfileScreen extends Component {
       title: 'Fotoğraf Yükle',
       chooseFromLibraryButtonTitle: 'Fotoğraflarımdan seç',
       takePhotoButtonTitle: 'Kamerayı aç',
+      cancelButtonTitle: 'Kapat',
+      customButtons: [{
+        name: 'DeleteButton',
+        title: 'Fotoğafı Sil'
+      }],
       mediaType: 'photo',
       storageOptions: {
         skipBackup: true,
         path: 'images',
         allowsEditing: true,
-        cameraRoll: true
+        cameraRoll: true,
+        path: Platform.OS == 'ios' ? 'Documents/ConsultMe Images/ProfilePictures' : 'Pictures/ ConsultMe Images/ProfilePictures'
       },
     };
 
@@ -65,10 +73,13 @@ class ProfileScreen extends Component {
       }
       else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
+        const { user } = this.props;
+        user.photoURL = strings.DEFAULT_PROFILE_PIC;
+        this.setState({
+          disabled: false
+        })
       }
       else {
-
-
         if (Platform.OS === 'ios') {
           response.path = response.uri.replace("file://", '');
         }
