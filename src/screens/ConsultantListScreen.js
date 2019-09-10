@@ -78,6 +78,7 @@ class ConsultantListScreen extends Component {
     }
 
     render() {
+        console.log("CONSULTANTS", this.props.state.consultants)
         return (
             <View style={styles.fullScreen}>
                 <FlatList
