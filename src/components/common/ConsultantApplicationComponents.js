@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { ListPicker, CardItem } from './index'
 import styles from "../../Constants/Styles";
-import { Input, Button, Card } from 'react-native-elements';
+import { Input, Button, Card, Icon } from 'react-native-elements';
 
 export class ApplicationFirstComponent extends Component {
     render() {
@@ -156,15 +156,61 @@ export class ApplicationSecondComponent extends Component {
             )
         }
     }
+
+    renderIcon = (type) => {
+        if (type == 'subscription') {
+            if (this.props.subscriptionOpened) {
+                return (
+                    <Icon
+                        type='antdesign'
+                        name='caretup'
+                        size={24}
+                        color={'green'}
+                    />
+                )
+            } else {
+                return (
+                    <Icon
+                        type='antdesign'
+                        name='caretdown'
+                        size={24}
+                        color={'green'}
+                    />
+                )
+            }
+        }
+        if (type == 'session') {
+            if (this.props.sessionOpened) {
+                return (
+                    <Icon
+                        type='antdesign'
+                        name='caretup'
+                        size={24}
+                        color={'green'}
+                    />
+                )
+            } else {
+                return (
+                    <Icon
+                        type='antdesign'
+                        name='caretdown'
+                        size={24}
+                        color={'green'}
+                    />
+                )
+            }
+        }
+    }
     render() {
         return (
             <ScrollView style={[styles.fullScreen, { margin: 10 }]}>
                 <Text style={styles.welcomeText} >Ücretlendirme şeklinizi belirleyin!</Text>
-                <TouchableOpacity onPress={() => { this.props.openSubscriptionDetails() }} >
+                <TouchableOpacity onPress={() => { this.props.openSubscriptionDetails() }}>
                     <Card style={{ marginTop: 10 }}>
                         <CardItem style={{ alignItems: 'center' }}>
                             <Text style={{ fontSize: 18 }}>Aylık abone</Text>
                         </CardItem>
+                        {this.renderIcon('subscription')}
                         {this.renderSubscriptionDetails()}
                     </Card>
                 </TouchableOpacity>
@@ -174,6 +220,7 @@ export class ApplicationSecondComponent extends Component {
                         <CardItem style={{ alignItems: 'center' }}>
                             <Text style={{ fontSize: 18, textAlign: 'center' }}>Oturum başına ücretlendirme</Text>
                         </CardItem>
+                        {this.renderIcon('session')}
                         {this.renderSessionDetails()}
                     </Card>
                 </TouchableOpacity >
