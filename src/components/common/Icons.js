@@ -58,12 +58,26 @@ export const SaveIcon = (props) => {
   return (
     <Icon
       type='font-awesome'
-      name='save'
+      name='cloud-upload'
       onPress={props.onPress || null}
       size={props.size || 33}
-      color={props.color || 'green'}
+      color={props.disabled ? 'grey' : props.color || 'green'}
       containerStyle={[props.containerStyle, { alignSelf: 'center' }]}
     />
   );
 }
+
+export const SignOutIcon = (props) => {
+  return (
+    <Icon
+      type='font-awesome'
+      name='sign-out'
+      onPress={props.onPress || null}
+      size={props.size || 33}
+      color={props.disabled ? 'grey' : props.color || 'red'}
+      containerStyle={[props.containerStyle, { alignSelf: 'center' }]}
+    />
+  );
+}
+
 

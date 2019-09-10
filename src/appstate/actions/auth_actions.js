@@ -65,25 +65,17 @@ export const createNewConsultant = (user, consultationDetails) => async () => {
 export const saveProfile = (user, callback) => async () => {
     console.log("Save profile\n", user)
     try {
-        console.log("1")
         // TODO change below lines to if firebaseUser.isProvider
         if (user.path) {
-            console.log("1")
             await firebase.storage().ref('profilePics').child(user.uid).putFile(user.path)
-            console.log("1")
             user.photoURL = await firebase.storage().ref().child("profilePics").child(user.uid).getDownloadURL();
-            console.log("1")
             delete user.path;
-            console.log("1")
         }
-        console.log("1")
         await firebase.auth().currentUser.updateProfile({ displayName: user.name, photoURL: user.photoURL })
-        console.log("1")
 
         // update user profile
         let url = `users/${user.uid}`
         await firebase.database().ref(url).update(user);
-        console.log("1")
 
         // update consultant 
         if (user.isProvider) {
@@ -102,7 +94,6 @@ export const saveProfile = (user, callback) => async () => {
 
             await firebase.database().ref('verifiedConsultants').child(user.uid).update(user)
             await firebase.database().ref(url).update(user);
-            console.log("1")
         }
         callback('Successfull')
     } catch (error) {

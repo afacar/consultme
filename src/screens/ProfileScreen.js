@@ -7,6 +7,7 @@ import ProfileForm from "../components/Forms/ProfileForm";
 import * as actions from '../appstate/actions';
 import strings from '../Constants/Strings';
 import { thisExpression } from '@babel/types';
+import firebase from 'react-native-firebase';
 
 const saveButtonDefaultTitle = 'Profilini düzenle'
 const saveButtonEnabledTitle = 'Kaydet';
@@ -76,7 +77,8 @@ class ProfileScreen extends Component {
         const { user } = this.props;
         user.photoURL = strings.DEFAULT_PROFILE_PIC;
         this.setState({
-          disabled: false
+          disabled: false,
+          saveButtonTitle: saveButtonEnabledTitle
         })
       }
       else {
@@ -151,7 +153,8 @@ class ProfileScreen extends Component {
           profile: {
             name: this.props.user.name,
             photoURL: this.props.user.photoURL
-          }
+          },
+          loading: false
         });
       }
       else {
@@ -171,10 +174,15 @@ class ProfileScreen extends Component {
     })
   }
 
+  signOut = () => {
+    firebase.auth().signOut();
+    this.props.navigation.navigate('SplashScreen')
+  }
+
   render() {
     return (
       <ScrollView>
-        <ProfileForm saveButtonTitle={this.state.saveButtonTitle} user={this.props.user} onChangeName={this.onChangeName} disabled={this.state.disabled} loading={this.state.loading} saveButtonPressed={this.saveButtonPressed} onAvatarPressed={this.onAvatarPressed} />
+        <ProfileForm saveButtonTitle={this.state.saveButtonTitle} user={this.props.user} onChangeName={this.onChangeName} disabled={this.state.disabled} loading={this.state.loading} saveButtonPressed={this.saveButtonPressed} onAvatarPressed={this.onAvatarPressed} signOut={this.signOut}/>
       </ScrollView>
     )
   }
