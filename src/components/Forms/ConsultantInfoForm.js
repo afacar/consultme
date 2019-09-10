@@ -34,63 +34,63 @@ export default class ConsultantInfoForm extends Component {
         } else if (type == 'session') {
             return (
                 <Card>
-                        <View
-                            style={{ flex: 1, flexDirection: 'row' }}>
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start'
-                            }}>
-                                <Text>Mesaj ücreti</Text>
-                            </View>
-
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start'
-                            }}>
-                                <Text>{consultant.consultationDetails.textPrice + " (tl/300 karakter)"}</Text>
-                            </View>
+                    <View
+                        style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'flex-start'
+                        }}>
+                            <Text>Mesaj ücreti</Text>
                         </View>
 
-             
-                        <View
-                            style={{ flex: 1, flexDirection: 'row' }}>
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start'
-                            }}>
-                                <Text>Sesli konuşma ücreti</Text>
-                            </View>
-
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start'
-                            }}>
-                                <Text>{consultant.consultationDetails.audioPrice + " (tl/dk)"}</Text>
-                            </View>
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'flex-start'
+                        }}>
+                            <Text>{consultant.consultationDetails.textPrice + " (tl/300 karakter)"}</Text>
                         </View>
-                      
-                        <View
-                            style={{ flex: 1, flexDirection: 'row' }}>
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start'
-                            }}>
-                                <Text>Görüntülü arama ücreti</Text>
-                            </View>
+                    </View>
 
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start'
-                            }}>
-                                <Text>{consultant.consultationDetails.videoPrice + " (tl/dk)"}</Text>
-                            </View>
+
+                    <View
+                        style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'flex-start'
+                        }}>
+                            <Text>Sesli konuşma ücreti</Text>
                         </View>
+
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'flex-start'
+                        }}>
+                            <Text>{consultant.consultationDetails.audioPrice + " (tl/dk)"}</Text>
+                        </View>
+                    </View>
+
+                    <View
+                        style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'flex-start'
+                        }}>
+                            <Text>Görüntülü arama ücreti</Text>
+                        </View>
+
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'flex-start'
+                        }}>
+                            <Text>{consultant.consultationDetails.videoPrice + " (tl/dk)"}</Text>
+                        </View>
+                    </View>
                 </Card>
             )
         }
@@ -99,30 +99,55 @@ export default class ConsultantInfoForm extends Component {
     renderSubBranch = (textType) => {
         const { consultant } = this.props;
         if (consultant.consultationDetails.subBranch) {
-            if (textType == 'text') {
-                return (
-                    <Text>Alt Branş</Text>
-                )
-            } else if (textType == 'value') {
-                return (
-                    <Text>{consultant.consultationDetails.subBranch}</Text>
-                )
-            }
+            return (
+                <Card>
+                    <View
+                        style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'flex-start'
+                        }}>
+                            <Text>Alt Branş</Text>
+                        </View>
+
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'flex-start'
+                        }}>
+                            <Text>{consultant.consultationDetails.subBranch}</Text>
+                        </View>
+                    </View>
+                </Card>
+            )
         }
     }
 
     renderInterest = (textType) => {
         const { consultant } = this.props;
         if (consultant.consultationDetails.interest) {
-            if (textType == 'text') {
-                return (
-                    <Text>İlgi Alanları</Text>
-                )
-            } else if (textType == 'value') {
-                return (
-                    <Text>{consultant.consultationDetails.interest}</Text>
-                )
-            }
+            return (<Card>
+                <View
+                    style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'flex-start'
+                    }}>
+                        <Text>İlgi Alanları</Text>
+                    </View>
+
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'flex-start'
+                    }}>
+                        <Text>{consultant.consultationDetails.interest}</Text>
+                    </View>
+                </View>
+            </Card>
+            )
         }
     }
 
@@ -175,47 +200,8 @@ export default class ConsultantInfoForm extends Component {
                         </View>
                     </Card>
 
-                    <Card>
-                        <View
-                            style={{ flex: 1, flexDirection: 'row' }}>
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start'
-                            }}>
-                                {this.renderSubBranch('text')}
-                            </View>
-
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start'
-                            }}>
-                                {this.renderSubBranch('value')}
-                            </View>
-                        </View>
-                    </Card>
-
-                    <Card>
-                        <View
-                            style={{ flex: 1, flexDirection: 'row' }}>
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start'
-                            }}>
-                                {this.renderInterest('text')}
-                            </View>
-
-                            <View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'flex-start'
-                            }}>
-                                {this.renderInterest('value')}
-                            </View>
-                        </View>
-                    </Card>
+                    {this.renderSubBranch()}
+                    {this.renderInterest()}
 
                     <Card>
                         <View
@@ -237,7 +223,7 @@ export default class ConsultantInfoForm extends Component {
                             </View>
                         </View>
                     </Card>
-                    
+
                     {this.renderPricing()}
 
                 </View>

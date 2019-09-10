@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Alert, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, Alert, ActivityIndicator, Platform, KeyboardAvoidingView } from 'react-native';
 
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import * as actions from '../appstate/actions';
 
 import styles from '../Constants/Styles';
-import { LoginPhoneNumberComponent, NameComponent, ProfileEmptyPictureComponent, ProfilePictureChosenComponent, PhoneNumberVerificationComponent } from '../components/common';
-import ProfileForm from '../components/Forms/ProfileForm';
+import { LoginPhoneNumberComponent, ProfilePictureComponent, PhoneNumberVerificationComponent } from '../components/common';
+
 class LoginScreen extends Component {
 
     static navigationOptions = ({ navigation }) => ({
@@ -26,7 +26,7 @@ class LoginScreen extends Component {
             number: '',
             photoURL: '',
             path: '',
-            uid: ''
+            uid: '',
         },
         message: '',
         verificationCode: '',
@@ -50,7 +50,7 @@ class LoginScreen extends Component {
                     phoneNumberVerified: true,
                     loading: false,
                     message: '',
-                    profile: { ...this.state.profile, uid: user.uid }
+                    profile: { ...this.state.profile, uid: user.uid, name: user.displayName, photoURL: user.photoURL }
                 });
             }
         });
@@ -71,30 +71,40 @@ class LoginScreen extends Component {
     }
 
     finishUserCreation = async () => {
-
-        this.setState({
-            loading: true
-        })
-        if (this.state.profile.name) {
+        if (!this.state.profile.name) {
             this.setState({
                 loading: false,
-                nameEntered: true,
+                message: 'İsim boş bırakılamaz'
             })
         } else {
-            this._isMounted &&
+            if (!this.state.switch1Value) {
                 this.setState({
-                    loading: false,
-                    message: 'İsim boş bırakılamaz'
+                    loading: true,
                 })
+                await this.props.createNewUserProfile(this.state.profile);
+                this.setState({
+                    completedRegistration: true,
+                    loading: false,
+                })
+                this.props.navigation.navigate('SplashScreen');
+            } else {
+                console.log("LS Prof", this.state.profile)
+                if (!this.state.profile.name) {
+                    this.setState({
+                        loading: false,
+                        message: 'İsim boş bırakılamaz'
+                    })
+                } else {
+                    this.setState({
+                        completedRegistration: true,
+                        loading: false,
+                    })
+                    this.props.saveUser(this.state.profile)
+                    this.props.createNewUserProfile(this.state.profile)
+                    this.props.navigation.navigate('ConsultantApplicationScreen');
+                }
+            }
         }
-
-        await this.props.createNewUserProfile(this.state.profile);
-        this.setState({
-            completedRegistration: true,
-            loading: false,
-        })
-        this.props.navigation.navigate('SplashScreen');
-
     }
 
     signIn = async () => {
@@ -192,11 +202,7 @@ class LoginScreen extends Component {
             return <PhoneNumberVerificationComponent verificationCode={this.state.verificationCode} onNextPressed={this.verifyPhoneNumber} disabled={this.state.loading} onVerificationCodeChanged={this.onVerificationCodeChanged} />
         }
         else if (!this.state.nameEntered) {
-            return <ProfileEmptyPictureComponent name={this.state.profile.name} onNameChanged={this.onNameChanged}
-                avatarPressed={this.openPicker} disabled={this.state.loading} toggleSwitch1={this.toggleSwitch1}
-                onNextPressed={this.finishUserCreation} onTextPressed={this.becomeConsultant} switch1Value={this.state.switch1Value} />
-        } else if (this.state.picChosen) {
-            return <ProfilePictureChosenComponent name={this.state.profile.name} onNameChanged={this.onNameChanged}
+            return <ProfilePictureComponent name={this.state.profile.name} onNameChanged={this.onNameChanged}
                 uri={this.state.profile.photoURL} disabled={this.state.loading} avatarPressed={this.openPicker}
                 onNextPressed={this.finishUserCreation} onTextPressed={this.becomeConsultant}
                 switch1Value={this.state.switch1Value} toggleSwitch1={this.toggleSwitch1} />
@@ -212,11 +218,11 @@ class LoginScreen extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
+            <KeyboardAvoidingView style={{ flex: 1, }}>
                 {this.renderLoginComponent()}
                 {this.renderMessage()}
                 {this.renderLoading()}
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 

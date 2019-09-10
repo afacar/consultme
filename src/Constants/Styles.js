@@ -16,9 +16,6 @@ const styles = StyleSheet.create({
     },
     fullScreen: {
         flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
         margin: 10,
     },
     welcomeText: {

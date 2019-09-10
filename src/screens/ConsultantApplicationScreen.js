@@ -48,11 +48,11 @@ class ConsultantApplicationScreen extends Component {
     }
 
     onInterestChange = (interest) => {
-        this.setState({ interest })
+        this.setState({ interest, })
     }
 
     onAddressChange = (address) => {
-        this.setState({ address, addrerrorMessageessEM: '', addressEmpty: false })
+        this.setState({ address, errorMessage: '', addressEmpty: false })
     }
 
     onFirstComponentCompleted = () => {
@@ -98,24 +98,25 @@ class ConsultantApplicationScreen extends Component {
 
     onSubscriptionPriceChanged = (price) => {
         this.setState({
-            subscriptionPrice: price
+            subscriptionPrice: price,
+            errorMessage: ''
         })
     }
 
     onSessionTextPriceChanged = (textPrice) => {
-        this.setState({ textPrice })
+        this.setState({ textPrice, errorMessage: '' })
     }
 
     onSessionVideoPriceChanged = (videoPrice) => {
-        this.setState({ videoPrice })
+        this.setState({ videoPrice, errorMessage: '' })
     }
 
     onSessionAudioPriceChanged = (audioPrice) => {
-        this.setState({ audioPrice })
+        this.setState({ audioPrice, errorMessage: '' })
     }
 
     onSecondComponentCompleted = async () => {
-
+        this.props.user.isProvider = true
         const { branch, subBranch, interest, address, sessionOpened, subscriptionOpened } = this.state
         if (subscriptionOpened) {
             const { subscriptionPrice } = this.state
@@ -129,7 +130,7 @@ class ConsultantApplicationScreen extends Component {
                     address,
                     subBranch,
                     subscriptionPrice,
-                    type:'subscription'
+                    type: 'subscription'
                 }
                 this.setState({
                     disabled: true,
@@ -164,11 +165,12 @@ class ConsultantApplicationScreen extends Component {
                     textPrice,
                     audioPrice,
                     videoPrice,
-                    type:'session'
+                    type: 'session'
                 }
                 this.setState({
                     disabled: true,
-                    loading: true
+                    loading: true,
+                    secondComponentCompleted: true,
                 })
                 await this.props.createNewConsultant(this.props.user, consultationDetails)
                 this.setState({

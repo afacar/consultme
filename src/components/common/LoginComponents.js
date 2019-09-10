@@ -5,6 +5,7 @@ import { Input, Button, Avatar, Card, Icon } from 'react-native-elements';
 import { LoginIcon, VerifyIcon, NextIcon } from '../common/Icons';
 import { Switch } from 'react-native-gesture-handler';
 import SwitchExample from './Switch.js'
+import strings from '../../Constants/Strings';
 
 export class LoginPhoneNumberComponent extends Component {
     render() {
@@ -117,6 +118,7 @@ export class ProfileEmptyPictureComponent extends Component {
                 <View style={{ margin: 10, alignItems: 'center' }} >
                     <Avatar
                         size="xlarge"
+                        onPress={() => { this.props.avatarPressed() }}
                         rounded={true}
                         icon={{ name: 'account', type: 'material-community' }}
                         showEditButton={true}
@@ -124,15 +126,15 @@ export class ProfileEmptyPictureComponent extends Component {
                 </View>
                 <View style={styles.container}>
                     <Input
-                        style = {{ flex: 1 }}
-                        key ='name'
-                        label ='İsminizi girin'
-                        placeholder = 'İsim Soyisim'
-                        value = {this.props.name || ''}
-                        onChangeText = {(value) => { this.props.onNameChanged(value) }}
+                        style={{ flex: 1 }}
+                        key='name'
+                        label='İsminizi girin'
+                        placeholder='İsim Soyisim'
+                        value={this.props.name || ''}
+                        onChangeText={(value) => { this.props.onNameChanged(value) }}
                     />
                     <Button
-                        style = {{ flex: 1 }}
+                        style={{ flex: 1 }}
                         type='clear'
                         disabled={this.props.disabled || false}
                         onPress={() => {
@@ -141,70 +143,68 @@ export class ProfileEmptyPictureComponent extends Component {
                             }
                             else { this.props.onNextPressed() }
                         }}
-                        icon = {<NextIcon size={24} disabled={this.props.disabled} />}
+                        icon={<NextIcon size={24} disabled={this.props.disabled} />}
                     />
 
                 </View>
-                <View style = {{ margin: 18, alignItems: 'center', flexDirection: 'row'}} >
-                    <Text style = {{ textAlign: 'center', fontSize: 18, color: 'green' }}>Danışman: </Text>
+                <View style={{ margin: 18, alignItems: 'center', flexDirection: 'row' }} >
+                    <Text style={{ textAlign: 'center', fontSize: 18, color: 'green' }}>Danışman: </Text>
                     <SwitchExample
-                        toggleSwitch1 = {this.props.toggleSwitch1}
-                        switch1Value = {this.props.switch1Value} />
+                        toggleSwitch1={this.props.toggleSwitch1}
+                        switch1Value={this.props.switch1Value} />
                 </View>
             </View>
         );
     }
 }
 
-export class ProfilePictureChosenComponent extends Component {
+export class ProfilePictureComponent extends Component {
 
     render() {
         return (
             <View style={{ margin: 10, alignItems: 'center', flexDirection: 'column', flex: 1 }}>
-            <Text style={{ fontSize: 18, color: 'black', marginBottom: 5 }}>
-                Lütfen profil resminizi seçin.
+                <Text style={{ fontSize: 18, color: 'black', marginBottom: 5 }}>
+                    Lütfen profil resminizi seçin.
             </Text>
-            <View style={{ margin: 10, alignItems: 'center' }} >
-                <Avatar
-                    size="xlarge"
-                    onPress={() => { this.props.avatarPressed() }}
-                    rounded={true}
-                    source={{ uri: this.props.uri }}
-                    showEditButton={true}
-                />
-            </View>
-            <View style={styles.container}>
-                <Input
-                    style = {{ flex: 1 }}
-                    key ='name'
-                    label ='İsminizi girin'
-                    placeholder = 'İsim Soyisim'
-                    value = {this.props.name || ''}
-                    onChangeText = {(value) => { this.props.onNameChanged(value) }}
-                />
-                <Button
-                    style = {{ flex: 1 }}
-                    type='clear'
-                    disabled={this.props.disabled || false}
-                    onPress={() => {
-                        if ( this.props.switch1Value) {
-                            this.props.onTextPressed()
-                        }
-                        else { this.props.onNextPressed() }
-                    }}
-                    icon = {<NextIcon size={24} disabled={this.props.disabled} />}
-                />
+                <View style={{ margin: 10, alignItems: 'center' }} >
+                    <Avatar
+                        size="xlarge"
+                        onPress={() => { this.props.avatarPressed() }}
+                        rounded={true}
+                        source={{ uri: this.props.uri || strings.DEFAULT_PROFILE_PIC }}
+                        showEditButton={true}
+                    />
+                </View>
+                <View style={styles.container}>
+                    <Input
+                        style={{ flex: 1 }}
+                        key='name'
+                        label='İsminizi girin'
+                        placeholder='İsim Soyisim'
+                        value={this.props.name || ''}
+                        onChangeText={(value) => { this.props.onNameChanged(value) }}
+                    />
+                    <Button
+                        style={{ flex: 1 }}
+                        type='clear'
+                        disabled={this.props.disabled || false}
+                        onPress={() => {
+                            this.props.onNextPressed()
+                        }}
+                        icon={<NextIcon size={24} disabled={this.props.disabled} />}
+                    />
 
+                </View>
+                <View style={{ margin: 18, alignItems: 'center', flexDirection: 'row' }} >
+                    <Text style={{ textAlign: 'center', fontSize: 18, color: 'green' }}>Danışman olmak istiyorum</Text>
+                    <Text style={{ textAlign: 'center', fontSize: 12, color: 'grey' }}>Eğer daha önce danışmanlık kayıdı yaptırdıysanız devam edebilirsiniz. </Text>
+                    <SwitchExample
+                        toggleSwitch1={this.props.toggleSwitch1}
+                        switch1Value={this.props.switch1Value} />
+                </View>
             </View>
-            <View style = {{ margin: 18, alignItems: 'center', flexDirection: 'row'}} >
-                <Text style = {{ textAlign: 'center', fontSize: 18, color: 'green' }}>Danışman: </Text>
-                <SwitchExample
-                    toggleSwitch1 = {this.props.toggleSwitch1}
-                    switch1Value = {this.props.switch1Value} />
-            </View>
-        </View>
-    );
-}
+        );
+    }
 }
 
 
