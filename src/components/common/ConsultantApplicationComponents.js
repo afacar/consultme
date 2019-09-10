@@ -11,7 +11,7 @@ export class ApplicationFirstComponent extends Component {
                 <Text style={styles.welcomeText} >Danışmanlık başvurusuna hoşgeldiniz!</Text>
                 <CardItem style={{ marginTop: 10 }}>
                     <ListPicker
-                        label='Branş*'
+                        defaultValue = {"Branş seçiniz"}
                         selectedValue={this.props.branch}
                         onValueChange={(branch, itemIndex) => this.props.selectBranch({ branch })}
                         options={['Doktor', 'Dietisyen', 'Psikolog', 'Eğitim Danışmanı']}
@@ -254,33 +254,6 @@ export class ApplicationSecondComponent extends Component {
                     </View>
                 </CardItem>
             </ScrollView >
-        )
-    }
-}
-
-export class ApplicationThirdComponent extends Component {
-
-
-    renderLoading = () => {
-        if (this.props.loading)
-            return (
-                <ActivityIndicator size='large' style={styles.screenCenter} color='green' />
-            )
-    }
-
-    render() {
-        return (
-            <ScrollView style={{ flex: 1 }}>
-                <Text style={styles.welcomeText}>{this.props.loading ? 'Danışmanlık başvurunuz alınıyor. Lütfen bekleyiniz.' : 'Başvurunuz alınmıştır'}</Text>
-                {this.renderLoading()}
-                <Button
-                    type='solid'
-                    title='Uygulamaya dön'
-                    disabled={this.props.loading}
-                    titleStyle={{ color: 'white' }}
-                    onPress={() => { this.props.onThirdComponentFinished() }}
-                />
-            </ScrollView>
         )
     }
 }

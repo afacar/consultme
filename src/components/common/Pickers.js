@@ -23,7 +23,7 @@ export class ListPicker extends Component {
               selectedValue={selectedValue || ''}
               onValueChange={(itemValue, itemIndex) => onValueChange(itemValue)}
             >
-              <Picker.Item key='nokey' label='Seçiniz...' value='' />
+              <Picker.Item key='nokey' label={this.props.defaultValue||'Seçiniz...'} value='' />
               {
                 options.map((item, index) => {
                   return <Picker.Item key={index} label={item} value={item} />;
@@ -52,7 +52,7 @@ export class ListPicker extends Component {
                       onValueChange={(itemValue, itemIndex) => onValueChange(itemValue)}
                       //itemStyle={{fontSize: 20,color:'yellow'}}
                       >
-                      <Picker.Item key='nokey' label='Seçiniz...' value='' />
+                      <Picker.Item key='nokey' label={this.props.defaultValue||'Seçiniz...'} value='' />
                       {
                         options.map((item, index) => {
                           return <Picker.Item  key={index} label={item} value={item}

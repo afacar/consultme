@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, ActivityIndicator } from 'react-native';
+import { ScrollView, Alert, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
 
 import { connect } from 'react-redux';
 
@@ -177,11 +177,11 @@ class ConsultantApplicationScreen extends Component {
                     disabled: false,
                     loading: false
                 })
+               
             }
         }
-    }
-    onThirdComponentFinished = () => {
-        this.props.navigation.navigate('HomeScreen')
+
+        this.props.navigation.navigate('SplashScreen')
     }
 
     renderComponents = () => {
@@ -215,22 +215,23 @@ class ConsultantApplicationScreen extends Component {
                     disabled={this.state.disabled}
                 />
             )
-        } else {
-            return (
-                <ApplicationThirdComponent loading={this.state.loading} onThirdComponentFinished={this.onThirdComponentFinished} />
-            )
         }
     }
     render() {
         return (
             <ScrollView style={[styles.fullScreen, { margin: 10 }]}>
-                {this.renderComponents()}
-
-
+                <KeyboardAvoidingView style={{ flex: 1 }} >
+                    {this.renderComponents()}
+                    {this.renderLoading()}
+                </KeyboardAvoidingView>
             </ScrollView>
         )
     }
-
+    renderLoading = () => {
+        if (this.state.loading) {
+            return <ActivityIndicator size='large' style={styles.screenCenter} color='green' />
+        }
+    }
     componentWillUnmount() {
         this._isMounted = false
     }
