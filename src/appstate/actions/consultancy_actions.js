@@ -9,15 +9,22 @@ export const fetchConsultants = (callback) => async (dispatch) => {
     console.log("Fetching consultants...")
     firebase.database().ref(url).limitToFirst(25).on('child_changed', consultantSnap => {
         console.log("New consultant ", consultantSnap.val());
-        if (user)
+        if (user) {
             if (consultantSnap.val().uid !== user.uid)
                 callback(consultantSnap.val());
+        }
+        else {
+            callback(consultantSnap.val());
+        }
     })
     firebase.database().ref(url).limitToFirst(25).on('child_added', consultantSnap => {
         console.log("New consultant ", consultantSnap.val());
-        if (user)
+        if (user) {
             if (consultantSnap.val().uid !== user.uid)
                 callback(consultantSnap.val());
+        } else {
+            callback(consultantSnap.val());
+        }
     })
 }
 

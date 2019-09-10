@@ -287,8 +287,10 @@ class LoginScreen extends Component {
 
     componentWillUnmount() {
         this._isMounted = false;
-        if (!this.state.completedRegistration)
-            firebase.auth().signOut();
+        if (!this.state.completedRegistration) {
+            if (firebase.auth().currentUser)
+                firebase.auth().signOut();
+        }
         if (this.unsubscribe) this.unsubscribe();
     }
 }
