@@ -8,7 +8,6 @@ export const fetchConsultants = (callback) => async (dispatch) => {
     let url = 'verifiedConsultants/';
     console.log("Fetching consultants...")
     firebase.database().ref(url).limitToFirst(25).on('child_changed', consultantSnap => {
-        console.log("New consultant ", consultantSnap.val());
         if (user) {
             if (consultantSnap.val().uid !== user.uid)
                 callback(consultantSnap.val());
@@ -18,7 +17,6 @@ export const fetchConsultants = (callback) => async (dispatch) => {
         }
     })
     firebase.database().ref(url).limitToFirst(25).on('child_added', consultantSnap => {
-        console.log("New consultant ", consultantSnap.val());
         if (user) {
             if (consultantSnap.val().uid !== user.uid)
                 callback(consultantSnap.val());

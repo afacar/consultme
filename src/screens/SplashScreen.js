@@ -9,7 +9,11 @@ import { connect } from 'react-redux';
 class SplashScreen extends Component {
 
 
-    componentDidMount =() => {
+    state = {
+        isProvider: false
+    }
+
+    componentDidMount = async () => {
         const firebaseUser = firebase.auth().currentUser;
         console.log("FU", firebaseUser)
         var user = {
@@ -27,28 +31,42 @@ class SplashScreen extends Component {
             user.uid = firebaseUser.uid;
 
             //Todo change into firebase user isProvider
-            firebase.database().ref('users').child(user.uid).child('isProvider').once('value', snapshot => {
-                if (snapshot.exists())
+            await firebase.database().ref('users').child(user.uid).child('isProvider').once('value', snapshot => {
+                if (snapshot.exists()) {
                     user.isProvider = snapshot.val();
+                }
             })
+
+            this.props.fetchUserChats(user,(chat) => {
+                console.log("New user chat on Splash screen", chat)
+                this.props.saveUserChat(chat)
+            })
+            if (user.isProvider) {
+                console.log("Start to fetch chats");
+                this.props.fetchConsultantChats(user, (chat) => {
+                    console.log("New consultant chat on Splash screen", chat)
+                    this.props.saveConsultantChat(chat);
+                })
+            }
         }
         console.log("Splash Screen did mount")
         this.props.fetchConsultants((consultant) => {
-            console.log("New consultant on Splash screen", consultant)
             this.props.saveConsultant(consultant);
         })
-        setTimeout(() => {
-            this.props.saveUser(user);
-            if (user.name) {
-                console.log('user found')
-                this.props.navigation.setParams('user', user)
+        this.props.saveUser(user);
+        if (user.name) {
+            console.log('user found')
+            this.props.navigation.setParams('user', user)
+            setTimeout(() => {
                 this.props.navigation.navigate('HomeScreen');
-            }
-            else {
-                console.log('no user found')
+            }, 500)
+        }
+        else {
+            console.log('no user found')
+            setTimeout(() => {
                 this.props.navigation.navigate('ConsultantListScreen');
-            }
-        }, 500)
+            }, 500)
+        }
     }
 
     render() {

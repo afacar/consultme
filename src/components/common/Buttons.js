@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { View } from 'react-native';
 import { Button } from 'react-native-elements';
 import * as styles from '../../Constants/Styles';
 import { SaveIcon, SignOutIcon } from './Icons';
+import colors from '../../Constants/Colors';
 
 export class SaveButton extends Component {
   render() {
@@ -43,3 +45,25 @@ export class SignOutButton extends Component {
   }
 }
 
+export class HomeScreenDivider extends Component {
+  render() {
+    const { consultantsSelected, user } = this.props;
+    let isProvider = false;
+    if (user) {
+      if (user.isProvider)
+        isProvider= true
+    }
+    if (isProvider) {
+      return (
+        <View style={{ flexDirection: 'row', width: '100%' }}>
+          <View style={{ flex: 1, justifyContent: 'center', borderBottomWidth: consultantsSelected ? 3 : 0, borderBottomColor: colors.IOS_DARK_BLUE, borderBottomStartRadius: 25 }}>
+            <Button type='clear' title='Danışmanlarım' buttonStyle={{ margin: 10 }} titleStyle={{ color: colors.IOS_BLUE, fontSize: consultantsSelected ? 16 : 14 }} onPress={() => { this.props.changeTab('consultingFrom') }} />
+          </View>
+          <View style={{ flex: 1, justifyContent: 'center', borderBottomWidth: consultantsSelected ? 0 : 3, borderBottomColor: colors.IOS_DARK_BLUE, borderBottomRightRadius: 25 }}>
+            <Button type='clear' title='Danışanlarım' buttonStyle={{ margin: 10 }} titleStyle={{ color: colors.IOS_BLUE, fontSize: consultantsSelected ? 14 : 16}} onPress={() => { this.props.changeTab('consultingTo') }} />
+          </View>
+        </View>
+      )
+    } 
+  }
+}
