@@ -26,7 +26,7 @@ export const startConsultancy = (user, consultant, callback) => async (dispatch)
     const cId = consultant.uid;
     let systemNewConsultationRef = `consultations/${cId}/${userId}/`;
     let userNewConsultationRef = `users/${userId}/consultationsFrom`;
-    let consultantNewConsultationRef = `users/${cId}/consultationsTo`
+    let consultantNewConsultationRef = `users/${cId}/consultationsTo/${userId}`
 
     var db = firebase.database();
     db.ref(systemNewConsultationRef).once('value', async (consultationSnap) => {
@@ -47,5 +47,5 @@ export const startConsultancy = (user, consultant, callback) => async (dispatch)
         };
     })
     db.ref(userNewConsultationRef).child(`${cId}`).set(true);
-    db.ref(consultantNewConsultationRef).child(`${userId}`).set(true);
+    db.ref(consultantNewConsultationRef).set(true);
 }
