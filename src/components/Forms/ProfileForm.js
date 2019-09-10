@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 
 import { Card, Input, Avatar } from 'react-native-elements';
-import { SaveButton } from '../common/Buttons';
+import { SaveButton, SignOutButton } from '../common/Buttons';
 
 import strings from '../../Constants/Strings';
+import colors from '../../Constants/Colors';
 
 class ProfileForm extends Component {
 
@@ -34,8 +35,15 @@ class ProfileForm extends Component {
 
         <SaveButton
           title={this.props.saveButtonTitle}
+          iconColor={colors.IOS_BLUE}
           onPress={() => this.props.saveButtonPressed()}
           disabled={this.props.disabled}
+        />
+
+        <SignOutButton
+          iconColor={colors.IOS_RED}
+          onPress={() => this.props.signOut()}
+          disabled={this.props.loading}
         />
 
       </KeyboardAvoidingView>

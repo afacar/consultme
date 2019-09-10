@@ -61,30 +61,31 @@ export class ApplicationFirstComponent extends Component {
                 </CardItem>
 
                 <CardItem style={{ marginTop: 10, borderWidth: 1 }}>
-                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                        <Button
-                            type='clear'
-                            title='Geri'
-                            titleStyle={{ color: 'red' }}
-                            onPress={() => { this.props.onBackPressed() }}
-                        />
-                    </View>
-                    <View style={{ flex: 2, justifyContent: 'center' }}>
-                        <Text style={{ textAlign: 'center', color: 'red' }}>
-                            {this.props.errorMessage}
-                        </Text>
-                    </View>
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{ flex: 1, }}>
+                            <Button
+                                type='clear'
+                                title='Geri'
+                                titleStyle={{ color: 'red' }}
+                                onPress={() => { this.props.onBackPressed() }}
+                            />
+                        </View>
+                        <View style={{ flex: 2, }}>
+                            <Text style={{ textAlign: 'center', color: 'red' }}>
+                                {this.props.errorMessage}
+                            </Text>
+                        </View>
 
-                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                        <Button
-                            type='clear'
-                            title='Devam'
-                            titleStyle={{ color: '#43B66D' }}
-                            onPress={() => { this.props.onNextPressed() }}
-                        />
+                        <View style={{ flex: 1, }}>
+                            <Button
+                                type='clear'
+                                title='Devam'
+                                titleStyle={{ color: '#43B66D' }}
+                                onPress={() => { this.props.onNextPressed() }}
+                            />
+                        </View>
                     </View>
                 </CardItem>
-
             </ScrollView>
         )
     }
@@ -177,32 +178,34 @@ export class ApplicationSecondComponent extends Component {
                     </Card>
                 </TouchableOpacity >
 
-                <CardItem style={{ marginTop: 10, borderWidth: 1 }}>
-                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                        <Button
-                            type='clear'
-                            title='Geri'
-                            titleStyle={{ color: 'red' }}
-                            onPress={() => { this.props.onBackPressed() }}
-                        />
-                    </View>
-                    <View style={{ flex: 2, justifyContent: 'center' }}>
-                        <Text style={{ textAlign: 'center', color: 'red' }}>
-                            {this.props.errorMessage}
-                        </Text>
-                    </View>
+                <Text style={{ textAlign: 'center', marginTop: 10, fontSize: 18 }}>{this.props.footerText}</Text>
 
-                    <View style={{ alignItems: 'flex-end', }}>
-                        <Button
-                            type='clear'
-                            title='Devam et'
-                            titleStyle={{ color: '#43B66D' }}
-                            disabled={this.props.disabled}
-                            onPress={() => { this.props.onNextPressed() }}
-                        />
+                <CardItem style={{ marginTop: 10, borderWidth: 1 }}>
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{ flex: 1, }}>
+                            <Button
+                                type='clear'
+                                title='Geri'
+                                titleStyle={{ color: 'red' }}
+                                onPress={() => { this.props.onBackPressed() }}
+                            />
+                        </View>
+                        <View style={{ flex: 2, }}>
+                            <Text style={{ textAlign: 'center', color: 'red' }}>
+                                {this.props.errorMessage}
+                            </Text>
+                        </View>
+
+                        <View style={{ flex: 1, }}>
+                            <Button
+                                type='clear'
+                                title='Devam'
+                                titleStyle={{ color: '#43B66D' }}
+                                onPress={() => { this.props.onNextPressed() }}
+                            />
+                        </View>
                     </View>
                 </CardItem>
-                <Text style={{ textAlign: 'center', marginTop: 10, fontSize: 18 }}>{this.props.footerText}</Text>
             </ScrollView >
         )
     }
