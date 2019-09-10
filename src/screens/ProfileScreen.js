@@ -175,14 +175,15 @@ class ProfileScreen extends Component {
   }
 
   signOut = () => {
-    firebase.auth().signOut();
-    this.props.navigation.navigate('SplashScreen')
+    firebase.auth().signOut().then(() => {
+      this.props.navigation.navigate('SplashScreen')
+    });
   }
 
   render() {
     return (
       <ScrollView>
-        <ProfileForm saveButtonTitle={this.state.saveButtonTitle} user={this.props.user} onChangeName={this.onChangeName} disabled={this.state.disabled} loading={this.state.loading} saveButtonPressed={this.saveButtonPressed} onAvatarPressed={this.onAvatarPressed} signOut={this.signOut}/>
+        <ProfileForm saveButtonTitle={this.state.saveButtonTitle} user={this.props.user} onChangeName={this.onChangeName} disabled={this.state.disabled} loading={this.state.loading} saveButtonPressed={this.saveButtonPressed} onAvatarPressed={this.onAvatarPressed} signOut={this.signOut} />
       </ScrollView>
     )
   }

@@ -9,8 +9,9 @@ import { connect } from 'react-redux';
 class SplashScreen extends Component {
 
 
-    componentDidMount = async () => {
+    componentDidMount =() => {
         const firebaseUser = firebase.auth().currentUser;
+        console.log("FU", firebaseUser)
         var user = {
             name: '',
             uid: '',
@@ -32,20 +33,22 @@ class SplashScreen extends Component {
             })
         }
         console.log("Splash Screen did mount")
-        await this.props.fetchConsultants((consultant) => {
+        this.props.fetchConsultants((consultant) => {
             console.log("New consultant on Splash screen", consultant)
             this.props.saveConsultant(consultant);
         })
-        this.props.saveUser(user);
-        if (user.name) {
-            console.log('user found')
-            this.props.navigation.setParams('user', user)
-            this.props.navigation.navigate('HomeScreen');
-        }
-        else {
-            console.log('no user found')
-            this.props.navigation.navigate('ConsultantListScreen');
-        }
+        setTimeout(() => {
+            this.props.saveUser(user);
+            if (user.name) {
+                console.log('user found')
+                this.props.navigation.setParams('user', user)
+                this.props.navigation.navigate('HomeScreen');
+            }
+            else {
+                console.log('no user found')
+                this.props.navigation.navigate('ConsultantListScreen');
+            }
+        }, 500)
     }
 
     render() {

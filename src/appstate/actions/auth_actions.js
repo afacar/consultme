@@ -19,14 +19,15 @@ export const checkAuthState = () => (dispatch) => {
 
 export const createNewUserProfile = (profile) => async (dispatch) => {
     const { _user } = firebase.auth().currentUser;
-    const { name, path } = profile;
+    const { name, path, photoURL } = profile;
     console.log("Profile", profile)
     // save image to firebase
     if (path) {
         await firebase.storage().ref('profilePics').child(_user.uid).putFile(path)
         profile.photoURL = await firebase.storage().ref().child("profilePics").child(_user.uid).getDownloadURL();
     } else {
-        profile.photoURL = strings.DEFAULT_PROFILE_PIC
+        if (!photoURL)
+            profile.photoURL = strings.DEFAULT_PROFILE_PIC
     }
     delete profile.path;
     // set new firebase user
