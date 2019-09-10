@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Button, Card } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { LoginIcon } from './Icons';
 import { connect } from 'react-redux';
 import * as actions from '../../appstate/actions';
@@ -28,7 +28,9 @@ class ConsultantListScreenHeaderRight extends Component {
 
 const mapStateToProps = ({ auth }) => {
     const { user } = auth
-    return {user}
+    return { user }
 }
 
 export default connect(mapStateToProps, actions)(ConsultantListScreenHeaderRight);
+
+
