@@ -107,56 +107,6 @@ export class NameComponent extends Component {
     }
 }
 
-export class ProfileEmptyPictureComponent extends Component {
-
-    render() {
-        return (
-            <View style={{ margin: 10, alignItems: 'center', flexDirection: 'column', flex: 1 }}>
-                <Text style={{ fontSize: 18, color: 'black', marginBottom: 5 }}>
-                    Lütfen profil resminizi seçin.
-                </Text>
-                <View style={{ margin: 10, alignItems: 'center' }} >
-                    <Avatar
-                        size="xlarge"
-                        onPress={() => { this.props.avatarPressed() }}
-                        rounded={true}
-                        icon={{ name: 'account', type: 'material-community' }}
-                        showEditButton={true}
-                    />
-                </View>
-                <View style={styles.container}>
-                    <Input
-                        style={{ flex: 1 }}
-                        key='name'
-                        label='İsminizi girin'
-                        placeholder='İsim Soyisim'
-                        value={this.props.name || ''}
-                        onChangeText={(value) => { this.props.onNameChanged(value) }}
-                    />
-                    <Button
-                        style={{ flex: 1 }}
-                        type='clear'
-                        disabled={this.props.disabled || false}
-                        onPress={() => {
-                            if (this.props.switch1Value) {
-                                this.props.onTextPressed()
-                            }
-                            else { this.props.onNextPressed() }
-                        }}
-                        icon={<NextIcon size={24} disabled={this.props.disabled} />}
-                    />
-
-                </View>
-                <View style={{ margin: 18, alignItems: 'center', flexDirection: 'row' }} >
-                    <Text style={{ textAlign: 'center', fontSize: 18, color: 'green' }}>Danışman: </Text>
-                    <SwitchExample
-                        toggleSwitch1={this.props.toggleSwitch1}
-                        switch1Value={this.props.switch1Value} />
-                </View>
-            </View>
-        );
-    }
-}
 
 export class ProfilePictureComponent extends Component {
 
@@ -197,11 +147,12 @@ export class ProfilePictureComponent extends Component {
                 </View>
                 <View style={{ margin: 18, alignItems: 'center', flexDirection: 'row' }} >
                     <Text style={{ textAlign: 'center', fontSize: 18, color: 'green' }}>Danışman olmak istiyorum</Text>
-                    <Text style={{ textAlign: 'center', fontSize: 12, color: 'grey' }}>Eğer daha önce danışmanlık kayıdı yaptırdıysanız devam edebilirsiniz. </Text>
                     <SwitchExample
                         toggleSwitch1={this.props.toggleSwitch1}
                         switch1Value={this.props.switch1Value} />
                 </View>
+                <Text style={{ textAlign: 'center', fontSize: 12, color: 'grey' }}>Eğer daha önce danışmanlık kayıdı yaptırdıysanız devam edebilirsiniz. </Text>
+
             </View>
         );
     }
