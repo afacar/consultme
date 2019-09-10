@@ -62,13 +62,15 @@ class ConsultantListScreen extends Component {
                     onPress: () => { },
                     style: 'cancel',
                 },
-                { text: 'Onaylıyorum', onPress: () => this.props.startConsultancy(this.props.state.user, consultant, (status)=>{
-                    if ( status == 'new'){
+                {
+                    text: 'Onaylıyorum', onPress: () => this.props.startConsultancy(this.props.state.user, consultant, (status) => {
+                        if (status == 'new') {
 
-                    }else if ( status == 'continue'){
-                        
-                    }
-                })},
+                        } else if (status == 'continue') {
+
+                        }
+                    })
+                },
             ]
         )
     }
@@ -96,6 +98,20 @@ class ConsultantListScreen extends Component {
 const mapStateToProps = (state) => {
     const { user } = state.auth;
     const { consultants } = state.app;
+    const { consultant_chats } = state.chat
+
+    console.log("Before splice", consultants)
+
+    console.log("CC", consultant_chats);
+
+    for (var i = consultants.length - 1; i >= 0; i--) {
+        for (var j = 0; j < consultant_chats.length; j++) {
+            if (consultants[i] && (consultants[i].uid !== consultant_chats[j].user.uid)) {
+                consultants.splice(i, 1);
+            }
+        }
+    }
+    console.log("After splice", consultants)
     return { state: { user, consultants } }
 }
 
