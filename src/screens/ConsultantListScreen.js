@@ -10,6 +10,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import ConsultantCard from '../components/Cards/ConsultantCard';
 import ConsultantFullInfoModal from '../components/Modals/ConsultantFullInfoModal';
 import styles from '../Constants/Styles';
+import strings from '../Constants/Strings';
 
 // TODO don't show the consultants which the user is having consultation.
 // TODO don't show the consultant himself
@@ -55,7 +56,7 @@ class ConsultantListScreen extends Component {
         this.setState({ openAgreementTextModal: true })
         Alert.alert(
             'Anlaşma metnini kabul ediyor musunuz?',
-            'Dummy anlaşma metni',
+            strings.AGREEMENT_POLICY,
             [
                 {
                     text: 'Reddet',
