@@ -34,7 +34,6 @@ class ProfileScreen extends Component {
   }
 
   componentDidMount() {
-    console.log("ProfileScreen mounted");
     this.setState({
       profile: {
         name: this.props.user.name,
@@ -64,16 +63,12 @@ class ProfileScreen extends Component {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
 
       if (response.didCancel) {
-        console.log('User cancelled image picker');
       }
       else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
       }
       else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
         const { user } = this.props;
         user.photoURL = strings.DEFAULT_PROFILE_PIC;
         this.setState({
@@ -113,7 +108,6 @@ class ProfileScreen extends Component {
   onChangeName = (newName) => {
     const prevName = this.state.profile.name;
     var { user } = this.props;
-    console.log('Prev vs new', prevName + '\n' + newName)
     if (prevName !== newName) {
       this.setState({ disabled: false, saveButtonTitle: saveButtonEnabledTitle })
       user.name = newName
@@ -124,7 +118,6 @@ class ProfileScreen extends Component {
   }
 
   saveButtonPressed = () => {
-    console.log("Save button pressed");
     this.setState({ loading: true, counter: 0, disabled: true })
     this.setState({ saveButtonTitle: saveButtonSavingTitle1 })
     this.savinginterval = setInterval(() => {
@@ -145,7 +138,6 @@ class ProfileScreen extends Component {
       })
     }, 1000)
     this.props.saveProfile(this.props.user, (result) => {
-      console.log("Result", result);
       if (result == 'Successfull') {
         this.setState({ saveButtonTitle: 'Kaydedildi' })
         clearInterval(this.savinginterval);
@@ -183,14 +175,15 @@ class ProfileScreen extends Component {
   render() {
     return (
       <ScrollView>
-        <ProfileForm saveButtonTitle={this.state.saveButtonTitle} user={this.props.user} onChangeName={this.onChangeName} disabled={this.state.disabled} loading={this.state.loading} saveButtonPressed={this.saveButtonPressed} onAvatarPressed={this.onAvatarPressed} signOut={this.signOut} />
+        <ProfileForm saveButtonTitle={this.state.saveButtonTitle} user={this.props.user}
+         onChangeName={this.onChangeName} disabled={this.state.disabled} loading={this.state.loading}
+          saveButtonPressed={this.saveButtonPressed} onAvatarPressed={this.onAvatarPressed} signOut={this.signOut} />
       </ScrollView>
     )
   }
 }
 
 const mapStateToProps = (state) => {
-  console.log("DidMount state", state.auth.user);
   return { user: state.auth.user }
 }
 

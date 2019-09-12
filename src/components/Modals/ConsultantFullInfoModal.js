@@ -14,7 +14,6 @@ import ConsultantInfoForm from "../Forms/ConsultantInfoForm";
 class ConsultantFullInfoModal extends Component {
 
     render() {
-        console.log("Incoming consultant ", JSON.stringify(this.props.consultant))
         return (
             <Modal visible={this.props.visible} transparent={true} animationType='fade'>
                 <ScrollView style={styles.consultantCard}>

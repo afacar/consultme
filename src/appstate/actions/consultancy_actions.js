@@ -6,7 +6,6 @@ import firebase from 'react-native-firebase';
 export const fetchConsultants = (callback) => async (dispatch) => {
     const user = firebase.auth().currentUser;
     let url = 'verifiedConsultants/';
-    console.log("Fetching consultants...")
     firebase.database().ref(url).limitToFirst(25).on('child_changed', consultantSnap => {
         if (user) {
             if (consultantSnap.val().uid !== user.uid)

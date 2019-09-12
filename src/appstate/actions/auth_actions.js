@@ -20,7 +20,6 @@ export const checkAuthState = () => (dispatch) => {
 export const createNewUserProfile = (profile) => async (dispatch) => {
     const { _user } = firebase.auth().currentUser;
     const { name, path, photoURL } = profile;
-    console.log("Profile", profile)
     // save image to firebase
     if (path) {
         await firebase.storage().ref('profilePics').child(_user.uid).putFile(path)
@@ -40,12 +39,10 @@ export const createNewUserProfile = (profile) => async (dispatch) => {
 };
 
 export const saveUser = (user) => (dispatch) => {
-    console.log("Saving user to redux state", user)
     return dispatch({ type: AUTH, payload: user })
 }
 
 export const createNewConsultant = (user, consultationDetails) => async () => {
-    console.log("User", user)
     // create consultant profile
     var consultantProfile = {
         name: user.name,
@@ -64,7 +61,6 @@ export const createNewConsultant = (user, consultationDetails) => async () => {
 }
 
 export const saveProfile = (user, callback) => async () => {
-    console.log("Save profile\n", user)
     try {
         // TODO change below lines to if firebaseUser.isProvider
         if (user.path) {
