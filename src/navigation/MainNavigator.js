@@ -6,7 +6,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 import ConsultantApplicationScreen from '../screens/ConsultantApplicationScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ArchivedChatsScreen from '../screens/ArchivedChatsScreen';
-import WalletScreen from '../screens/WalletScreen'
+import WalletScreen from '../screens/WalletScreen';
+import ChatScreen from '../screens/ChatScreen';
 
 export default MainNavigator = createStackNavigator({
     HomeScreen,
@@ -15,7 +16,8 @@ export default MainNavigator = createStackNavigator({
     ConsultantApplicationScreen,
     ProfileScreen,
     ArchivedChatsScreen,
-    WalletScreen
+    WalletScreen,
+    ChatScreen
 }, {
         initialRouteName: 'HomeScreen'
     }

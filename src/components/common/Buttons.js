@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Button } from 'react-native-elements';
 import * as styles from '../../Constants/Styles';
-import { SaveIcon, SignOutIcon } from './Icons';
+import { SaveIcon, SignOutIcon, PlayIcon, PauseIcon } from './Icons';
 import colors from '../../Constants/Colors';
 
 export class SaveButton extends Component {
@@ -51,7 +51,7 @@ export class HomeScreenDivider extends Component {
     let isProvider = false;
     if (user) {
       if (user.isProvider)
-        isProvider= true
+        isProvider = true
     }
     if (isProvider) {
       return (
@@ -60,10 +60,38 @@ export class HomeScreenDivider extends Component {
             <Button type='clear' title='Danışmanlarım' buttonStyle={{ margin: 10 }} titleStyle={{ color: colors.IOS_BLUE, fontSize: consultantsSelected ? 16 : 14 }} onPress={() => { this.props.changeTab('consultingFrom') }} />
           </View>
           <View style={{ flex: 1, justifyContent: 'center', borderBottomWidth: consultantsSelected ? 0 : 3, borderBottomColor: colors.IOS_DARK_BLUE, borderBottomRightRadius: 25 }}>
-            <Button type='clear' title='Danışanlarım' buttonStyle={{ margin: 10 }} titleStyle={{ color: colors.IOS_BLUE, fontSize: consultantsSelected ? 14 : 16}} onPress={() => { this.props.changeTab('consultingTo') }} />
+            <Button type='clear' title='Danışanlarım' buttonStyle={{ margin: 10 }} titleStyle={{ color: colors.IOS_BLUE, fontSize: consultantsSelected ? 14 : 16 }} onPress={() => { this.props.changeTab('consultingTo') }} />
           </View>
         </View>
       )
-    } 
+    }
+  }
+}
+
+export class PlayButton extends Component {
+  render() {
+    return (
+      <Button
+        title=""
+        onPress={this.props.onPress}
+        icon={<PlayIcon isListening={this.props.isListening} />}
+        containerStyle={styles.buttonStyle}
+        buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
+      />
+    )
+  }
+}
+
+export class PauseButton extends Component {
+  render() {
+    return (
+      <Button
+        title=""
+        onPress={this.props.onPress}
+        icon={<PauseIcon isListening={this.props.isListening} />}
+        containerStyle={styles.buttonStyle}
+        buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
+      />
+    )
   }
 }

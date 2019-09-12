@@ -89,7 +89,6 @@ export class ListPicker extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    console.log('options', this.props.options)
   }
 
   componentWillUnmount() {

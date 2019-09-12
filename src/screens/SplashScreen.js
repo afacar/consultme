@@ -15,7 +15,6 @@ class SplashScreen extends Component {
 
     componentDidMount = async () => {
         const firebaseUser = firebase.auth().currentUser;
-        console.log("FU", firebaseUser)
         var user = {
             name: '',
             uid: '',
@@ -24,7 +23,6 @@ class SplashScreen extends Component {
             isProvider: false,
         };
         if (firebaseUser) {
-            console.log("FU", firebaseUser)
             user.name = firebaseUser.displayName;
             user.number = firebaseUser.phoneNumber;
             user.photoURL = firebaseUser.photoURL;
@@ -38,31 +36,25 @@ class SplashScreen extends Component {
             })
 
             this.props.fetchUserChats(user,(chat) => {
-                console.log("New user chat on Splash screen", chat)
                 this.props.saveUserChat(chat)
             })
             if (user.isProvider) {
-                console.log("Start to fetch chats");
                 this.props.fetchConsultantChats(user, (chat) => {
-                    console.log("New consultant chat on Splash screen", chat)
                     this.props.saveConsultantChat(chat);
                 })
             }
         }
-        console.log("Splash Screen did mount")
         this.props.fetchConsultants((consultant) => {
             this.props.saveConsultant(consultant);
         })
         this.props.saveUser(user);
         if (user.name) {
-            console.log('user found')
             this.props.navigation.setParams('user', user)
             setTimeout(() => {
                 this.props.navigation.navigate('HomeScreen');
             }, 500)
         }
         else {
-            console.log('no user found')
             setTimeout(() => {
                 this.props.navigation.navigate('ConsultantListScreen');
             }, 500)

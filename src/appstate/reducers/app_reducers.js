@@ -1,9 +1,14 @@
 import {
-  APP
+  APP, SELECTED_CHAT, NEW_MESSAGE, SAVE_IMAGES
 } from '../actions/action_types';
 
 const INITIAL_STATE = {
   consultants: [],
+  selectedChat: {
+    chatId: '',
+    userMode: true,
+    images: [],
+  }
 }
 
 export default function (state = INITIAL_STATE, action) {
@@ -13,18 +18,20 @@ export default function (state = INITIAL_STATE, action) {
       var exists = false
       var i = 0
       for (var i = 0; i < consultants.length; i++) {
-        console.log("Consultant at ", i + "\n" + consultants[i])
         if (consultants[i].uid == action.payload.uid) {
           exists = true
-          console.log("Same uid found " + "\n" + "consultant " + '\n' + consultants[i]);
           consultants[i] = action.payload;
-          console.log("Same uid changed into " + "\n" + "consultant " + '\n' + consultants[i]);
         }
       }
-      console.log("ALl consults", consultants)
       if (!exists)
         return { ...state, consultants: [...state.consultants, action.payload] };
       return { ...state, consultants: consultants };
+    }
+    case SELECTED_CHAT: {
+      return { ...state, selectedChat: action.payload }
+    }
+    case SAVE_IMAGES: {
+      return {...state, selectedChat: {...state.selectedChat, images: action.payload.images}}
     }
     default:
       return state;

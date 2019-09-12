@@ -6,7 +6,6 @@ import * as actions from '../../appstate/actions';
 
 class ConsultantListScreenHeaderRight extends Component {
     render() {
-        console.log('CLSHR', this.props.user);
         return (
             this.props.user.uid ? (
                 <Button

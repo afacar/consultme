@@ -238,7 +238,6 @@ class ConsultantApplicationScreen extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
-    console.log("MSTP", auth)
     const { user } = auth;
     return { user };
 }

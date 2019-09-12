@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList } from 'react-native'
+import { View, FlatList, TouchableOpacity } from 'react-native'
 import styles from '../../Constants/Styles';
 import { HomeScreenDivider } from '../common/Buttons'
 import { ChatItem } from '../ListItems/ChatItem';
@@ -12,7 +12,9 @@ export class HomeScreenBody extends Component {
     }
 
     renderChatItem = ({ item }) => {
-        return <ChatItem chat={item.chat} user={item.user} currentUser={this.props.user}/>
+        return (
+            <ChatItem chat={item.chat} user={item.user} currentUser={this.props.user} onPress={this.props.onChatItemPress} />
+        )
     }
 
     renderChatList = () => {
@@ -38,7 +40,6 @@ export class HomeScreenBody extends Component {
     }
 
     render() {
-        console.log("HSB", this.props.consultant_chats)
         return (
             <View style={styles.fullScreen}>
                 <HomeScreenDivider changeTab={this.props.changeTab} consultantsSelected={this.props.consultantsSelected} user={this.props.user} />

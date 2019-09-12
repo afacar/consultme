@@ -12,7 +12,6 @@ class WalletScreen extends Component {
     });
 
     componentDidMount() {
-        console.log("WalletScreen mounted");
     }
 
     render() {

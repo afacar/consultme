@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         borderColor: '#ddd',
         position: 'relative'
-      },
-      cardItemColumnStyle: {
+    },
+    cardItemColumnStyle: {
         borderWidth: 0,
         padding: 5,
         backgroundColor: '#fff',
@@ -64,16 +64,31 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderColor: '#ddd',
         position: 'relative'
-      },
-      cardItemContentStyle: {
+    },
+    cardItemContentStyle: {
         flexDirection: 'row',
-      },
-      cardItemLabelStyle: {
+    },
+    cardItemLabelStyle: {
         fontWeight: "bold",
         alignContent: "center",
         paddingRight: 30,
-      }
-
+    },
+    chatMessageImage: {
+        width: 200,
+        height: 200,
+        borderRadius: 13,
+        margin: 3,
+        resizeMode: 'cover',
+    },
+    audioCardLoader: {
+        flexDirection: "row",
+        backgroundColor: 'rgb(220,220,220)',
+        height: 60,
+        width: "100%",
+        borderRadius: 4,
+        justifyContent: 'center',
+        padding: 8
+    }
 })
 
 export default styles;
