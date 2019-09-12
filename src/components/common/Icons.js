@@ -8,7 +8,7 @@ export const LoginIcon = (props) => {
       name='login'
       onPress={props.onPress || null}
       size={props.size || 33}
-      color={props.disabled ? 'grey'  : props.color ||'green'}
+      color={props.disabled ? 'grey' : props.color || 'green'}
       containerStyle={[props.containerStyle, { alignSelf: 'center', paddingRight: 10 }]}
     />
   );
@@ -101,6 +101,27 @@ export const CashIcon = (props) => {
       size={props.size || 33}
       color={props.disabled ? 'green' : props.color || 'red'}
       containerStyle={[props.containerStyle, { alignSelf: 'center', paddingLeft: 5 }]}
+  }
+export const PlayIcon = (props) => {
+  return (
+    <Icon
+      name='play-arrow'
+      type='material'
+      onPress={props.onPress || null}
+      color={'grey'}
+      size={30}
+    />
+  );
+}
+
+export const PauseIcon = (props) => {
+  return (
+    <Icon
+      name='pause'
+      type='material'
+      onPress={props.onPress || null}
+      color={'grey'}
+      size={30}
     />
   );
 }

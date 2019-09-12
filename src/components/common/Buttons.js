@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Button } from 'react-native-elements';
 import * as styles from '../../Constants/Styles';
-import { SaveIcon, SignOutIcon, FilterIcon, CashIcon } from './Icons';
+
+import { SaveIcon, SignOutIcon, FilterIcon, CashIcon,PlayIcon, PauseIcon } from './Icons';
+
 import colors from '../../Constants/Colors';
 
 export class SaveButton extends Component {
@@ -68,6 +70,7 @@ export class HomeScreenDivider extends Component {
   }
 }
 
+
 export class FilterButton extends Component {
   render() {
     return (
@@ -87,6 +90,7 @@ export class FilterButton extends Component {
     );
   }
 }
+
 export class BuyButton extends Component {
   render() {
     return (
@@ -95,6 +99,7 @@ export class BuyButton extends Component {
         onPress={this.props.onPress || null}
         type={'outline'}
         disabled={this.props.disabled}
+      {
         icon={<CashIcon disabled={this.props.disabled} color={this.props.iconColor} size={24} />}
         containerStyle={[this.props.containerStyle, {
           padding: 10,
@@ -104,5 +109,33 @@ export class BuyButton extends Component {
         buttonStyle={[this.props.buttonStyle, styles.default.buttonStyle]}
       />
     );
+  }
+}
+export class PlayButton extends Component {
+  render() {
+    return (
+      <Button
+        title=""
+        onPress={this.props.onPress}
+        icon={<
+      isListening={this.props.isListening} />}
+        containerStyle={styles.buttonStyle}
+        buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
+      />
+    )
+  }
+}
+
+export class PauseButton extends Component {
+  render() {
+    return (
+      <Button
+        title=""
+        onPress={this.props.onPress}
+        icon={<PauseIcon isListening={this.props.isListening} />}
+        containerStyle={styles.buttonStyle}
+        buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
+      />
+    )
   }
 }

@@ -12,7 +12,6 @@ class ArchivedChatsScreen extends Component {
     });
 
     componentDidMount() {
-        console.log("ArchivedChatsScreen mounted");
     }
 
     render() {

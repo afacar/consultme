@@ -45,7 +45,6 @@ class LoginScreen extends Component {
         this._isMounted = true
         this.unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
             if (user) {
-                console.log("LS user", user)
                 this._isMounted && this.setState({
                     phoneNumberVerified: true,
                     loading: false,
@@ -88,7 +87,6 @@ class LoginScreen extends Component {
                 })
                 this.props.navigation.navigate('SplashScreen');
             } else {
-                console.log("LS Prof", this.state.profile)
                 if (!this.state.profile.name) {
                     this.setState({
                         loading: false,
@@ -108,7 +106,6 @@ class LoginScreen extends Component {
     }
 
     signIn = async () => {
-        console.log("Number ", number)
         const { number } = this.state.profile;
         this.setState({ disabled: true, loading: true })
         this.setState({ message: 'Kod SMS ile yollanıyor ...' });
@@ -182,7 +179,6 @@ class LoginScreen extends Component {
     }
 
     becomeConsultant = async () => {
-        console.log("LS Prof", this.state.profile)
         if (!this.state.profile.name) {
             this.setState({
                 loading: false,
@@ -243,16 +239,12 @@ class LoginScreen extends Component {
         };
 
         ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
 
             if (response.didCancel) {
-                console.log('User cancelled image picker');
             }
             else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
             }
             else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
             }
             else {
 

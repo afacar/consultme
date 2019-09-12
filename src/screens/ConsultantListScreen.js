@@ -52,7 +52,6 @@ class ConsultantListScreen extends Component {
     }
 
     consultMe = (consultant) => {
-        console.log("Consult me request for ", consultant + " \nfrom " + this.props.state.user);
         this.setState({ openAgreementTextModal: true })
         Alert.alert(
             'Anlaşma metnini kabul ediyor musunuz?',
@@ -81,7 +80,6 @@ class ConsultantListScreen extends Component {
     }
 
     render() {
-        console.log("CONSULTANTS", this.props.state.consultants)
         return (
             <View style={styles.fullScreen}>
                 <FlatList
@@ -101,9 +99,7 @@ const mapStateToProps = (state) => {
     const { consultants } = state.app;
     const { consultant_chats } = state.chat
 
-    console.log("Before splice", consultants)
 
-    console.log("CC", consultant_chats);
 
     for (var i = consultants.length - 1; i >= 0; i--) {
         for (var j = 0; j < consultant_chats.length; j++) {
@@ -112,7 +108,6 @@ const mapStateToProps = (state) => {
             }
         }
     }
-    console.log("After splice", consultants)
     return { state: { user, consultants } }
 }
 

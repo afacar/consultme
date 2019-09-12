@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
 export class ChatItem extends Component {
@@ -11,9 +11,11 @@ export class ChatItem extends Component {
     var { chat, user, currentUser } = this.props
     var title = user.name
     let subtitle = '';
-    const lastMessage = chat.lastMessage;
-    userName = (lastMessage.user.uid === currentUser.uid) ? 'Siz: ' : user.name + ': ';
+    var lastMessage = ''
+    if (chat)
+      lastMessage = chat.lastMessage;
     if (lastMessage) {
+      userName = (lastMessage.user._id === currentUser.uid) ? 'Siz: ' : user.name + ': ';
       // if (chat.unread > 0)
       //   badge = { value: theChat.unread, status: 'primary', textStyle: { fontSize: 15 } }
       if (lastMessage.text) {
@@ -40,7 +42,7 @@ export class ChatItem extends Component {
     // Will display time in 10:30:23 format
     var lastMessageTime = minutes.substr(-2) + ':' + seconds.substr(-2);
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => this.props.onPress({ item: { chat, user } })}>
         <ListItem
           title={title || "Title"}
           titleStyle={{ fontWeight: 'bold', fontSize: 17 }}

@@ -6,7 +6,6 @@ export class CardItem extends Component {
   state = { hasError: false };
 
   componentDidCatch(error, info) {
-    console.error("CardItemCaught error", error, info);
     this.setState({ hasError: true, error, info });
   }
 
