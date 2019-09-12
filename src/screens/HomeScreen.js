@@ -7,6 +7,7 @@ import * as actions from '../appstate/actions'
 import { connect } from 'react-redux'
 
 import { HomeScreenBody } from '../components/ScreenParts/HomeScreenBody';
+import firebase from 'react-native-firebase';
 
 class HomeScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -101,16 +102,70 @@ class HomeScreen extends Component {
     }
 
 
-    async componentDidMount() {
+    componentDidMount() {
         // preparation for Audio
-        this.checkPermission().then(async hasPermission => {
-            this.setState({ hasPermission });
-            if (!hasPermission) return;
-
-        });
+        this.checkAudioPermission();
+        this.checkNotificationPermission();
     }
 
-    checkPermission() {
+    checkNotificationPermission = async () => {
+        try {
+            let enabled = await firebase.messaging().hasPermission()
+            if (enabled) {
+                console.log("Push permission var, token al!");
+                this.getToken();
+            } else {
+                this.requestPermission();
+            }
+        } catch (error) {
+            console.log('checkPermisson error:', error.message);
+        }
+    }
+
+    requestPermission = async () => {
+        try {
+            await firebase.messaging().requestPermission();
+            // User has authorised
+            this.getToken();
+        } catch (error) {
+            // User has rejected permissions
+            console.log('permission rejected');
+        }
+    }
+
+    getToken = async () => {
+        try {
+            let token = "";
+            console.log("Existing token is,", token);
+            if (!token) {
+                token = await firebase.messaging().getToken();
+                console.log("New Token is taken :", token);
+                await this._saveToken(token);
+            }
+        } catch (error) {
+            console.log('getToken error:', error.message);
+        }
+
+    }
+
+    _saveToken = async (token) => {
+        const { _user } = firebase.auth().currentUser;
+        const url = `users/${_user.uid}/FCMToken/${token}`;
+
+        if (token) {
+            // user has a device token
+            console.log('_saveToken url', url);
+            console.log('_saveToken token', token);
+            try {
+                await firebase.database().ref(url).set(true);
+                console.log("_saveToken FCMToken is saved to firebase!");
+            } catch (error) {
+                console.log("_saveToken has error", error.message);
+            }
+        }
+    }
+
+    checkAudioPermission = async () => {
         if (Platform.OS !== "android") {
             return Promise.resolve(true);
         }
@@ -119,23 +174,19 @@ class HomeScreen extends Component {
             message:
                 "AudioExample needs access to your microphone so you can record audio."
         };
-        return PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-            rationale
-        ).then(result => {
-            return result === true || result === PermissionsAndroid.RESULTS.GRANTED;
-        });
-    }F
+        const result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, rationale);
+        return result === true || result === PermissionsAndroid.RESULTS.GRANTED;
+    }
 
-render() {
-    return (
-        <View style={{ flex: 1 }}>
-            <HomeScreenBody changeTab={this.changeTab} consultantsSelected={this.state.consultantsSelected}
-                user={this.props.user} consultant_chats={this.props.consultant_chats} user_chats={this.props.user_chats}
-                onChatItemPress={this.onChatItemPress} />
-        </View>
-    )
-}
+    render() {
+        return (
+            <View style={{ flex: 1 }}>
+                <HomeScreenBody changeTab={this.changeTab} consultantsSelected={this.state.consultantsSelected}
+                    user={this.props.user} consultant_chats={this.props.consultant_chats} user_chats={this.props.user_chats}
+                    onChatItemPress={this.onChatItemPress} />
+            </View>
+        )
+    }
 }
 
 const mapStateToProps = ({ auth, chat }) => {
