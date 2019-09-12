@@ -18,6 +18,11 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 10,
     },
+    fullScreenSearchComponent: {
+        flex: 1,
+        margin: 10,
+        marginTop: 10
+    },
     welcomeText: {
         textAlign: 'center',
         fontSize: 24,
@@ -32,7 +37,7 @@ const styles = StyleSheet.create({
     consultantCardAvatarContainer: {
         flex: 2,
         alignItems: 'center',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
     },
     consultantCardCloseButtonContainer: {
         position: 'absolute',
@@ -46,7 +51,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginHorizontal: '20%'
     },
-
+    searchButtonStyle: {
+        flex: 1,
+        padding: 1,
+        borderRadius: 3,
+        justifyContent: 'center',
+        marginHorizontal: '16%'
+    },
     cardItemRowStyle: {
         borderWidth: 0,
         padding: 5,
@@ -55,8 +66,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         borderColor: '#ddd',
         position: 'relative'
-      },
-      cardItemColumnStyle: {
+    },
+    cardItemColumnStyle: {
         borderWidth: 0,
         padding: 5,
         backgroundColor: '#fff',
@@ -64,15 +75,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderColor: '#ddd',
         position: 'relative'
-      },
-      cardItemContentStyle: {
+    },
+    cardItemContentStyle: {
         flexDirection: 'row',
-      },
-      cardItemLabelStyle: {
+    },
+    cardItemLabelStyle: {
         fontWeight: "bold",
         alignContent: "center",
         paddingRight: 30,
-      }
+    }
 
 })
 
