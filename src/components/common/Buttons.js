@@ -99,7 +99,6 @@ export class BuyButton extends Component {
         onPress={this.props.onPress || null}
         type={'outline'}
         disabled={this.props.disabled}
-      {
         icon={<CashIcon disabled={this.props.disabled} color={this.props.iconColor} size={24} />}
         containerStyle={[this.props.containerStyle, {
           padding: 10,
@@ -117,8 +116,7 @@ export class PlayButton extends Component {
       <Button
         title=""
         onPress={this.props.onPress}
-        icon={<
-      isListening={this.props.isListening} />}
+        icon={<PlayIcon isListening={this.props.isListening} />}
         containerStyle={styles.buttonStyle}
         buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
       />

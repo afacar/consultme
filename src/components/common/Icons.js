@@ -101,7 +101,10 @@ export const CashIcon = (props) => {
       size={props.size || 33}
       color={props.disabled ? 'green' : props.color || 'red'}
       containerStyle={[props.containerStyle, { alignSelf: 'center', paddingLeft: 5 }]}
-  }
+    />
+      );
+    }
+
 export const PlayIcon = (props) => {
   return (
     <Icon
