@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Button } from 'react-native-elements';
 import * as styles from '../../Constants/Styles';
-import { SaveIcon, SignOutIcon, PlayIcon, PauseIcon } from './Icons';
+
+import { SaveIcon, SignOutIcon, FilterIcon, CashIcon,PlayIcon, PauseIcon } from './Icons';
+
 import colors from '../../Constants/Colors';
 
 export class SaveButton extends Component {
@@ -68,13 +70,55 @@ export class HomeScreenDivider extends Component {
   }
 }
 
+
+export class FilterButton extends Component {
+  render() {
+    return (
+      <Button
+        title={this.props.title || "Uzmanları Listele"}
+        onPress={this.props.onPress || null}
+        type={'outline'}
+        disabled={this.props.disabled}
+        icon={<FilterIcon disabled={this.props.disabled} color={this.props.iconColor} size={27} />}
+        containerStyle={[this.props.containerStyle, {
+          padding: 10,
+          justifyContent: 'center'
+        }]}
+        titleStyle={[this.props.titleStyle, { paddingLeft: 5, paddingRight: 5, fontSize: 19 }]}
+        buttonStyle={[this.props.buttonStyle, styles.default.searchButtonStyle]}
+      />
+    );
+  }
+}
+
+export class BuyButton extends Component {
+  render() {
+    return (
+      <Button
+        title={this.props.title || "Kredi Al"}
+        onPress={this.props.onPress || null}
+        type={'outline'}
+        disabled={this.props.disabled}
+      {
+        icon={<CashIcon disabled={this.props.disabled} color={this.props.iconColor} size={24} />}
+        containerStyle={[this.props.containerStyle, {
+          padding: 10,
+          justifyContent: 'center'
+        }]}
+        titleStyle={[this.props.titleStyle, { paddingLeft: 5, paddingRight: 5, fontSize: 18 }]}
+        buttonStyle={[this.props.buttonStyle, styles.default.buttonStyle]}
+      />
+    );
+  }
+}
 export class PlayButton extends Component {
   render() {
     return (
       <Button
         title=""
         onPress={this.props.onPress}
-        icon={<PlayIcon isListening={this.props.isListening} />}
+        icon={<
+      isListening={this.props.isListening} />}
         containerStyle={styles.buttonStyle}
         buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
       />

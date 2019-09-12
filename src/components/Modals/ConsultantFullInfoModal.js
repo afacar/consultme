@@ -19,7 +19,6 @@ class ConsultantFullInfoModal extends Component {
                 <ScrollView style={styles.consultantCard}>
                     <View style={styles.consultantCardAvatarContainer}>
                         <Avatar
-                            avatarStyle={{ borderBottomLeftRadius: 50, borderBottomRightRadius: 50, }}
                             width='100%'
                             size='xlarge'
                             source={{ uri: this.props.consultant.photoURL }}

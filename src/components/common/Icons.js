@@ -80,6 +80,28 @@ export const SignOutIcon = (props) => {
   );
 }
 
+export const FilterIcon = (props) => {
+  return (
+    <Icon
+      type='font-awesome'
+      name='filter'
+      onPress={props.onPress || null}
+      size={props.size || 33}
+      color={props.disabled ? 'green' : props.color || 'red'}
+      containerStyle={[props.containerStyle, { alignSelf: 'center', paddingLeft: 5 }]}
+    />
+  );
+}
+export const CashIcon = (props) => {
+  return (
+    <Icon
+      type='font-awesome'
+      name='money'
+      onPress={props.onPress || null}
+      size={props.size || 33}
+      color={props.disabled ? 'green' : props.color || 'red'}
+      containerStyle={[props.containerStyle, { alignSelf: 'center', paddingLeft: 5 }]}
+  }
 export const PlayIcon = (props) => {
   return (
     <Icon

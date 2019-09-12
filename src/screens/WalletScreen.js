@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { ScrollView } from 'react-native';
+import { WalletForm } from '../components/Forms/WalletForm';
 
 class WalletScreen extends Component {
 
@@ -16,9 +17,9 @@ class WalletScreen extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-                <Text>WalletScreen</Text>
-            </View>
+            <ScrollView>
+                <WalletForm/>
+            </ScrollView>
         )
     }
 }

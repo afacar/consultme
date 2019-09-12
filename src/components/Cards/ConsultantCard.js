@@ -54,7 +54,7 @@ class ConsultantCard extends Component {
         const { consultant } = this.props;
         const { consultationDetails } = consultant;
         return (
-            <TouchableOpacity activeOpacity={0.90} onPress={()=> {this.props.infoPressed(this.props.consultant)}}>
+            <TouchableOpacity activeOpacity={0.80} onPress={()=> {this.props.infoPressed(this.props.consultant)}}>
                 <Card
                     containerStyle={styles.container}>
                     <View style={{ flex: 1, alignItems: 'center', flexDirection: 'row', margin: 5 }}>
@@ -100,11 +100,22 @@ class ConsultantCard extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        borderWidth: 2,
+        marginBottom: 40,
+        borderWidth: 0,
+        borderRightWidth: 0.2,
+        borderBottomWidth: 0.1,
         borderRadius: 21,
-        backgroundColor: '#f2f2f2',
-        borderColor: 'grey'
-
+        backgroundColor: 'white',
+        borderColor: 'grey',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 12,
+        },
+        shadowOpacity: 0.58,
+        shadowRadius: 12.00,
+        
+        elevation: 24,
 
     }
 })
