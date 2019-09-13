@@ -41,7 +41,7 @@ export class HomeScreenBody extends Component {
 
     render() {
         return (
-            <View style={styles.fullScreen}>
+            <View style={[styles.fullScreen, {margin: 0}]}>
                 <HomeScreenDivider changeTab={this.props.changeTab} consultantsSelected={this.props.consultantsSelected} user={this.props.user} />
                 {this.renderChatList()}
             </View>
