@@ -12,9 +12,6 @@ import ConsultantFullInfoModal from '../components/Modals/ConsultantFullInfoModa
 import styles from '../Constants/Styles';
 import strings from '../Constants/Strings';
 
-// TODO don't show the consultants which the user is having consultation.
-// TODO don't show the consultant himself
-
 class ConsultantListScreen extends Component {
 
     static navigationOptions = ({ navigation }) => ({
@@ -53,26 +50,47 @@ class ConsultantListScreen extends Component {
 
     consultMe = (consultant) => {
         this.setState({ openAgreementTextModal: true })
-        Alert.alert(
-            'Anlaşma metnini kabul ediyor musunuz?',
-            strings.AGREEMENT_POLICY,
-            [
-                {
-                    text: 'Reddet',
-                    onPress: () => { },
-                    style: 'cancel',
-                },
-                {
-                    text: 'Onaylıyorum', onPress: () => this.props.startConsultancy(this.props.state.user, consultant, (status) => {
-                        if (status == 'new') {
 
-                        } else if (status == 'continue') {
+        const user = this.props.state.user;
 
-                        }
-                    })
-                },
-            ]
-        )
+        if (user) {
+            Alert.alert(
+                strings.AGREEMENT_POLICY_TITLE,
+                strings.AGREEMENT_POLICY,
+                [
+                    {
+                        text: 'Reddet',
+                        onPress: () => { },
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Onaylıyorum', onPress: () => this.props.startConsultancy(this.props.state.user, consultant, (status) => {
+                            if (status == 'new') {
+
+                            } else if (status == 'continue') {
+
+                            }
+                        })
+                    },
+                ],
+                { cancelable: false }
+            )
+        } else {
+            Alert.alert(
+                strings.AGREEMENT_POLICY_NO_USER_TITLE,
+                [
+                    {
+                        text: 'Daha Sonra',
+                        onPress: () => { },
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Giriş yap', onPress: () => this.props.navigation.navigate('LoginScreen')
+                    }
+                ],
+                { cancelable: false }
+            )
+        }
     }
 
     onModalClose = () => {

@@ -62,7 +62,8 @@ const mapStateToProps = (state) => {
         delete selectedChat.chat.lastMessage;
         chatArray = Object.keys(selectedChat.chat).map(key => (selectedChat.chat[key]))
     }
-    selectedChat.chat.lastMessage = lastMessage;
+    if (lastMessage)
+        selectedChat.chat.lastMessage = lastMessage;
     console.log("Chat array before,", chatArray)
     chatArray.unshift({ _id: 1, text: strings.AGREEMENT_POLICY, createdAt: '1970-01-01 00:00:00 UTC+00', system: true })
     var index = 1;
