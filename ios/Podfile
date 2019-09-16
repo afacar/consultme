@@ -33,6 +33,8 @@ target 'consultme' do
 
   pod 'RNSound', :path => '../node_modules/react-native-sound'
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
   target 'consultmeTests' do
     inherit! :search_paths
     # Pods for testing

@@ -51,6 +51,7 @@ export class WalletForm extends Component {
                 <View
                 style = {{flex :1, alignItems: 'center', paddingTop: 30}} >
                     <BuyButton
+                    onPress={() => {this.props.onBuyCreditsPressed()}}
                     />
                 </View>
             </View>
