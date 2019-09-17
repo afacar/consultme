@@ -39,6 +39,7 @@ export const startThreeDSPayment = (card, user, price) => (dispatch) => {
     };
     let data = {
         price: parseFloat(price),
+        paidPrice: parseFloat(price),
         conversationId: conversationId,
         conversationData: _user.displayName + "-" + conversationId,
         paymentCard: {
@@ -49,7 +50,7 @@ export const startThreeDSPayment = (card, user, price) => (dispatch) => {
             cvc: card.CVC,
             registerCard: '0'
         },
-        callbackUrl: 'https://us-central1-homecare-f7c5b.cloudfunctions.net/threedsCallback',
+        callbackUrl: 'https://us-central1-consultme-cb5ad.cloudfunctions.net/threedsCallback',
         installment: '1',
         basketId: 'B67832',
         buyer: {
@@ -74,15 +75,6 @@ export const startThreeDSPayment = (card, user, price) => (dispatch) => {
             address: user.address,
             zipCode: user.zipCode
         },
-        basketItems: [
-            {
-                id: 'BI101',
-                name: 'ConsultMe Uygulamasi Kredisi',
-                category1: 'Collectibles',
-                itemType: `Iyzipay.BASKET_ITEM_TYPE.VIRTUAL`,
-                price: parseFloat(price)
-            }
-        ],
         shippingAddress: buyerAddress,
         billingAddress: buyerAddress,
     };
