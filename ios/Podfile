@@ -35,6 +35,12 @@ target 'consultme' do
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
+
+  pod 'ReactNativeIncallManager', :path => '../node_modules/react-native-incall-manager'
+
+  pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
+
+
   target 'consultmeTests' do
     inherit! :search_paths
     # Pods for testing
