@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import * as actions from '../appstate/actions';
 import styles from '../Constants/Styles';
 import { ChatScreenBody } from '../components/ScreenParts/ChatScreenBody';
 import strings from '../Constants/Strings';
+import { Button } from 'react-native-elements';
 
 class ChatScreen extends Component {
 
@@ -15,6 +16,13 @@ class ChatScreen extends Component {
         headerStyle: {
             backgroundColor: 'white',
         },
+        headerRight: (
+            <View>
+                <Button title='Video' type='clear' onPress={() => {
+                    navigation.navigate('VideoScreen')
+                }} />
+            </View>
+        )
     });
 
     updateMessages = (newMessage, chatId, userMode) => {
