@@ -177,7 +177,7 @@ android {
 
         }
     }
-
+    
     packagingOptions {
         pickFirst '**/armeabi-v7a/libc++_shared.so'
         pickFirst '**/x86/libc++_shared.so'
@@ -199,7 +199,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
 
-    implementation project(':WebRTCModule')
+    // implementation project(':WebRTCModule')
   // Firebase dependencies
     implementation "com.google.android.gms:play-services-base:16.1.0"
     implementation "com.google.firebase:firebase-core:16.0.9"
