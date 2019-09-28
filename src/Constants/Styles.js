@@ -99,6 +99,11 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         justifyContent: 'center',
         padding: 8
+    },
+    checkOutFormStyle: {
+        height: height,
+        margin: 10,
+        backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR
     }
 })
 

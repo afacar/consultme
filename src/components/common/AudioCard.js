@@ -177,7 +177,7 @@ class AudioCard extends Component {
         if (this.is_mounted) {
             this.setState({
                 playing: true,
-                currentDuration: 0
+                currentDuration: -1
             })
         }
         const sound = this.state.sound;

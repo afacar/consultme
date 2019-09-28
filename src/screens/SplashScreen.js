@@ -75,12 +75,10 @@ class SplashScreen extends Component {
                                 })
                                 .catch(e => {
                                     this.props.userIsLogging(false);
-                                    alert(`Error inside.\n\n${JSON.stringify(e)}`);
                                 })
                         })
                         .catch(e => {
                             this.props.userIsLogging(false);
-                            alert(`Error.\n\n${JSON.stringify(e)}`);
                         })
                 } else {
                     console.log("session err", error);

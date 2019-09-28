@@ -124,3 +124,27 @@ const getFormattedDateTime = (timestamp = new Date()) => {
 
     return date + ' ' + time;
 }
+
+export const finalize_threeds_payment = ((paymentObject) => async (dispatch) => {
+    var finalizePayment = firebase.functions().httpsCallable('finalizeThreeDSPayment');
+    return new Promise((resolve, reject) => {
+        finalizePayment(paymentObject)
+            .then((result) => {
+                console.log("RESULT", result)
+                resolve(result)
+            })
+            .catch(err => {
+                console.log('finalizepayment rejects =>', err);
+                reject(err);
+            });
+    });
+});
+
+export const checkNewPayment = (callback) => async (dispatch) => {
+    const uid = firebase.auth().currentUser.uid;
+    console.log("Inside new payments", uid);
+    firebase.database().ref(`payments/results/${uid}`).on('child_added', newPayment => {
+        console.log("New payment", newPayment.val());
+        callback(newPayment.val());
+    })
+}
