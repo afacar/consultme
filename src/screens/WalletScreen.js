@@ -4,15 +4,11 @@ import { WebView } from 'react-native-webview'
 import { connect } from 'react-redux'
 
 import * as actions from '../appstate/actions';
-import styles from '../Constants/Styles';
 import CheckOutForm from '../components/Modals/CheckOutForm';
 import { WalletForm } from '../components/Forms/WalletForm';
 import IyziPaymentErrors from '../Constants/Errors';
 
 import Base64 from '../Utils/Base64';
-import { Button, Text } from 'react-native-elements';
-import { SuccessIcon } from '../components/common/Icons';
-import colors from '../Constants/Colors';
 
 class WalletScreen extends Component {
 

@@ -5,10 +5,10 @@ import ImagePicker from 'react-native-image-picker';
 import { AudioUtils, AudioRecorder } from 'react-native-audio';
 
 
-import AudioCard from '../common/AudioCard';
-import styles from '../../Constants/Styles';
+import AudioCard from '../../common/AudioCard';
 import { Button, Icon } from 'react-native-elements';
-import ImageViewerModal from '../Modals/ImageViewerModal';
+import ImageViewerModal from '../../Modals/ImageViewerModal';
+import styles from '../../../Constants/Styles';
 
 export class ChatScreenBody extends Component {
 
