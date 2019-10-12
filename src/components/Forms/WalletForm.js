@@ -54,6 +54,54 @@ export class WalletForm extends Component {
         }
     }
 
+    renderFifty = () => {
+        if (this.props.fiftyKontorOpened) {
+            return (
+                <ScrollView>
+                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
+                        <CardItem style={{ flex: 1, borderWidth: 1, }}>
+                            <Text> 50 kontor 50 lira</Text>
+                        </CardItem>
+                    </TouchableOpacity>
+                </ScrollView>
+
+            )
+
+        }
+    }
+
+    renderHundred = () => {
+        if (this.props.fiftyKontorOpened) {
+            return (
+                <ScrollView>
+                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
+                        <CardItem style={{ flex: 1, borderWidth: 1, }}>
+                            <Text> 100 kontor 1oo lira</Text>
+                        </CardItem>
+                    </TouchableOpacity>
+                </ScrollView>
+
+            )
+
+        }
+    }
+
+    renderTwoHundred = () => {
+        if (this.props.fiftyKontorOpened) {
+            return (
+                <ScrollView>
+                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
+                        <CardItem style={{ flex: 1, borderWidth: 1, }}>
+                            <Text> 200 kontor 200 lira</Text>
+                        </CardItem>
+                    </TouchableOpacity>
+                </ScrollView>
+
+            )
+
+        }
+    }
+
     render() {
         return (
             <ScrollView>
