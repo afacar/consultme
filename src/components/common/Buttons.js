@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Button } from 'react-native-elements';
 import * as styles from '../../Constants/Styles';
 
-import { SaveIcon, SignOutIcon, FilterIcon, CashIcon, PlayIcon, PauseIcon } from './Icons';
+import { SaveIcon, SignOutIcon, FilterIcon, CashIcon,PlayIcon, PauseIcon, MicIcon, CameraIcon } from './Icons';
 
 import colors from '../../Constants/Colors';
 
@@ -125,6 +125,33 @@ export class PauseButton extends Component {
         title=""
         onPress={this.props.onPress}
         icon={<PauseIcon isListening={this.props.isListening} />}
+        containerStyle={styles.buttonStyle}
+        buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
+      />
+    )
+  }
+}
+export class MicButton extends Component {
+  render() {
+    return (
+      <Button
+        title=""
+        onPress={this.props.onPress}
+        icon={<MicIcon isListening={this.props.isListening} />}
+        containerStyle={styles.buttonStyle}
+        buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
+      />
+    )
+  }
+}
+
+export class CameraButton extends Component {
+  render() {
+    return (
+      <Button
+        title=""
+        onPress={this.props.onPress}
+        icon={<CameraIcon isListening={this.props.isListening} />}
         containerStyle={styles.buttonStyle}
         buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
       />

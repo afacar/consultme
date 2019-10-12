@@ -27,7 +27,13 @@ class WalletScreen extends Component {
     state = {
         wallet: 0,
         buyCredits: false,
-        checkOutFormSubmitted: false,
+        fiveKontorOpened: false,
+        tenKontorOpened: false,
+        twentyFiveKontorOpened: false,
+        fiftyKontorOpened: false,
+        hundredKontorOpened: false,
+        twoHundredKontorOpened: false,
+        checkOutFormSubmited: false,
         disabled: false,
         cardName: 'Javid Haji-zada',
         cardNumber: '5311 5700 0000 0005',
@@ -65,10 +71,81 @@ class WalletScreen extends Component {
         })
     }
 
+    openFiveDetails = () => {
+        this.setState({
+            fiveKontorOpened: true,
+            tenKontorOpened: false,
+            twentyFiveKontorOpened: false,
+            fiftyKontorOpened: false,
+            hundredKontorOpened: false,
+            twoHundredKontorOpened: false
+        })
+    }
+    openTenDetails = () => {
+        this.setState({
+            fiveKontorOpened: false,
+            tenKontorOpened: true,
+            twentyFiveKontorOpened: false,
+            fiftyKontorOpened: false,
+            hundredKontorOpened: false,
+            twoHundredKontorOpened: false
+        })
+    }
+    openTwentyFiveDetails = () => {
+        this.setState({
+            fiveKontorOpened: false,
+            tenKontorOpened: false,
+            twentyFiveKontorOpened: true,
+            fiftyKontorOpened: false,
+            hundredKontorOpened: false,
+            twoHundredKontorOpened: false
+        })
+    }
+    openFiftyDetails = () => {
+        this.setState({
+            fiveKontorOpened: false,
+            tenKontorOpened: false,
+            twentyFiveKontorOpened: false,
+            fiftyKontorOpened: true,
+            hundredKontorOpened: false,
+            twoHundredKontorOpened: false
+        })
+    }
+    openHundredDetails = () => {
+        this.setState({
+            fiveKontorOpened: false,
+            tenKontorOpened: false,
+            twentyFiveKontorOpened: false,
+            fiftyKontorOpened: false,
+            hundredKontorOpened: true,
+            twoHundredKontorOpened: false
+        })
+    }
+    openTwoHundredDetails = () => {
+        this.setState({
+            fiveKontorOpened: false,
+            tenKontorOpened: false,
+            twentyFiveKontorOpened: false,
+            fiftyKontorOpened: false,
+            hundredKontorOpened: false,
+            twoHundredKontorOpened: true
+        })
+    }
+
+    makeAllFalse = () => {
+        this.setState({
+            fiveKontorOpened: false,
+            tenKontorOpened: false,
+            twentyFiveKontorOpened: false,
+            fiftyKontorOpened: false,
+            hundredKontorOpened: false,
+            twoHundredKontorOpened: false
+        })
+    }
+
     onCancelPayment = () => {
         this.resetState();
     }
-
     onCardNameChanged = (name) => {
         this.setState({
             nameError: '',
@@ -341,13 +418,20 @@ class WalletScreen extends Component {
         };
     }([0, 2, 4, 6, 8, 1, 3, 5, 7, 9]));
 
-
     render() {
         return (
             <ScrollView>
                 {!this.state.buyCredits &&
                     (
-                        <WalletForm onBuyCreditsPressed={this.onBuyCreditsPressed} wallet={this.props.user.wallet}/>
+                        <WalletForm onBuyCreditsPressed={this.onBuyCreditsPressed} openFiveDetails={this.openFiveDetails} openTenDetails={this.openTenDetails}
+                            openTwentyFiveDetails={this.openTwentyFiveDetails} openFiftyDetails={this.openFiftyDetails} openHundredDetails={this.openHundredDetails} openTwoHundredDetails={this.openTwoHundredDetails}
+                            fiveKontorOpened={this.state.fiveKontorOpened} tenKontorOpened={this.state.tenKontorOpened} twentyFiveKontorOpened={this.state.twentyFiveKontorOpened}
+                            makeAllFalse = {this.makeAllFalse}
+                            fiftyKontorOpened={this.state.fiftyKontorOpened}
+                            hundredKontorOpened={this.state.hundredKontorOpened}
+                            twoHundredKontorOpened={this.state.twoHundredKontorOpened}
+
+                        />
                     )
                 }
                 {this.state.buyCredits &&

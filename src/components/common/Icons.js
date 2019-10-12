@@ -152,3 +152,25 @@ export const FailIcon = (props) => {
     />
   );
 }
+export const MicIcon = (props) => {
+  return (
+    <Icon
+      name='microphone'
+      type='font-awesome'
+      onPress={props.onPress || null}
+      color={'blue'}
+      size={30}
+    />
+  );
+}
+export const CameraIcon = (props) => {
+  return (
+    <Icon
+      name='camera'
+      type='antdesign'
+      onPress={props.onPress || null}
+      color={'grey'}
+      size={30}
+    />
+  );
+}

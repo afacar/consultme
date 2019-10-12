@@ -5,10 +5,10 @@ import ImagePicker from 'react-native-image-picker';
 import { AudioUtils, AudioRecorder } from 'react-native-audio';
 
 
-import AudioCard from '../../common/AudioCard';
-import styles from '../../../Constants/Styles';
-import { Button } from 'react-native-elements';
-import ImageViewerModal from '../../Modals/ImageViewerModal';
+import AudioCard from '../common/AudioCard';
+import styles from '../../Constants/Styles';
+import { Button, Icon } from 'react-native-elements';
+import ImageViewerModal from '../Modals/ImageViewerModal';
 
 export class ChatScreenBody extends Component {
 
@@ -155,7 +155,12 @@ export class ChatScreenBody extends Component {
     renderSend = (props) => {
         return (
             <Send {...props} containerStyle={{ justifyContent: "center" }}>
-                <Text style={{ fontSize: 19, color: 'blue', margin: 5 }}>Gönder</Text>
+                <Icon
+                style={{ fontSize: 19, color: 'blue', margin: 5 }}
+                type={"font-awesome"}
+                name = {"send"}>                   
+                </Icon>
+                
             </Send>
         );
     }
@@ -210,12 +215,12 @@ export class ChatScreenBody extends Component {
                 <View style={{ width: '20%', flexDirection: 'row', alignItems: 'center' }}>
                     <View >
                         <TouchableOpacity onPress={this.openPicker}>
-                            <Button type='clear' title='pic' onPress={this.openPicker} />
+                            <Button type='clear' icon = {{type: 'antDesign', name: 'camera'}} onPress={this.openPicker} />
                         </TouchableOpacity>
                     </View>
                     <View  >
                         <TouchableOpacity onPress={this.handleAudio}>
-                            <Button type='clear' title='mic' titleStyle={{ color: this.state.startAudio ? 'red' : 'blue' }} onPress={this.handleAudio} />
+                            <Button type='clear' icon = {{type: 'font-awesome', name: 'microphone'}} titleStyle={{ color: this.state.startAudio ? 'red' : 'blue' }} onPress={this.handleAudio} />
                         </TouchableOpacity>
                     </View>
                 </View>
