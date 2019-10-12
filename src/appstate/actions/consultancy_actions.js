@@ -26,26 +26,31 @@ export const fetchConsultants = (callback) => async (dispatch) => {
 }
 
 export const startConsultancy = (user, consultant, callback) => async (dispatch) => {
+    console.log("user", user);
+    console.log("consultant", consultant);
+
     const userId = user.uid;
     const cId = consultant.uid;
     let systemNewConsultationRef = `consultations/${cId}/${userId}/`;
     let userNewConsultationRef = `users/${userId}/consultationsFrom`;
-    let consultantNewConsultationRef = `users/${cId}/consultationsTo/${userId}`
+    let consultantNewConsultationRef = `users/${cId}/consultationsTo/${userId}`;
+    var consultationDetails = consultant.consultationDetails;
+    consultationDetails.freeChars  = 300;
+    consultationDetails.counter = 0;
+
 
     var db = firebase.database();
     db.ref(systemNewConsultationRef).once('value', async (consultationSnap) => {
         if (consultationSnap.exists()) {
             await db.ref(systemNewConsultationRef).update({
-                consultant,
-                user,
                 firstTime: false,
+                consultationDetails: consultationDetails
             })
             callback('continue')
         } else {
             await db.ref(systemNewConsultationRef).update({
-                consultant,
-                user,
                 firstTime: true,
+                consultationDetails: consultationDetails
             })
             callback('new')
         };

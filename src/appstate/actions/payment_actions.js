@@ -39,6 +39,7 @@ export const startThreeDSPayment = (card, user, price) => (dispatch) => {
     };
     let data = {
         price: parseFloat(price),
+        paidPrice: parseFloat(price),
         conversationId: conversationId,
         conversationData: _user.displayName + "-" + conversationId,
         paymentCard: {
@@ -49,7 +50,7 @@ export const startThreeDSPayment = (card, user, price) => (dispatch) => {
             cvc: card.CVC,
             registerCard: '0'
         },
-        callbackUrl: 'https://us-central1-homecare-f7c5b.cloudfunctions.net/threedsCallback',
+        callbackUrl: 'https://us-central1-consultme-cb5ad.cloudfunctions.net/threedsCallback',
         installment: '1',
         basketId: 'B67832',
         buyer: {
@@ -74,15 +75,6 @@ export const startThreeDSPayment = (card, user, price) => (dispatch) => {
             address: user.address,
             zipCode: user.zipCode
         },
-        basketItems: [
-            {
-                id: 'BI101',
-                name: 'ConsultMe Uygulamasi Kredisi',
-                category1: 'Collectibles',
-                itemType: `Iyzipay.BASKET_ITEM_TYPE.VIRTUAL`,
-                price: parseFloat(price)
-            }
-        ],
         shippingAddress: buyerAddress,
         billingAddress: buyerAddress,
     };
@@ -131,4 +123,31 @@ const getFormattedDateTime = (timestamp = new Date()) => {
     let time = hr + ':' + min + ':' + sec;
 
     return date + ' ' + time;
+}
+
+export const finalize_threeds_payment = ((paymentObject) => async (dispatch) => {
+    var finalizePayment = firebase.functions().httpsCallable('finalizeThreeDSPayment');
+    return new Promise((resolve, reject) => {
+        finalizePayment(paymentObject)
+            .then((result) => {
+                console.log("RESULT", result)
+                resolve(result)
+            })
+            .catch(err => {
+                console.log('finalizepayment rejects =>', err);
+                reject(err);
+            });
+    });
+});
+
+export const checkNewPayment = (startTime, callback) => async (dispatch) => {
+    const uid = firebase.auth().currentUser.uid;
+    console.log("Inside new payments", uid);
+    firebase.database().ref(`payments/results/${uid}`).on('child_added', newPayment => {
+        console.log("New payment", newPayment.val());
+        var convId = newPayment.val().result.conversationId;
+        var time = convId.substring(convId.indexOf('_') + 1, convId.length);
+        if (parseInt(startTime) < parseInt(time))
+            callback(newPayment.val());
+    })
 }

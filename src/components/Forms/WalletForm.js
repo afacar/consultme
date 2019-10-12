@@ -11,11 +11,11 @@ export class WalletForm extends Component {
         if (this.props.fiveKontorOpened) {
             return (
                 <ScrollView>
-                    <TouchableOpacity  onPress={() => { this.props.makeAllFalse() }}>
+                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
                         <CardItem style={{ flex: 1, borderWidth: 1, }}>
                             <Text> 5 kontor 5 lira</Text>
                         </CardItem>
-                        </TouchableOpacity>
+                    </TouchableOpacity>
                 </ScrollView>
 
             )
@@ -26,11 +26,11 @@ export class WalletForm extends Component {
         if (this.props.tenKontorOpened) {
             return (
                 <ScrollView>
-                    <TouchableOpacity  onPress={() => { this.props.makeAllFalse() }}>
+                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
                         <CardItem style={{ flex: 1, borderWidth: 1, }}>
                             <Text> 10 kontor 10 lira</Text>
                         </CardItem>
-                        </TouchableOpacity>
+                    </TouchableOpacity>
                 </ScrollView>
 
             )
@@ -42,57 +42,12 @@ export class WalletForm extends Component {
         if (this.props.twentyFiveKontorOpened) {
             return (
                 <ScrollView>
-                <TouchableOpacity  onPress={() => { this.props.makeAllFalse() }}>
-                    <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                        <Text> 25 kontor 25 lira</Text>
-                    </CardItem>
-                    </TouchableOpacity>
-            </ScrollView>
-
-            )
-
-        }
-    }
-    renderFifty = () => {
-        if (this.props.fiftyKontorOpened) {
-            return (
-                <ScrollView>
-                    <TouchableOpacity  onPress={() => { this.props.makeAllFalse() }}>
+                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
                         <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                            <Text> 50 kontor 50 lira</Text>
+                            <Text> 25 kontor 25 lira</Text>
                         </CardItem>
-                        </TouchableOpacity>
-                </ScrollView>
-
-            )
-
-        }
-    }
-    renderHundred = () => {
-        if (this.props.hundredKontorOpened) {
-            return (
-                <ScrollView>
-                    <TouchableOpacity  onPress={() => { this.props.makeAllFalse() }}>
-                        <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                            <Text> 100 kontor 100 lira</Text>
-                        </CardItem>
-                        </TouchableOpacity>
-                </ScrollView>
-
-            )
-
-        }
-    }
-    renderTwoHundred = () => {
-        if (this.props.twoHundredKontorOpened) {
-            return (
-                <ScrollView>
-                <TouchableOpacity  onPress={() => { this.props.makeAllFalse() }}>
-                    <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                        <Text> 200 kontor 200 lira</Text>
-                    </CardItem>
                     </TouchableOpacity>
-            </ScrollView>
+                </ScrollView>
 
             )
 
@@ -130,7 +85,7 @@ export class WalletForm extends Component {
                             <Input
                                 key='balance'
                                 label="Bakiye"
-                                //value={this.state.balance}
+                                value={this.props.wallet ? this.props.wallet + '' : '0'}
                                 multiline={false}
                                 editable={false}
                                 rightIcon={{

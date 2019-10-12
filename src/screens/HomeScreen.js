@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, PermissionsAndroid } from 'react-native';
+import { View, TouchableOpacity, PermissionsAndroid, Alert } from 'react-native';
 
 import { Icon } from 'react-native-elements';
 
@@ -8,6 +8,9 @@ import { connect } from 'react-redux'
 
 import { HomeScreenBody } from '../components/ScreenParts/HomeScreenBody';
 import firebase from 'react-native-firebase';
+import ConnectyCube from 'connectycube-reactnative';
+
+import CallingService from '../Backend/ConnectyCube/services/CallingService';
 
 class HomeScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -57,6 +60,9 @@ class HomeScreen extends Component {
         consultantsSelected: true,
     }
 
+
+
+
     changeTab = (tabName) => {
         if (tabName === 'consultingFrom') {
             this.setState({
@@ -96,6 +102,10 @@ class HomeScreen extends Component {
     */
     onChatItemPress = ({ item }) => {
         this.props.setSelectedChatId(item.user.uid, this.state.consultantsSelected)
+        firebase.database().ref(`users/${item.user.uid}/CCID`).once('value', ccid => {
+            console.log("CCID of opponent", ccid)
+            this.props.videoCallOpponentsIds([ccid.val()])
+        })
         this.props.navigation.navigate('ChatScreen', {
             title: item.user.name,
         });
@@ -103,6 +113,8 @@ class HomeScreen extends Component {
 
 
     componentDidMount() {
+        // call listeners
+        this.setupListeners();
         // preparation for Audio
         this.checkAudioPermission();
         this.checkNotificationPermission();
@@ -187,11 +199,149 @@ class HomeScreen extends Component {
             </View>
         )
     }
+    setupListeners() {
+        ConnectyCube.videochat.onCallListener = this.onCallListener.bind(this);
+        ConnectyCube.videochat.onUserNotAnswerListener = this.onUserNotAnswerListener.bind(this);
+        ConnectyCube.videochat.onAcceptCallListener = this.onAcceptCallListener.bind(this);
+        ConnectyCube.videochat.onRemoteStreamListener = this.onRemoteStreamListener.bind(this);
+        ConnectyCube.videochat.onRejectCallListener = this.onRejectCallListener.bind(this);
+        ConnectyCube.videochat.onStopCallListener = this.onStopCallListener.bind(this);
+        ConnectyCube.videochat.onSessionConnectionStateChangedListener = this.onSessionConnectionStateChangedListener.bind(this);
+    }
+    onCallListener(session, extension) {
+        console.log('onCallListener, extension: ', extension);
+
+        const {
+            videoSessionObtained,
+            setMediaDevices,
+            localVideoStreamObtained,
+            callInProgress
+        } = this.props
+
+        videoSessionObtained(session);
+
+        Alert.alert(
+            'Incoming call',
+            'from user',
+            [
+                {
+                    text: 'Accept', onPress: () => {
+                        console.log('Accepted call request');
+
+                        this.props.navigation.navigate("VideoScreen")
+                        CallingService.getVideoDevices()
+                            .then(setMediaDevices);
+
+                        CallingService.getUserMedia(session).then(stream => {
+                            localVideoStreamObtained(stream);
+                            CallingService.acceptCall(session);
+                            callInProgress(true);
+                        });
+                    }
+                },
+                {
+                    text: 'Reject',
+                    onPress: () => {
+                        console.log('Rejected call request');
+                        CallingService.rejectCall(session);
+                    },
+                    style: 'cancel',
+                },
+            ],
+            { cancelable: false },
+        );
+    }
+
+    onUserNotAnswerListener(session, userId) {
+        CallingService.processOnUserNotAnswer(session, userId);
+
+        this.props.userIsCalling(false);
+    }
+
+    onAcceptCallListener(session, userId, extension) {
+        CallingService.processOnAcceptCallListener(session, extension);
+        this.props.callInProgress(true);
+        this.props.setCallInProgress(true);
+    }
+
+    onRemoteStreamListener(session, userID, remoteStream) {
+        this.props.remoteVideoStreamObtained(remoteStream, userID);
+        this.props.userIsCalling(false);
+    }
+
+    onRejectCallListener(session, userId, extension) {
+        CallingService.processOnRejectCallListener(session, extension);
+
+        this.props.userIsCalling(false);
+
+        this.props.clearVideoSession();
+        this.props.clearVideoStreams();
+        this.props.setCallInProgress(false);
+    }
+
+    onStopCallListener(session, userId, extension) {
+        this.props.userIsCalling(false);
+        this.props.callInProgress(false);
+
+        this.props.clearVideoSession();
+        this.props.clearVideoStreams();
+        this.props.setCallInProgress(false);
+
+        CallingService.processOnStopCallListener(session, extension);
+    }
+
+    onSessionConnectionStateChangedListener(session, userID, connectionState) {
+        console.log('onSessionConnectionStateChangedListener', userID, connectionState);
+    }
 }
 
-const mapStateToProps = ({ auth, chat }) => {
+function mapDispatchToProps(dispatch) {
+    return {
+        videoSessionObtained: videoSession => dispatch(videoSessionObtained(videoSession)),
+        userIsCalling: isCalling => dispatch(userIsCalling(isCalling)),
+        callInProgress: inProgress => dispatch(callInProgress(inProgress)),
+        remoteVideoStreamObtained: remoteStream => dispatch(remoteVideoStreamObtained(remoteStream)),
+        localVideoStreamObtained: localStream => dispatch(localVideoStreamObtained(localStream)),
+        clearVideoSession: () => dispatch(clearVideoSession()),
+        clearVideoStreams: () => dispatch(clearVideoStreams()),
+        setMediaDevices: mediaDevices => dispatch(setMediaDevices(mediaDevices)),
+        setActiveVideoDevice: videoDevice => dispatch(setActiveVideoDevice(videoDevice))
+    }
+}
+
+
+
+const mapStateToProps = (state) => {
+    console.log("state", state)
+    const { auth, chat } = state;
     const { user } = auth
-    const { consultant_chats, user_chats } = chat
-    return { user, consultant_chats, user_chats }
+    const { consultant_chats, user_chats, user_last_messages, consultant_last_messages, consultant_profiles, user_profiles, consultation_details } = chat;
+    var userChats = [];
+    var consultantChats = [];
+
+    const userProfileArray = Object.keys(user_profiles).map(key => (user_profiles[key]));
+    const consultantProfileArray = Object.keys(consultant_profiles).map(key => (consultant_profiles[key]));
+
+    for (var i = 0; i < userProfileArray.length; i++) {
+        var userProfile = userProfileArray[i];
+        var chatObj = {
+            lastMessage: consultant_last_messages[userProfile.uid]
+        };
+        chatObj.user = userProfile;
+        chatObj.chat = user_chats[userProfile.uid]
+        consultantChats.push(chatObj);
+    }
+
+    for (var i = 0; i < consultantProfileArray.length; i++) {
+        var userProfile = consultantProfileArray[i];
+        var chatObj = {
+            lastMessage: user_last_messages[userProfile.uid]
+        };
+        chatObj.user = userProfile;
+        chatObj.chat = consultant_chats[userProfile.uid]
+        userChats.push(chatObj);
+    };
+
+    return { user, consultant_chats: consultantChats, user_chats: userChats, consultant_profiles, user_profiles, consultation_details }
 }
 export default connect(mapStateToProps, actions)(HomeScreen);

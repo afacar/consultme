@@ -1,5 +1,5 @@
 import {
-  APP, SELECTED_CHAT, NEW_MESSAGE, SAVE_IMAGES
+  APP, SELECTED_CHAT, SAVE_IMAGES, CALL_IN_PROGRESS_CONDITION
 } from '../actions/action_types';
 
 const INITIAL_STATE = {
@@ -8,7 +8,8 @@ const INITIAL_STATE = {
     chatId: '',
     userMode: true,
     images: [],
-  }
+  },
+  callInProgress: false
 }
 
 export default function (state = INITIAL_STATE, action) {
@@ -31,7 +32,10 @@ export default function (state = INITIAL_STATE, action) {
       return { ...state, selectedChat: action.payload }
     }
     case SAVE_IMAGES: {
-      return {...state, selectedChat: {...state.selectedChat, images: action.payload.images}}
+      return { ...state, selectedChat: { ...state.selectedChat, images: action.payload.images } }
+    }
+    case CALL_IN_PROGRESS_CONDITION: {
+      return { ...state, callInProgress: action.payload }
     }
     default:
       return state;

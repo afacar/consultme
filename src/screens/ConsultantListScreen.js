@@ -11,6 +11,7 @@ import ConsultantCard from '../components/Cards/ConsultantCard';
 import ConsultantFullInfoModal from '../components/Modals/ConsultantFullInfoModal';
 import styles from '../Constants/Styles';
 import strings from '../Constants/Strings';
+import firebase from 'react-native-firebase';
 
 class ConsultantListScreen extends Component {
 
@@ -51,9 +52,8 @@ class ConsultantListScreen extends Component {
     consultMe = (consultant) => {
         this.setState({ openAgreementTextModal: true })
 
-        const user = this.props.state.user;
-
-        if (user) {
+        const user = this.props.user;
+        if (user && user.uid) {
             Alert.alert(
                 strings.AGREEMENT_POLICY_TITLE,
                 strings.AGREEMENT_POLICY,
@@ -64,13 +64,22 @@ class ConsultantListScreen extends Component {
                         style: 'cancel',
                     },
                     {
-                        text: 'Onaylıyorum', onPress: () => this.props.startConsultancy(this.props.state.user, consultant, (status) => {
-                            if (status == 'new') {
+                        text: 'Onaylıyorum', onPress: () => {
+                            this.props.startConsultancy(this.props.user, consultant, (status) => {
+                                if (status == 'new') {
 
-                            } else if (status == 'continue') {
+                                } else if (status == 'continue') {
 
-                            }
-                        })
+                                }
+                                this.props.setSelectedChatId(consultant.uid, true)
+                                firebase.database().ref(`users/${consultant.uid}/CCID`).once('value', ccid => {
+                                    console.log("CCID of opponent", ccid)
+                                    this.props.videoCallOpponentsIds([ccid.val()])
+                                })
+                                this.props.navigation.navigate('SplashScreen');
+                            })
+
+                        }
                     },
                 ],
                 { cancelable: false }
@@ -78,6 +87,7 @@ class ConsultantListScreen extends Component {
         } else {
             Alert.alert(
                 strings.AGREEMENT_POLICY_NO_USER_TITLE,
+                strings.AGREEMENT_POLICY_NO_USER_BODY,
                 [
                     {
                         text: 'Daha Sonra',
@@ -85,8 +95,14 @@ class ConsultantListScreen extends Component {
                         style: 'cancel',
                     },
                     {
-                        text: 'Giriş yap', onPress: () => this.props.navigation.navigate('LoginScreen')
-                    }
+                        text: 'Şimdi',
+                        onPress: () => {
+                            this.props.navigation.navigate('LoginScreen')
+                            this.setState({
+                                infoModalVisible: false
+                            })
+                        }
+                    },
                 ],
                 { cancelable: false }
             )
@@ -101,8 +117,8 @@ class ConsultantListScreen extends Component {
         return (
             <View style={styles.fullScreen}>
                 <FlatList
-                    data={this.props.state.consultants}
-                    extraData={this.props.state.consultants}
+                    data={this.props.consultants}
+                    extraData={this.props.consultants}
                     keyExtractor={this.extractKeyForFlatlist}
                     renderItem={this.renderConsultant}
                 />
@@ -126,7 +142,7 @@ const mapStateToProps = (state) => {
             }
         }
     }
-    return { state: { user, consultants } }
+    return { user, consultants }
 }
 
 export default connect(mapStateToProps, actions)(ConsultantListScreen);

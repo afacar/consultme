@@ -87,7 +87,7 @@ export const FilterIcon = (props) => {
       name='filter'
       onPress={props.onPress || null}
       size={props.size || 33}
-      color={props.disabled ? 'green' : props.color || 'red'}
+      color={props.disabled ? 'grey' : props.color || 'red'}
       containerStyle={[props.containerStyle, { alignSelf: 'center', paddingLeft: 5 }]}
     />
   );
@@ -99,7 +99,7 @@ export const CashIcon = (props) => {
       name='money'
       onPress={props.onPress || null}
       size={props.size || 33}
-      color={props.disabled ? 'green' : props.color || 'red'}
+      color={props.disabled ? 'grey' : props.color || 'red'}
       containerStyle={[props.containerStyle, { alignSelf: 'center', paddingLeft: 5 }]}
     />
       );
@@ -111,8 +111,8 @@ export const PlayIcon = (props) => {
       name='play-arrow'
       type='material'
       onPress={props.onPress || null}
-      color={'grey'}
-      size={30}
+      color={props.disabled ? 'grey' : props.color || 'red'}
+      size={props.size || 33}
     />
   );
 }
@@ -123,8 +123,32 @@ export const PauseIcon = (props) => {
       name='pause'
       type='material'
       onPress={props.onPress || null}
-      color={'grey'}
-      size={30}
+      color={props.disabled ? 'grey' : props.color || 'red'}
+      size={props.size || 33}
+    />
+  );
+}
+
+export const SuccessIcon = (props) => {
+  return (
+    <Icon
+      name='check-circle'
+      type='font-awesome'
+      onPress={props.onPress || null}
+      color={props.disabled ? 'grey' : props.color || 'green'}
+      size={props.size || 33}
+    />
+  );
+}
+
+export const FailIcon = (props) => {
+  return (
+    <Icon
+      name='times-circle'
+      type='font-awesome'
+      onPress={props.onPress || null}
+      color={props.disabled ? 'grey' : props.color || 'red'}
+      size={props.size || 33}
     />
   );
 }

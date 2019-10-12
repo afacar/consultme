@@ -8,12 +8,9 @@ export class ChatItem extends Component {
   }
 
   render() {
-    var { chat, user, currentUser } = this.props
+    var { chat, user, currentUser, lastMessage } = this.props
     var title = user.name
     let subtitle = '';
-    var lastMessage = ''
-    if (chat)
-      lastMessage = chat.lastMessage;
     if (lastMessage) {
       userName = (lastMessage.user._id === currentUser.uid) ? 'Siz: ' : user.name + ': ';
       // if (chat.unread > 0)
@@ -30,17 +27,22 @@ export class ChatItem extends Component {
     } else {
       subtitle = "Mesaj yok! İlk mesajı siz yazın.";
     }
-    const createdAt = lastMessage.createdAt;
+    var createdAt = '';
+    var lastMessageTime = '';
+    if (lastMessage) {
+      createdAt = lastMessage.createdAt;
 
-    // Create Date Object
-    var date = new Date(createdAt * 1000);
-    // Minutes part from the timestamp
-    var minutes = "0" + date.getMinutes();
-    // Seconds part from the timestamp
-    var seconds = "0" + date.getSeconds();
+      // Create Date Object
+      var date = new Date(createdAt);
+      // Minutes part from the timestamp
+      var minutes = "0" + date.getHours();
+      // Seconds part from the timestamp
+      var seconds = "0" + date.getMinutes();
 
-    // Will display time in 10:30:23 format
-    var lastMessageTime = minutes.substr(-2) + ':' + seconds.substr(-2);
+      // Will display time in 10:30:23 format
+      lastMessageTime = minutes.substr(-2) + ':' + seconds.substr(-2);
+    }
+
     return (
       <TouchableOpacity onPress={() => this.props.onPress({ item: { chat, user } })}>
         <ListItem

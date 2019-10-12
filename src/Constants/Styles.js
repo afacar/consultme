@@ -6,11 +6,7 @@ const { width, height } = Dimensions.get('window');
 const MODAL_HEIGHT = 4 * height / 5;
 const styles = StyleSheet.create({
     screenCenter: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -99,6 +95,11 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         justifyContent: 'center',
         padding: 8
+    },
+    checkOutFormStyle: {
+        height: height,
+        margin: 10,
+        backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR
     }
 })
 
