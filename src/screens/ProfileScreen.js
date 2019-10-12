@@ -43,15 +43,20 @@ class ProfileScreen extends Component {
   }
 
   onAvatarPressed = () => {
+    var customButtons = [];
+    if (this.state.profile.photoURL !== strings.DEFAULT_PROFILE_PIC) {
+      customButtons = [{
+        name: 'DeleteButton',
+        title: 'Fotoğrafı Sil'
+      }]
+    }
     const options = {
       title: 'Fotoğraf Yükle',
       chooseFromLibraryButtonTitle: 'Fotoğraflarımdan seç',
       takePhotoButtonTitle: 'Kamerayı aç',
       cancelButtonTitle: 'Kapat',
-      customButtons: [{
-        name: 'DeleteButton',
-        title: 'Fotoğafı Sil'
-      }],
+
+      customButtons: customButtons,
       mediaType: 'photo',
       storageOptions: {
         skipBackup: true,
@@ -176,7 +181,7 @@ class ProfileScreen extends Component {
     return (
       <ScrollView>
         <ProfileForm saveButtonTitle={this.state.saveButtonTitle} user={this.props.user}
-         onChangeName={this.onChangeName} disabled={this.state.disabled} loading={this.state.loading}
+          onChangeName={this.onChangeName} disabled={this.state.disabled} loading={this.state.loading}
           saveButtonPressed={this.saveButtonPressed} onAvatarPressed={this.onAvatarPressed} signOut={this.signOut} />
       </ScrollView>
     )

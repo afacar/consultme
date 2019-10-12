@@ -261,6 +261,7 @@ class HomeScreen extends Component {
     onAcceptCallListener(session, userId, extension) {
         CallingService.processOnAcceptCallListener(session, extension);
         this.props.callInProgress(true);
+        this.props.setCallInProgress(true);
     }
 
     onRemoteStreamListener(session, userID, remoteStream) {
@@ -275,6 +276,7 @@ class HomeScreen extends Component {
 
         this.props.clearVideoSession();
         this.props.clearVideoStreams();
+        this.props.setCallInProgress(false);
     }
 
     onStopCallListener(session, userId, extension) {
@@ -283,6 +285,7 @@ class HomeScreen extends Component {
 
         this.props.clearVideoSession();
         this.props.clearVideoStreams();
+        this.props.setCallInProgress(false);
 
         CallingService.processOnStopCallListener(session, extension);
     }
@@ -308,9 +311,37 @@ function mapDispatchToProps(dispatch) {
 
 
 
-const mapStateToProps = ({ auth, chat }) => {
+const mapStateToProps = (state) => {
+    console.log("state", state)
+    const { auth, chat } = state;
     const { user } = auth
-    const { consultant_chats, user_chats } = chat
-    return { user, consultant_chats, user_chats }
+    const { consultant_chats, user_chats, user_last_messages, consultant_last_messages, consultant_profiles, user_profiles, consultation_details } = chat;
+    var userChats = [];
+    var consultantChats = [];
+
+    const userProfileArray = Object.keys(user_profiles).map(key => (user_profiles[key]));
+    const consultantProfileArray = Object.keys(consultant_profiles).map(key => (consultant_profiles[key]));
+
+    for (var i = 0; i < userProfileArray.length; i++) {
+        var userProfile = userProfileArray[i];
+        var chatObj = {
+            lastMessage: consultant_last_messages[userProfile.uid]
+        };
+        chatObj.user = userProfile;
+        chatObj.chat = user_chats[userProfile.uid]
+        consultantChats.push(chatObj);
+    }
+
+    for (var i = 0; i < consultantProfileArray.length; i++) {
+        var userProfile = consultantProfileArray[i];
+        var chatObj = {
+            lastMessage: user_last_messages[userProfile.uid]
+        };
+        chatObj.user = userProfile;
+        chatObj.chat = consultant_chats[userProfile.uid]
+        userChats.push(chatObj);
+    };
+
+    return { user, consultant_chats: consultantChats, user_chats: userChats, consultant_profiles, user_profiles, consultation_details }
 }
 export default connect(mapStateToProps, actions)(HomeScreen);

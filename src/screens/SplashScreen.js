@@ -35,24 +35,64 @@ class SplashScreen extends Component {
 
             var ccid = '';
             var ccpass = '';
-            //Todo change into firebase user isProvider
+            //get isProvider, ccid, ccpass and wallet info
             await firebase.database().ref('users').child(user.uid).once('value', snapshot => {
                 if (snapshot.child('isProvider').exists()) {
-                    user.isProvider = snapshot.val();
+                    user.isProvider = true;
+                }else{
+                    user.isProvider = false;
                 }
                 ccid = snapshot.child('CCID').val();
                 ccpass = snapshot.child("CCPASS").val()
             })
 
-            this.props.fetchUserChats(user, (chat) => {
-                this.props.saveUserChat(chat)
+            firebase.database().ref('wallets').child(user.uid).on('value', snapshot => {
+                console.log("Wallet in splash screen", snapshot.val())
+                if (snapshot.exists()) {
+                    user.wallet = snapshot.val();
+                    console.log("Wallet in splash screen", snapshot.val())
+                }
+                this.props.saveUser(user);
             })
+
+            // fetch and save profiles of people, current user getting consultation from
+            this.props.fetchUserChats(user, (profile) => {
+                this.props.saveUserChat(profile);
+            });
+
+            // fetch and set lastMessages of chats in userMode
+            // lastMessageObj = { lastMessage:{}, chatId:''}
+            this.props.fetchUserLastMessages(user, (lastMessageObj) => {
+                this.props.saveUserLastMessage(lastMessageObj);
+            })
+
+            // fetch messages from current user's consultants
+            this.props.fetchUserMessages(user, (message) => {
+                message.userMode = true;
+                this.props.saveUserMessages(message)
+            })
+
+            // fetch and set pricing for each reaceived consultation of current user.
+            this.props.fetchChatConsultationDetails(user, (consultation) => {
+                this.props.saveConsultationDetails(consultation)
+            })
+
             if (user.isProvider) {
-                this.props.fetchConsultantChats(user, (chat) => {
-                    this.props.saveConsultantChat(chat);
+                this.props.fetchConsultantChats(user, (profile) => {
+                    this.props.saveConsultantChat(profile);
+                });
+
+                this.props.fetchConsultantLastMessages(user, (lastMessageObj) => {
+                    console.log("New consultant mode last message  on Splash Screen ", lastMessageObj)
+                    this.props.saveConsultantLastMessage(lastMessageObj);
+                });
+
+                this.props.fetchConsultantMessages(user, (message) => {
+                    message.userMode = false;
+                    console.log("New consultant message on splash screen ", message)
+                    this.props.saveConsultantMessages(message)
                 })
             }
-
             console.log("CCID", ccid)
             // Connecty Cube login
             let userProfile = {
@@ -85,10 +125,10 @@ class SplashScreen extends Component {
                 }
             })
         }
+        this.props.saveUser(user);
         this.props.fetchConsultants((consultant) => {
             this.props.saveConsultant(consultant);
         })
-        this.props.saveUser(user);
         if (user.name) {
             this.props.navigation.setParams('user', user)
             setTimeout(() => {

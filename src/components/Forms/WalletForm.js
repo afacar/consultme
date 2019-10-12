@@ -37,7 +37,7 @@ export class WalletForm extends Component {
                         <Input
                             key='balance'
                             label="Bakiye"
-                            //value={this.state.balance}
+                            value={this.props.wallet ? this.props.wallet + '' : '0'}
                             multiline={false}
                             editable={false}
                             rightIcon={{

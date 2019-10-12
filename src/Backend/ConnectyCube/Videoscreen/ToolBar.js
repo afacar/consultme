@@ -17,25 +17,28 @@ import CallingService from '../services/CallingService'
 
 export class ToolBar extends React.Component {
 
+	state = {
+		callDisabled: true
+	}
+
+	componentWillReceiveProps(props){
+		if (props.stopCall){
+			this.stopCall();
+		}
+	}
+
 	initiateCall() {
-		console.log("Initiate call called")
 		CallingService.createVideoSession(this.props.opponentsIds).then(session => {
 			this.props.videoSessionObtained(session)
-			console.log("Initiate call called 1 session obtained ", session)
 
 			CallingService.getVideoDevices()
 				.then(this.props.setMediaDevices);
-			console.log("Initiate call called 2")
 
 			CallingService.getUserMedia(session)
 				.then(stream => {
-					console.log("Initiate call called 3")
 					this.props.localVideoStreamObtained(stream);
-					console.log("Initiate call called 4")
 					this.props.userIsCalling(true);
-					console.log("Initiate call called 5")
 					CallingService.initiateCall(this.props.videoSession);
-					console.log("Initiate call called 6")
 				})
 				.catch(err => {
 					console.error("getUserMedia err" + err);
@@ -44,6 +47,7 @@ export class ToolBar extends React.Component {
 	}
 
 	stopCall() {
+		this.props.clearInterval();
 		this.props.userIsCalling(false);
 		this.props.callInProgress(false);
 
@@ -68,6 +72,11 @@ export class ToolBar extends React.Component {
 	}
 
 	render() {
+		if (this.props.remainingMinutes <= 0) {
+			if (this.props.videoSession)
+				this.stopCall();
+		}
+
 		const isCallingOrCallInProgress = this.props.isCalling || this.props.activeCall;
 		const isActiveCall = this.props.activeCall;
 		const isTwoCamerasAvailable = this.props.mediaDevices.length > 1;
@@ -76,7 +85,7 @@ export class ToolBar extends React.Component {
 			? <TouchableOpacity style={[styles.buttonContainer, styles.buttonCallEnd]} onPress={() => this.stopCall()}>
 				<MaterialIcon name="call-end" size={38} color="white" />
 			</TouchableOpacity>
-			: <TouchableOpacity style={[styles.buttonContainer, styles.buttonCall]} onPress={() => this.initiateCall()}>
+			: <TouchableOpacity style={[styles.buttonContainer, styles.buttonCall]} disabled={this.props.disableCall} onPress={() => this.initiateCall()}>
 				<MaterialIcon name="call" size={38} color="white" />
 			</TouchableOpacity>;
 

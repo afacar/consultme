@@ -150,7 +150,6 @@ class AudioCard extends Component {
     // }
 
     renderPlayPause = () => {
-        console.log("here")
         if (this.state.playing) {
             return <PauseButton onPress={this.pausePlaying} />
         } else if (!this.state.playing) {
@@ -268,7 +267,6 @@ class AudioCard extends Component {
     }
 }
 const mapStateToProps = ({ chat }) => {
-    console.log("Chat", chat)
     return { currentAudio: chat.currentAudio };
 }
 export default connect(mapStateToProps, actions)(AudioCard);

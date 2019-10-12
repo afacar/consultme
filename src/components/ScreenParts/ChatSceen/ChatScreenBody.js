@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { Dimensions, TouchableOpacity, Text, View, Image, Platform, Modal, BackHandler } from 'react-native';
-import { GiftedChat, Send, Bubble } from 'react-native-gifted-chat';
+import { TouchableOpacity, Text, View, Image, Platform, } from 'react-native';
+import { GiftedChat, Send, Bubble, Composer, InputToolbar } from 'react-native-gifted-chat';
 import ImagePicker from 'react-native-image-picker';
 import { AudioUtils, AudioRecorder } from 'react-native-audio';
 
 
-import AudioCard from '../common/AudioCard';
-import styles from '../../Constants/Styles';
-import { SignOutButton, SaveButton } from '../common/Buttons';
+import AudioCard from '../../common/AudioCard';
+import styles from '../../../Constants/Styles';
 import { Button } from 'react-native-elements';
-import Sound from 'react-native-sound';
-import ImageViewerModal from '../Modals/ImageViewerModal';
+import ImageViewerModal from '../../Modals/ImageViewerModal';
 
 export class ChatScreenBody extends Component {
 
@@ -55,20 +53,60 @@ export class ChatScreenBody extends Component {
     sendMessage = (messages) => {
         console.log("Message\n", messages);
         let messagesArray = [];
-
+        const { chatId, user, userMode } = this.props;
+        var success = true;
+        var length = 0;
+        var text = false;
         for (let i = 0; i < messages.length; i++) {
             let message = messages[i];
+            // TODO convert audio messages into text and count length
             message.createdAt = new Date();
             if (!message._id)
                 message._id = this.randIDGenerator();
-            if (message.text)
+            if (message.text) {
                 message._id = this.randIDGenerator();
+                if (userMode)
+                    this.props.changeRemaining(message.text.length)
+                        .then((result) => {
+                            console.log("Promise result", result);
+                            if (result.status !== 'success') {
+                                success = false;
+                                length = result.length;
+                                text = true;
+                            }
+                        })
+                        .catch((err) => {
+                            console.log("Promise err", err);
+                            success = false;
+                            length = err.length;
+                        })
+            }
+            if (message.audio && userMode) {
+                this.props.changeRemaining(100)
+                    .then((result) => {
+                        console.log("Promise result", result);
+                        if (result.status !== 'success') {
+                            success = false;
+                            length = result.length;
+                            text = false;
+                        }
+                    })
+                    .catch((err) => {
+                        console.log("Promise err", err);
+                        success = false;
+                        length = err.length;
+                    })
+            }
             this.updateState(message);
             messagesArray.push(message);
             console.log("Messages before", this.props.messages);
         }
-        const { chatId, user, userMode } = this.props;
-        this.props.sendMessage(messagesArray, chatId, user, userMode);
+        if (success)
+            this.props.sendMessage(messagesArray, chatId, user, userMode);
+        else {
+            this.props.sendMessage(messagesArray, chatId, user, userMode);
+            this.props.closeComposer();
+        }
     }
 
     randIDGenerator = () => {
@@ -79,8 +117,25 @@ export class ChatScreenBody extends Component {
 
     updateState(message) {
         console.log('message in update state', message)
-        this.props.updateMessages(message, this.props.chatId, this.props.userMode)
-        this.forceUpdate();
+        const { userMode } = this.props;
+        var msgObj = {};
+        if (userMode) {
+            console.log("User is user now")
+            msgObj = {
+                message,
+                chatId: this.props.chatId,
+                userMode: true
+            }
+            this.props.saveUserMessages(msgObj);
+        } else {
+            console.log("User is consultant now")
+            msgObj = {
+                message,
+                chatId: this.props.chatId,
+                userMode: false
+            }
+            this.props.saveConsultantMessages(msgObj);
+        }
     }
 
 
@@ -133,6 +188,22 @@ export class ChatScreenBody extends Component {
         }
     };
 
+    // renderComposer = props => {
+    //     if (this.props.userMode && (this.props.composerClosed || this.props.remaining <= 0)) {
+    //         return (
+    //             <View style={{ width: '100%' }}>
+    //                 <Text>Cüzdanınızda yeterli bakiye bulunmamaktadır</Text>
+    //             </View>
+    //         )
+    //     } else {
+    //         return (
+    //             <View>
+    //                 <Composer {...props} />
+    //             </View>
+    //         )
+    //     }
+    // }
+
     renderActions = (props) => {
         if (!this.state.userIsTyping) {
             return (
@@ -173,13 +244,33 @@ export class ChatScreenBody extends Component {
         })
     }
 
+    renderInputToolbar = (props) => {
+        const { userMode, remaining, composerClosed } = this.props;
+        console.log("User mode", userMode);
+        console.log("Remaining", remaining);
+        console.log("composerClosed", composerClosed);
+
+        if (!(userMode && (remaining <= 0 || composerClosed))) {
+            return (
+                <InputToolbar {...props} />
+            )
+        } else {
+            return (
+                <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text>Cüzdanınızda yeterli bakiye bulunmamaktadır</Text>
+                </View>
+            )
+        }
+    }
 
     render() {
+        console.log("CSB render")
         var { messages, chatId, user } = this.props
         return (
             <View style={[styles.fullScreen, { margin: 5 }]}>
                 <GiftedChat
                     key={chatId}
+                    inverted={true}
                     messages={messages}
                     locale={'tr'}
                     onSend={(message) => this.sendMessage(message)}
@@ -190,6 +281,8 @@ export class ChatScreenBody extends Component {
                         name: user.name,
                         avatar: user.photoURL,
                     }}
+                    renderInputToolbar={this.renderInputToolbar}
+                    scrollToBottom={true}
                     placeholder='Mesaj yazın...'
                     renderSend={this.renderSend}
                     renderBubble={this.renderBubble}

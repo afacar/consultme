@@ -9,6 +9,18 @@ export const APP = 'app';
 
 export const USER_CHAT = 'user_chat';
 
+export const CALL_IN_PROGRESS_CONDITION = 'call_in_progress_condition'; 
+
+export const CONSULTATION_DETAILS = 'consultation_details';
+
+export const CHAT_CONSULTANT_PROFILE = 'chat_consultant_profile'; 
+
+export const CHAT_USER_PROFILE ='chat_user_profile';
+
+export const CHAT_CONSULTANT_LAST_MESSAGE = 'chat_consultant_last_message';
+
+export const CHAT_USER_LAST_MESSAGE = 'chat_user_last_message';
+
 export const CONSULTANT_CHAT = 'consultant_chat';
 
 export const SELECTED_CHAT = 'selected_chat';
@@ -17,7 +29,7 @@ export const CHATS_AUDIO = 'chats_audio';
 
 export const NEW_MESSAGE = 'new_message';
 
-export const SAVE_IMAGES = 'save_images'
+export const SAVE_IMAGES = 'save_images';
 
 // connecty cube 
 export const USER_LOGIN = 'USER_LOGIN'

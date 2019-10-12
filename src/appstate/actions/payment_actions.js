@@ -140,11 +140,14 @@ export const finalize_threeds_payment = ((paymentObject) => async (dispatch) => 
     });
 });
 
-export const checkNewPayment = (callback) => async (dispatch) => {
+export const checkNewPayment = (startTime, callback) => async (dispatch) => {
     const uid = firebase.auth().currentUser.uid;
     console.log("Inside new payments", uid);
     firebase.database().ref(`payments/results/${uid}`).on('child_added', newPayment => {
         console.log("New payment", newPayment.val());
-        callback(newPayment.val());
+        var convId = newPayment.val().result.conversationId;
+        var time = convId.substring(convId.indexOf('_') + 1, convId.length);
+        if (parseInt(startTime) < parseInt(time))
+            callback(newPayment.val());
     })
 }

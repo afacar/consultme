@@ -1,37 +1,117 @@
 import firebase from 'react-native-firebase';
 import { CHATS_AUDIO, NEW_MESSAGE } from './action_types';
 
-export const fetchUserChats = (user, callback) => async (dispatch) => {
+const db = firebase.database();
 
-    let consultantChatsUrl = `users/${user.uid}/consultationsFrom/`;
+export const fetchUserChats = (user, callback) => async (dispatch) => {
+    let consultantChatsUrl = `users/${user.uid}/consultationsFrom`;
+    firebase.database().ref(consultantChatsUrl).on('child_added', chatsSnap => {
+        var consultantId = chatsSnap.key;
+        let consultantProfileUrl = `users/${consultantId}`;
+        db.ref(consultantProfileUrl).on('value', consultantProfileSnap => {
+            const snapValue = consultantProfileSnap.val();
+            const profile = {
+                name: snapValue.name,
+                number: snapValue.number,
+                photoURL: snapValue.photoURL,
+                uid: snapValue.uid
+            }
+            callback(profile);
+        });
+    })
+}
+
+export const fetchUserLastMessages = (user, callback) => async (dispatch) => {
+    let consultantChatsUrl = `users/${user.uid}/consultationsFrom`;
+    firebase.database().ref(consultantChatsUrl).on('child_added', chatsSnap => {
+        var chatId = chatsSnap.key;
+        let lastMessageUrl = `consultations/${chatId}/${user.uid}/lastMessage`;
+        firebase.database().ref(lastMessageUrl).on('value', lastMessageSnap => {
+            callback({ lastMessage: lastMessageSnap.val(), chatId: chatId })
+        })
+    })
+}
+
+export const fetchUserMessages = (user, callback) => async (dispatch) => {
+    let consultantChatsUrl = `users/${user.uid}/consultationsFrom`;
     firebase.database().ref(consultantChatsUrl).on('value', chatsSnap => {
         chatsSnap.forEach(chatIdSnap => {
             var chatId = chatIdSnap.key;
-            let chatUrl = `consultations/${chatId}/${user.uid}`;
-            firebase.database().ref(chatUrl).child('chat').on('value', chatSnap => {
-                firebase.database().ref(chatUrl).child('consultant').on('value', consultantSnap => {
-                    callback({ chat: chatSnap.val(), user: consultantSnap.val() });
-                })
+            let chatUrl = `consultations/${chatId}/${user.uid}/messages`;
+            firebase.database().ref(chatUrl).on('child_added', newMessage => {
+                callback({ message: newMessage.val(), chatId: chatId })
+            })
+        })
+    })
+}
+
+export const fetchChatConsultationDetails = (user, callback) => async (dispatch) => {
+    let consultantChatsUrl = `users/${user.uid}/consultationsFrom`;
+    firebase.database().ref(consultantChatsUrl).on('value', chatsSnap => {
+        chatsSnap.forEach(chatIdSnap => {
+            var chatId = chatIdSnap.key;
+            let consultationDetailsUrl = `consultations/${chatId}/${user.uid}/consultationDetails`;
+            firebase.database().ref(consultationDetailsUrl).once('value', consultationDetailsSnap => {
+                callback({ consultationDetails: consultationDetailsSnap.val(), chatId: chatId })
             })
         })
     })
 }
 
 export const fetchConsultantChats = (user, callback) => async (dispatch) => {
-    let consultantChatsUrl = `users/${user.uid}/consultationsTo/`;
+    let userChatsUrl = `users/${user.uid}/consultationsTo`;
+    firebase.database().ref(userChatsUrl).on('child_added', chatsSnap => {
+        var userId = chatsSnap.key;
+        let userProfileUrl = `users/${userId}`;
+        db.ref(userProfileUrl).on('value', userProfileSnap => {
+            const snapValue = userProfileSnap.val();
+            const profile = {
+                name: snapValue.name,
+                number: snapValue.number,
+                photoURL: snapValue.photoURL,
+                uid: snapValue.uid
+            }
+            callback(profile);
+        });
+    })
+}
+
+export const fetchConsultantLastMessages = (user, callback) => async (dispatch) => {
+    let consultantChatsUrl = `users/${user.uid}/consultationsFrom`;
+    firebase.database().ref(consultantChatsUrl).on('child_added', chatsSnap => {
+        var chatId = chatsSnap.key;
+        let lastMessageUrl = `consultations/${user.uid}/${chatId}/lastMessage`;
+        firebase.database().ref(lastMessageUrl).on('value', lastMessageSnap => {
+            callback({ lastMessage: lastMessageSnap.val(), chatId: chatId })
+        })
+    })
+}
+
+export const fetchConsultantMessages = (user, callback) => async (dispatch) => {
+    let consultantChatsUrl = `users/${user.uid}/consultationsTo`;
     firebase.database().ref(consultantChatsUrl).on('value', chatsSnap => {
         chatsSnap.forEach(chatIdSnap => {
             var chatId = chatIdSnap.key;
-            let chatUrl = `consultations/${user.uid}/${chatId}`;
-            firebase.database().ref(chatUrl).child('chat').on('value', chatSnap => {
-                firebase.database().ref(chatUrl).child('user').on('value', userSnap => {
-                    callback({ chat: chatSnap.val(), user: userSnap.val() });
-                })
+            let chatUrl = `consultations/${user.uid}/${chatId}/messages`;
+            firebase.database().ref(chatUrl).on('child_added', newMessage => {
+                callback({ message: newMessage.val(), chatId: chatId })
             })
         })
     })
 }
-export const sendMessage = (messages, chatId, user, userMode, uploadPercentage) => async (dispatch) => {
+export const fetchConsultantChatUserProfile = (user, callback) => async (dispatch) => {
+    let consultantChatsUrl = `users/${user.uid}/consultationsTo/`;
+    firebase.database().ref(consultantChatsUrl).on('value', chatsSnap => {
+        chatsSnap.forEach(chatIdSnap => {
+            var chatId = chatIdSnap.key;
+            let userProfileUrl = `users/${chatId}`;
+            firebase.database().ref(userProfileUrl).on('value', userProfileSnap => {
+                callback({ userProfile: userProfileSnap.val() })
+            })
+        })
+    })
+}
+export const sendMessage = (messages, chatId, user, userMode, callback) => async (dispatch) => {
     const uid = user.uid;
     let unreadURL = '';
     var downloadUrl = '';
@@ -50,9 +130,9 @@ export const sendMessage = (messages, chatId, user, userMode, uploadPercentage) 
 
         // set message url
         if (userMode) {
-            messageURL = `consultations/${chatId}/${uid}/chat/${message._id}`;
+            messageURL = `consultations/${chatId}/${uid}/messages/${message._id}`;
         } else {
-            messageURL = `consultations/${uid}/${chatId}/chat/${message._id}`;
+            messageURL = `consultations/${uid}/${chatId}/messages/${message._id}`;
         }
 
         // image url
@@ -83,7 +163,6 @@ export const sendMessage = (messages, chatId, user, userMode, uploadPercentage) 
             downloadUrl = await firebase.storage().ref(uploadUrl).getDownloadURL();
         }
 
-        console.log("passed here?")
         var messageData = {
             user: message.user,
             createdAt: message.createdAt,
@@ -98,9 +177,9 @@ export const sendMessage = (messages, chatId, user, userMode, uploadPercentage) 
 
         let lastMessageUrl = ''
         if (userMode) {
-            lastMessageUrl = `consultations/${chatId}/${uid}/chat/lastMessage`;
+            lastMessageUrl = `consultations/${chatId}/${uid}/lastMessage`;
         } else {
-            lastMessageUrl = `consultations/${uid}/${chatId}/chat/lastMessage`;
+            lastMessageUrl = `consultations/${uid}/${chatId}/lastMessage`;
         }
         let ref = firebase.database().ref();
         firebase.database().ref(lastMessageUrl).set(messageData)
@@ -122,7 +201,12 @@ export const setAudio = (id) => async (dispatch) => {
     return dispatch({ type: CHATS_AUDIO, payload: { id } })
 }
 
-export const updateMessages = (newMessage, chatId, userMode) => (dispatch) => {
-    console.log("new message", JSON.stringify(newMessage) + '\n id ' + chatId)
-    return dispatch({ type: NEW_MESSAGE, payload: { newMessage, chatId, userMode } })
+export const updateMessages = (message, chatId, userMode) => (dispatch) => {
+    return dispatch({ type: NEW_MESSAGE, payload: { message, chatId, userMode } })
+}
+
+export const incrementCharCounter = (length, chatId) => async (dispatch) => {
+    firebase.database().ref(`consultations/${chatId}/${firebase.auth().currentUser.uid}/consultationDetails/counter`).transaction((charCounter) => {
+        return (charCounter || 0) + length
+    })
 }

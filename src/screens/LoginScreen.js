@@ -169,7 +169,6 @@ class LoginScreen extends Component {
     }
 
     handleConnectyCubeLogin = () => {
-        console.log("Here")
         var pass = this.generateRandomPass();
         console.log("pass", pass)
         ConnectyCube.createSession((error, session) => {

@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 
 import * as actions from '../appstate/actions';
 import styles from '../Constants/Styles';
-import { ChatScreenBody } from '../components/ScreenParts/ChatScreenBody';
+import { ChatScreenBody } from '../components/ScreenParts/ChatSceen/ChatScreenBody';
 import strings from '../Constants/Strings';
 import { Button } from 'react-native-elements';
+import ChatScreenWalletInfo from '../components/ScreenParts/ChatSceen/ChatScreenWalletInfo';
 
 class ChatScreen extends Component {
 
@@ -25,21 +26,81 @@ class ChatScreen extends Component {
         )
     });
 
+    state = {
+        remaining: 0,
+        wallet: 0,
+        composerClosed: false
+    }
+
     updateMessages = (newMessage, chatId, userMode) => {
         this.props.updateMessages(newMessage, chatId, userMode)
     }
 
+    componentDidMount = () => {
+        const { user, userMode, consultationDetails } = this.props;
+        console.log("Props", this.props)
+        if (userMode && consultationDetails.type === 'session') {
+            var walletChar = parseInt(user.wallet / consultationDetails.textPrice)
+            var remaining = 0;
+
+            if (walletChar >= 1)
+                remaining = walletChar * 300 + consultationDetails.freeChars - consultationDetails.counter;
+            else
+                remaining = consultationDetails.freeChars - consultationDetails.counter;
+            composerClosed = false;
+            if (remaining <= 0)
+                composerClosed = true;
+            this.setState({ wallet: user.wallet, remaining, composerClosed });
+        }
+    }
+
+    saveUserMessages = (message) => {
+        console.log("MEssage in SUM", message);
+        this.props.saveUserMessages(message);
+    }
+
+    saveConsultantMessages = (message) => {
+        console.log("MEssage in SCM", message);
+        this.props.saveConsultantMessages(message);
+    }
+
     render() {
-        const { messages, user, chatId, userMode, imagesExist, imageArray } = this.props;
-        console.log("Image array", imageArray)
+        const { messages, user, chatId, userMode, imagesExist, imageArray, consultationDetails } = this.props;
         if (!imagesExist) {
             this.props.saveImages(chatId, userMode, imageArray)
         }
         return (
             <View style={[styles.fullScreen, { margin: 0 }]}>
-                <ChatScreenBody messages={messages} user={user} chatId={chatId} userMode={userMode} sendMessage={this.props.sendMessage} updateMessages={this.updateMessages} imageArray={imageArray} />
+                {
+                    userMode && consultationDetails.type === 'session' && (
+                        <ChatScreenWalletInfo wallet={this.props.user.wallet} remaining={this.state.remaining} />
+                    )
+                }
+                <ChatScreenBody changeRemaining={this.changeRemaining} remaining={this.state.remaining} messages={messages} user={user} closeComposer={this.closeComposer} composerClosed={this.state.composerClosed}
+                    chatId={chatId} userMode={userMode} sendMessage={this.props.sendMessage} saveUserMessages={this.saveUserMessages} saveConsultantMessages={this.saveConsultantMessages} imageArray={imageArray} />
             </View>
         )
+    }
+
+    closeComposer = () => {
+        this.setState({
+            composerClosed: true
+        })
+    }
+
+    changeRemaining = (length) => {
+        const { chatId } = this.props
+        this.props.incrementCharCounter(length, chatId);
+        this.setState({
+            remaining: parseInt(this.state.remaining) - parseInt(length)
+        })
+        return new Promise((resolve, reject) => {
+            if (this.state.remaining <= 0) {
+                reject({ status: 'failed', length: 0 - this.state.remaining })
+            } else {
+                resolve({ status: 'success' })
+            }
+        })
     }
 }
 
@@ -48,57 +109,45 @@ const mapStateToProps = (state) => {
     console.log("State", state);
     const { app, auth, chat } = state;
     const { chatId, userMode } = app.selectedChat;
-    var selectedChat = {};
+    var selectedChat = {
+        chat: []
+    };
+    var consultationDetails = {};
+    const { consultation_details } = chat;
     if (userMode) {
         const { user_chats } = chat;
-        for (var i = 0; i < user_chats.length; i++) {
-            if (user_chats[i].user.uid === chatId) {
-                selectedChat = user_chats[i];
-            }
-        }
+        if (user_chats[chatId])
+            selectedChat.chat = user_chats[chatId].messages;
+        consultationDetails = consultation_details[chatId]
     } else {
         const { consultant_chats } = chat;
-        for (var i = 0; i < consultant_chats.length; i++) {
-            if (consultant_chats[i].user.uid === chatId) {
-                selectedChat = consultant_chats[i];
-            }
-        }
+        if (consultant_chats[chatId])
+            selectedChat.chat = consultant_chats[chatId].messages;
     }
-    var chatArray = []
-    if (selectedChat.chat) {
-        var lastMessage = selectedChat.chat.lastMessage;
-        delete selectedChat.chat.lastMessage;
-        chatArray = Object.keys(selectedChat.chat).map(key => (selectedChat.chat[key]))
-    }
-    if (lastMessage)
-        selectedChat.chat.lastMessage = lastMessage;
-    console.log("Chat array before,", chatArray)
-    chatArray.unshift({ _id: 1, text: strings.AGREEMENT_POLICY, createdAt: '1970-01-01 00:00:00 UTC+00', system: true })
+    if (selectedChat.chat[selectedChat.chat.length - 1] && selectedChat.chat[selectedChat.chat.length - 1]._id !== 1)
+        selectedChat.chat.push({ _id: 1, text: strings.AGREEMENT_POLICY, createdAt: '1970-01-01 00:00:00 UTC+00', system: true })
     var index = 1;
     var imageArray = [];
-    for (var i = 0; i < chatArray.length; i++) {
-        if (chatArray[i].image) {
-            var image = chatArray[i].image;
-            console.log("image here ", image)
+    console.log("Selected chat", selectedChat)
+    for (var i = 0; i < selectedChat.chat.length; i++) {
+        var message = selectedChat.chat[i]
+        if (message.image) {
+            var image = message.image;
             if (!image.url) {
-                chatArray[i].image = {
+                message.image = {
                     url: image,
                     index: index
                 }
             }
             index++;
-            imageArray.push(chatArray[i].image)
+            imageArray.push(message.image)
         }
     }
-    console.log("Chat array after,", chatArray)
-    console.log("Image array after,", imageArray)
 
     if (!app.selectedChat.images) {
-        console.log("Images not  exists", imageArray)
-        return ({ messages: chatArray, user: auth.user, chatId, userMode, imageArray, imagesExist: false })
+        return ({ messages: selectedChat.chat, user: auth.user, chatId, userMode, imageArray, imagesExist: false, consultationDetails })
     } else {
-        console.log("Images exists", app.selectedChat.images)
-        return ({ messages: chatArray, user: auth.user, chatId, userMode, imageArray: app.selectedChat.images, imagesExist: true })
+        return ({ messages: selectedChat.chat, user: auth.user, chatId, userMode, imageArray: app.selectedChat.images, imagesExist: true, consultationDetails })
     }
 }
 

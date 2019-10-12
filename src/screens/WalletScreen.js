@@ -347,7 +347,7 @@ class WalletScreen extends Component {
             <ScrollView>
                 {!this.state.buyCredits &&
                     (
-                        <WalletForm onBuyCreditsPressed={this.onBuyCreditsPressed} />
+                        <WalletForm onBuyCreditsPressed={this.onBuyCreditsPressed} wallet={this.props.user.wallet}/>
                     )
                 }
                 {this.state.buyCredits &&
@@ -379,13 +379,12 @@ class WalletScreen extends Component {
 
     checkNewPayment = () => {
         console.log("checkNewPayment");
-        this.props.checkNewPayment(newPayment => {
+        this.props.checkNewPayment(new Date().getTime(),(newPayment) => {
             console.log("New Payment on wallet screen", newPayment);
             var result = newPayment.result
             console.log("New Payment Result", result);
             if (result) {
                 if (result.status === 'success' && result.mdStatus == 1) {
-                    console.log("Here");
                     var paymentObject = {
                         conversationId: result.conversationId,
                         paymentId: result.paymentId,
@@ -437,7 +436,6 @@ class WalletScreen extends Component {
                         });
 
                 } else {
-                    console.log("Here1");
                     const mdStatus = result.mdStatus;
                     var errorMessage = IyziPaymentErrors.IyziPaymentErrors[mdStatus];
                     this.setState({
