@@ -18,6 +18,8 @@ export default class CheckOutForm extends Component {
                 <View style={{ flex: 1, backgroundColor: 'transparent', justifyContent: 'center' }} >
                     <ScrollView style={{ height: height / 3, margin: 10, backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR }} contentContainerStyle={{ justifyContent: 'flex-start', }}>
                         <Input
+                            leftIcon={{ type: 'antdesign', name: 'profile' }}
+                            leftIconContainerStyle={{ marginLeft: 0 }}
                             style={{ flex: 1 }}
                             editable={!this.props.disabled}
                             key='cardName'
@@ -30,6 +32,8 @@ export default class CheckOutForm extends Component {
                             value={this.props.cardName || ''}
                         />
                         <Input
+                            leftIcon={{ type: 'antdesign', name: 'creditcard' }}
+                            leftIconContainerStyle={{ marginLeft: 0 }}
                             style={{ flex: 1 }}
                             editable={!this.props.disabled}
                             key='card_number'
@@ -44,6 +48,8 @@ export default class CheckOutForm extends Component {
                         <View style={{ flex: 1, flexDirection: 'row' }}>
                             <View style={{ flex: 1 }}>
                                 <Input
+                                    leftIcon={{ type: 'antdesign', name: 'calendar' }}
+                                    leftIconContainerStyle={{ marginLeft: 0 }}
                                     style={{ flex: 1 }}
                                     editable={!this.props.disabled}
                                     key='month'
@@ -58,6 +64,8 @@ export default class CheckOutForm extends Component {
 
                             <View style={{ flex: 1 }}>
                                 <Input
+                                    leftIcon={{ type: 'antdesign', name: 'calendar' }}
+                                    leftIconContainerStyle={{ marginLeft: 0 }}
                                     style={{ flex: 1 }}
                                     key='year'
                                     editable={!this.props.disabled}
@@ -72,6 +80,8 @@ export default class CheckOutForm extends Component {
 
                             <View style={{ flex: 1 }}>
                                 <Input
+                                    leftIcon={{ type: 'entypo', name: 'credit-card' }}
+                                    leftIconContainerStyle={{ marginLeft: 0 }}
                                     style={{ flex: 1 }}
                                     key='cvc'
                                     editable={!this.props.disabled}
@@ -85,10 +95,10 @@ export default class CheckOutForm extends Component {
                             </View>
                         </View>
 
-                        <CheckBox title='3D Secure' onPress={() => { this.props.onThreeDSChecked() }} checked={this.props.threeDSChecked} />
-
                         <View style={{ flex: 1 }}>
                             <Input
+                                leftIcon={{ type: 'font-awesome', name: 'turkish-lira' }}
+                                leftIconContainerStyle={{ marginLeft: 0 }}
                                 key='value'
                                 editable={!this.props.disabled}
                                 keyboardType='number-pad'
@@ -103,6 +113,8 @@ export default class CheckOutForm extends Component {
 
                         <View style={{ flex: 1 }}>
                             <Input
+                                leftIcon={{ type: 'entypo', name: 'location' }}
+                                leftIconContainerStyle={{ marginLeft: 0 }}
                                 key='city'
                                 editable={!this.props.disabled}
                                 keyboardType='default'
@@ -114,6 +126,8 @@ export default class CheckOutForm extends Component {
                             />
 
                             <Input
+                                leftIcon={{ type: 'antdesign', name: 'home' }}
+                                leftIconContainerStyle={{ marginLeft: 0 }}
                                 key='address'
                                 editable={!this.props.disabled}
                                 keyboardType='default'
@@ -127,6 +141,8 @@ export default class CheckOutForm extends Component {
 
                         <View style={{ flex: 1 }}>
                             <Input
+                                leftIcon={{ type: 'antdesign', name: 'codesquareo' }}
+                                leftIconContainerStyle={{ marginLeft: 0 }}
                                 key='zipCode'
                                 editable={!this.props.disabled}
                                 keyboardType='number-pad'
@@ -138,6 +154,7 @@ export default class CheckOutForm extends Component {
                             />
 
                         </View>
+                        <CheckBox title='3D Secure' onPress={() => { this.props.onThreeDSChecked() }} checked={this.props.threeDSChecked} />
 
                         <Button disabled={this.props.disabled} title={this.props.payButtonTitle} titleStyle={{ color: 'white' }}
                             type='solid' buttonStyle={{ backgroundColor: colors.IOS_BLUE, marginTop: 10 }}
