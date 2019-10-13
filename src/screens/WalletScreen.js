@@ -183,7 +183,7 @@ class WalletScreen extends Component {
 
     onThreeDSChecked = () => {
         this.setState({
-            threeDSChecked: !this.state.threeDSChecked
+            threeDSChecked: true
         })
     }
 
@@ -379,7 +379,7 @@ class WalletScreen extends Component {
             city: '',
             address: '',
             zipCode: '',
-            threeDSChecked: false,
+            threeDSChecked: true,
             cardNumberError: '',
             nameError: '',
             monthError: '',
