@@ -31,7 +31,7 @@ export class VideoScreen extends React.Component {
     });
 
     state = {
-        disableCall: true,
+        disableCall: false,
         minutes: 0,
         seconds: 0,
         callReceived: false,
