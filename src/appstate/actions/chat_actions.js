@@ -77,7 +77,7 @@ export const fetchConsultantChats = (user, callback) => async (dispatch) => {
 }
 
 export const fetchConsultantLastMessages = (user, callback) => async (dispatch) => {
-    let consultantChatsUrl = `users/${user.uid}/consultationsFrom`;
+    let consultantChatsUrl = `users/${user.uid}/consultationsTo`;
     firebase.database().ref(consultantChatsUrl).on('child_added', chatsSnap => {
         var chatId = chatsSnap.key;
         let lastMessageUrl = `consultations/${user.uid}/${chatId}/lastMessage`;
