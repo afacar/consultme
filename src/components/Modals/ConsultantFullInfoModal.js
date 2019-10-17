@@ -15,7 +15,8 @@ class ConsultantFullInfoModal extends Component {
 
     render() {
         return (
-            <Modal visible={this.props.visible} transparent={true} animationType='fade'>
+            <Modal visible={this.props.visible} transparent={true} animationType='fade'
+            onRequestClose={() => {{this.props.onModalClose()}}}>
                 <ScrollView style={styles.consultantCard}>
                     <View style={styles.consultantCardAvatarContainer}>
                         <Avatar

@@ -81,8 +81,28 @@ export class ChatScreenBody extends Component {
                             length = err.length;
                         })
             }
-            if (message.audio && userMode) {
+            else if (message.audio && userMode) {
                 this.props.changeRemaining(100)
+                    .then((result) => {
+                        console.log("Promise result", result);
+                        if (result.status !== 'success') {
+                            success = false;
+                            length = result.length;
+                            text = false;
+                        }
+                    })
+                    .catch((err) => {
+                        console.log("Promise err", err);
+                        success = false;
+                        length = err.length;
+                    })
+            }
+            else if (message.image) {
+                this.props.imageArray.push({
+                    url: message.image,
+                    index: this.props.imageArray.length
+                })
+                this.props.changeRemaining(10)
                     .then((result) => {
                         console.log("Promise result", result);
                         if (result.status !== 'success') {
@@ -101,8 +121,9 @@ export class ChatScreenBody extends Component {
             messagesArray.push(message);
             console.log("Messages before", this.props.messages);
         }
-        if (success)
+        if (success) {
             this.props.sendMessage(messagesArray, chatId, user, userMode);
+        }
         else {
             this.props.sendMessage(messagesArray, chatId, user, userMode);
             this.props.closeComposer();
@@ -156,11 +177,11 @@ export class ChatScreenBody extends Component {
         return (
             <Send {...props} containerStyle={{ justifyContent: "center" }}>
                 <Icon
-                style={{ fontSize: 19, color: 'blue', margin: 5 }}
-                type={"font-awesome"}
-                name = {"send"}>                   
+                    style={{ fontSize: 19, color: 'blue', margin: 5 }}
+                    type={"font-awesome"}
+                    name={"send"}>
                 </Icon>
-                
+
             </Send>
         );
     }
@@ -215,12 +236,12 @@ export class ChatScreenBody extends Component {
                 <View style={{ width: '20%', flexDirection: 'row', alignItems: 'center' }}>
                     <View >
                         <TouchableOpacity onPress={this.openPicker}>
-                            <Button type='clear' icon = {{type: 'antDesign', name: 'camera'}} onPress={this.openPicker} />
+                            <Button type='clear' icon={{ type: 'antDesign', name: 'camera' }} onPress={this.openPicker} />
                         </TouchableOpacity>
                     </View>
                     <View  >
                         <TouchableOpacity onPress={this.handleAudio}>
-                            <Button type='clear' icon = {{type: 'font-awesome', name: 'microphone'}} titleStyle={{ color: this.state.startAudio ? 'red' : 'blue' }} onPress={this.handleAudio} />
+                            <Button type='clear' icon={{ type: 'font-awesome', name: 'microphone' }} titleStyle={{ color: this.state.startAudio ? 'red' : 'blue' }} onPress={this.handleAudio} />
                         </TouchableOpacity>
                     </View>
                 </View>

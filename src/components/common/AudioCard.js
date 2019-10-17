@@ -67,7 +67,7 @@ class AudioCard extends Component {
                     backgroundColor: 'rgb(220,220,220)',
                     height: Platform.OS == 'ios' ? 80 : 60,
                     width: "100%",
-                    borderRadius: 4,
+                    borderRadius: 10,
                     justifyContent: 'center',
                     padding: 8
                 }}>
@@ -92,11 +92,6 @@ class AudioCard extends Component {
                                 onValueChange={(ChangedValue) => { this.SliderValueChanged(ChangedValue) }}
                                 style={{ marginLeft: 4, alignSelf: 'flex-end', width: '100%' }}
                             />
-                            {/* <ProgressBar
-                                style={{ marginLeft: 4, alignSelf: 'flex-end' }}
-                                duration={this.state.totalMins * 60 + this.state.totalSecs}
-                                currentTime={this.state.tmpCurrentDurMins * 60 + this.state.tmpCurrentDurSecs}
-                            /> */}
                         </View>
                         <View style={{ flex: 1, flexDirection: 'row' }} >
                             <Text style={{ flex: 1, marginLeft: 4, alignSelf: 'center', fontSize: 12 }}>{this.getPlayTimeText()}</Text>

@@ -125,7 +125,7 @@ const mapStateToProps = (state) => {
             selectedChat.chat = consultant_chats[chatId].messages;
     }
     if (selectedChat.chat[selectedChat.chat.length - 1] && selectedChat.chat[selectedChat.chat.length - 1]._id !== 1)
-        selectedChat.chat.push({ _id: 1, text: strings.AGREEMENT_POLICY, createdAt: '1970-01-01 00:00:00 UTC+00', system: true })
+        selectedChat.chat.push({ _id: 1, text: strings.AGREEMENT_POLICY, createdAt: '1970-01-01 00:00:00', system: true })
     var index = 1;
     var imageArray = [];
     console.log("Selected chat", selectedChat)
