@@ -10,6 +10,9 @@ import IyziPaymentErrors from '../Constants/Errors';
 
 import Base64 from '../Utils/Base64';
 import colors from '../Constants/Colors';
+import firebase from 'react-native-firebase';
+
+const timeout = 1500;
 
 class WalletScreen extends Component {
 
@@ -37,7 +40,7 @@ class WalletScreen extends Component {
         city: 'Ankara',
         address: 'ODTU Teknokent',
         zipCode: '60001',
-        threeDSChecked: false,
+        threeDSChecked: true,
         cardNumberError: '',
         nameError: '',
         monthError: '',
@@ -52,6 +55,8 @@ class WalletScreen extends Component {
         paymentSuccessfull: false,
         paymentFailed: false,
         threedsPaymentLoading: false,
+        paymentLoading: false,
+        paymentFinished: false,
     }
 
     componentDidMount() {
@@ -132,35 +137,6 @@ class WalletScreen extends Component {
         })
     }
 
-    onValueChanged = (value) => {
-        this.setState({
-            valueError: '',
-            value,
-            payButtonTitle: `${value}TL öde`
-        })
-    }
-
-    onCityChanged = (city) => {
-        this.setState({
-            city,
-            cityError: ''
-        })
-    }
-
-    onAddressChanged = (address) => {
-        this.setState({
-            address,
-            addressError: ''
-        })
-    }
-
-    onZipCodeChanged = (zipCode) => {
-        this.setState({
-            zipCode,
-            zipCodeError: ''
-        })
-    }
-
     onPayButtonPressed = () => {
         var { cardNumber } = this.state;
         cardNumber = cardNumber.replace(/\s+/g, '')
@@ -220,6 +196,12 @@ class WalletScreen extends Component {
                         this.finalizeThreedsPayment(threedsPaymentResult);
                     })
             } else {
+                this.setState({
+                    checkOutFormSubmitted: true,
+                    threedsPaymentLoading: false,
+                    threedsPaymentResult: true,
+                    paymentLoading: true
+                })
                 this.props.startPayment(card, user, value)
             }
         }
@@ -315,7 +297,8 @@ class WalletScreen extends Component {
             htmlContentReceived: false,
             paymentSuccessfull: false,
             paymentFailed: false,
-            threedsPaymentLoading: false
+            threedsPaymentLoading: false,
+            paymentLoading: false
         })
     }
 
@@ -341,7 +324,7 @@ class WalletScreen extends Component {
             <ScrollView>
                 {!this.state.buyCredits &&
                     (
-                        <WalletForm onBuyCreditsPressed={this.onBuyCreditsPressed} />
+                        <WalletForm onBuyCreditsPressed={this.onBuyCreditsPressed} wallet={this.props.user.wallet} />
                     )
                 }
                 {this.state.buyCredits &&
@@ -374,74 +357,98 @@ class WalletScreen extends Component {
             var result = newPayment.result
             console.log("New Payment Result", result);
             if (result) {
-                if (result.status === 'success' && result.mdStatus == 1) {
-                    var paymentObject = {
-                        conversationId: result.conversationId,
-                        paymentId: result.paymentId,
-                        conversationData: result.conversationData
-                    }
-                    this.setState({
-                        threedsPaymentLoading: true,
-                        threedsCodeText: 'Ödeme alınıyor'
-                    })
-                    this.props.finalize_threeds_payment(paymentObject)
-                        .then((paymentResult) => {
-                            console.log("finalize payment no error", paymentResult.data);
-                            if (paymentResult.data.status == 'success') {
-                                this.setState({
-                                    wallet: parseInt(this.state.wallet) + parseInt(this.state.value),
-                                    htmlContentReceived: false,
-                                    paymentSuccessfull: true,
-                                    threedsPaymentLoading: false,
-                                    paymentFailed: false
-                                })
-                                // setTimeout(this.resetState, timeout)
-                            }
-                            else {
-                                console.log("finalize payment error", paymentResult)
-                                for (var i in paymentResult) {
-                                    console.log("var i: ", i)
-                                    for (var j in i) {
-                                        console.log("var j ", j);
-                                    }
+                if (!result.hasOwnProperty('phase')) {
+                    if (result.status === 'success' && result.mdStatus == 1) {
+                        var paymentObject = {
+                            conversationId: result.conversationId,
+                            paymentId: result.paymentId,
+                            conversationData: result.conversationData
+                        }
+                        this.setState({
+                            threedsPaymentLoading: true,
+                            threedsCodeText: 'Ödeme alınıyor'
+                        })
+                        console.log("Finalizing 3ds payment")
+                        this.props.finalize_threeds_payment(paymentObject)
+                            .then((paymentResult) => {
+                                console.log("finalize payment no error", paymentResult.data);
+                                if (paymentResult.data.status == 'success') {
+                                    this.setState({
+                                        wallet: parseInt(this.state.wallet) + parseInt(this.state.value),
+                                        htmlContentReceived: false,
+                                        paymentSuccessfull: true,
+                                        threedsPaymentLoading: false,
+                                        paymentFailed: false
+                                    })
+                                    setTimeout(this.resetState, timeout)
                                 }
+                                else {
+                                    console.log("finalize payment error", paymentResult)
+                                    for (var i in paymentResult) {
+                                        console.log("var i: ", i)
+                                        for (var j in i) {
+                                            console.log("var j ", j);
+                                        }
+                                    }
+                                    this.setState({
+                                        htmlContentReceived: false,
+                                        paymentErrorMessage: paymentResult.data.errorMessage ? paymentResult.data.errorMessage : IyziPaymentErrors[paymentResult.data.errorCode],
+                                        paymentSuccessfull: false,
+                                        threedsPaymentLoading: false,
+                                        paymentFailed: true
+                                    })
+                                    setTimeout(this.resetState, timeout)
+                                }
+                            })
+                            .catch((paymentError) => {
                                 this.setState({
                                     htmlContentReceived: false,
-                                    paymentErrorMessage: paymentResult.data.errorMessage ? paymentResult.data.errorMessage : IyziPaymentErrors[paymentResult.data.errorCode],
                                     paymentSuccessfull: false,
                                     threedsPaymentLoading: false,
                                     paymentFailed: true
                                 })
-                                // setTimeout(this.resetState, timeout)
-                            }
+                                setTimeout(this.resetState, timeout)
+                            });
+                    } else {
+                        const mdStatus = result.mdStatus;
+                        var errorMessage = IyziPaymentErrors[mdStatus];
+                        this.setState({
+                            htmlContentReceived: false,
+                            paymentErrorMessage: errorMessage,
+                            paymentSuccessfull: false
                         })
-                        .catch((paymentError) => {
-                            this.setState({
-                                htmlContentReceived: false,
-                                paymentSuccessfull: false,
-                                threedsPaymentLoading: false,
-                                paymentFailed: true
-                            })
-                            setTimeout(this.resetState, timeout)
-                        });
-
+                        setTimeout(this.resetState, timeout)
+                    }
                 } else {
-                    const mdStatus = result.mdStatus;
-                    var errorMessage = IyziPaymentErrors.IyziPaymentErrors[mdStatus];
-                    this.setState({
-                        htmlContentReceived: false,
-                        paymentErrorMessage: errorMessage,
-                        paymentSuccessfull: false
-                    })
-                    setTimeout(this.resetState, timeout)
+                    console.log("not a 3ds payment")
+                    if (result.status === 'success') {
+                        this.setState({
+                            paymentLoading: false,
+                            paymentFinished: true,
+                            paymentSuccessfull: true,
+                            paymentFailed: false,
+                        })
+                    } else {
+                        this.setState({
+                            paymentLoading: false,
+                            paymentFinished: true,
+                            paymentSuccessfull: false,
+                            paymentFailed: true,
+                        })
+                    }
+                    setTimeout(this.resetState, timeout);
                 }
             }
         })
+    }
+    componentWillUnmount() {
+        firebase.database().ref(`payments/results/${this.props.user.uid}`).off('child_added');
     }
 }
 
 const mapStateToProps = ({ auth }) => {
     const { user } = auth
+    console.log("USer", user)
     return { user }
 }
 

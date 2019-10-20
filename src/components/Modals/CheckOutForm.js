@@ -105,13 +105,13 @@ export default class CheckOutForm extends Component {
                             )
                         }
                         {
-                            this.props.checkOutFormSubmitted && (!this.props.threedsPaymentResult || this.props.threedsPaymentLoading) && (
+                            this.props.checkOutFormSubmitted && (!this.props.threedsPaymentResult || this.props.threedsPaymentLoading || this.props.paymentLoading) && (
                                 <View style={styles.screenCenter}>
                                     <ActivityIndicator size='large' color={colors.IOS_BLUE} />
                                 </View>
                             )
                         }
-                        {this.props.checkOutFormSubmitted && this.props.threedsPaymentResult && (
+                        {this.props.checkOutFormSubmitted && this.props.threedsPaymentResult && this.props.threeDSChecked && (
                             <View style={{ flex: 1 }}>
                                 <WebView
                                     source={{ html: Base64.atob(this.props.threedsPaymentResult.data.htmlContent) }}
@@ -119,7 +119,7 @@ export default class CheckOutForm extends Component {
                             </View>
                         )}
                         {
-                            this.props.checkOutFormSubmitted && this.props.threedsPaymentResult && !this.props.threedsPaymentLoading && this.props.paymentSuccessfull && (
+                            this.props.checkOutFormSubmitted && ((this.props.threedsPaymentResult && !this.props.threedsPaymentLoading) || this.props.paymentFinished) && this.props.paymentSuccessfull && (
                                 <ScrollView style={styles.checkOutFormStyle} contentContainerStyle={{ justifyContent: 'flex-start', }}>
                                     <Button
                                         disabled={true}

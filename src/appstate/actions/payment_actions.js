@@ -59,7 +59,7 @@ export const startThreeDSPayment = (card, user, price) => (dispatch) => {
             surname: surname,
             gsmNumber,
             email,
-            identityNumber: '74300864791',
+            identityNumber: '11111111111',
             lastLoginDate,
             registrationDate,
             registrationAddress: user.address,
@@ -96,6 +96,94 @@ export const startThreeDSPayment = (card, user, price) => (dispatch) => {
 
 export const startPayment = (card, user, price) => (dispatch) => {
     console.log("Payment with card", card + '\n user ' + user + '\n price ' + price);
+    const { _user } = firebase.auth().currentUser;
+
+    let { displayName, email, phoneNumber, metadata } = _user;
+    const { creationTime, lastSignInTime } = metadata;
+
+    const lastLoginDate = getFormattedDateTime(lastSignInTime);
+    const registrationDate = getFormattedDateTime(creationTime);
+
+    console.log('lastLoginDate', lastLoginDate);
+    console.log('registrationDate', registrationDate);
+
+    const tempName = displayName.split(' ');
+    let name = tempName[0];
+    let surname = tempName[1];
+    const nameLength = tempName.length;
+
+    if (nameLength === 3) {
+        name = tempName[0] + ' ' + tempName[1];
+        surname = tempName[nameLength - 1];
+    } else if (nameLength === 1) {
+        name = tempName[0];
+        surname = tempName[0];
+    }
+
+    email = email || 'info@afacar.com';
+    const gsmNumber = phoneNumber || '+905554443322';
+
+    var conversationId = user.uid + "_" + (new Date().getTime());
+    var buyerAddress = {
+        contactName: card.name,
+        city: 'Istanbul',
+        country: 'Turkey',
+        address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+        zipCode: '34732'
+    };
+    let data = {
+        price: parseFloat(price),
+        paidPrice: parseFloat(price),
+        conversationId: conversationId,
+        paymentCard: {
+            cardHolderName: card.name,
+            cardNumber: card.number,
+            expireMonth: card.month,
+            expireYear: '20' + card.year,
+            cvc: card.CVC,
+            registerCard: '0'
+        },
+        installment: '1',
+        basketId: 'B67832',
+        buyer: {
+            id: _user.uid,
+            name,
+            surname: surname,
+            gsmNumber,
+            email,
+            identityNumber: '11111111111',
+            lastLoginDate,
+            registrationDate,
+            registrationAddress: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+            ip: '85.34.78.112',
+            city: "Istanbul",
+            country: 'Turkey',
+            zipCode: '34732'
+        },
+        buyerAddress: {
+            contactName: card.name,
+            city: 'Istanbul',
+            country: 'Turkey',
+            address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+            zipCode: '34732'
+        },
+        shippingAddress: buyerAddress,
+        billingAddress: buyerAddress,
+    };
+    console.log('data is ready for callable makePayment method');
+    var makePayment = firebase.functions().httpsCallable('makePayment');
+
+    return new Promise((resolve, reject) => {
+        makePayment(data)
+            .then((result) => {
+                console.log('makePayment resolves =>', result);
+                resolve(result);
+            })
+            .catch(err => {
+                console.log('makePayment rejects =>', err);
+                reject(err);
+            });
+    });
 }
 
 const getFormattedDateTime = (timestamp = new Date()) => {
@@ -147,7 +235,8 @@ export const checkNewPayment = (startTime, callback) => async (dispatch) => {
         console.log("New payment", newPayment.val());
         var convId = newPayment.val().result.conversationId;
         var time = convId.substring(convId.indexOf('_') + 1, convId.length);
-        if (parseInt(startTime) < parseInt(time))
+        if (parseInt(startTime) < parseInt(time)){
             callback(newPayment.val());
+        }
     })
 }
