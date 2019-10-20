@@ -48,7 +48,7 @@ class AudioCard extends Component {
                 }
             }
             else {
-                console.log("Hata var", this.props.audio);
+                console.log("Ses oluşturulurken hata oluştu", this.props.audio);
             }
         })
     }

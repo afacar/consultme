@@ -56,7 +56,7 @@ export const startThreeDSPayment = (card, user, price) => (dispatch) => {
         buyer: {
             id: _user.uid,
             name,
-            surname: 'Haji-zada',
+            surname: surname,
             gsmNumber,
             email,
             identityNumber: '74300864791',

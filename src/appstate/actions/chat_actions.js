@@ -38,7 +38,7 @@ export const fetchUserMessages = (user, callback) => async (dispatch) => {
         chatsSnap.forEach(chatIdSnap => {
             var chatId = chatIdSnap.key;
             let chatUrl = `consultations/${chatId}/${user.uid}/messages`;
-            firebase.database().ref(chatUrl).on('child_added', newMessage => {
+            firebase.database().ref(chatUrl).orderByChild('createdAt').on('child_added', newMessage => {
                 callback({ message: newMessage.val(), chatId: chatId })
             })
         })
@@ -93,7 +93,7 @@ export const fetchConsultantMessages = (user, callback) => async (dispatch) => {
         chatsSnap.forEach(chatIdSnap => {
             var chatId = chatIdSnap.key;
             let chatUrl = `consultations/${user.uid}/${chatId}/messages`;
-            firebase.database().ref(chatUrl).on('child_added', newMessage => {
+            firebase.database().ref(chatUrl).orderByChild('createdAt').on('child_added', newMessage => {
                 callback({ message: newMessage.val(), chatId: chatId })
             })
         })

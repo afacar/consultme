@@ -81,6 +81,7 @@ class LoginScreen extends Component {
                 message: 'İsim boş bırakılamaz'
             })
         } else {
+            this.handleConnectyCubeLogin();
             if (!this.state.switch1Value) {
                 this.setState({
                     loading: true,
@@ -152,7 +153,7 @@ class LoginScreen extends Component {
                         var user = result.user;
                         user.getIdToken().then((idToken) => {
                             console.log("Get id token", idToken)
-                            this.handleConnectyCubeLogin(idToken);
+                            // this.handleConnectyCubeLogin(idToken);
                         })
                     })
                 })

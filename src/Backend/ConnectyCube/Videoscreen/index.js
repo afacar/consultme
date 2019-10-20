@@ -5,7 +5,6 @@ import {
     StatusBar,
     Dimensions,
     Platform,
-    BackHandler,
 } from 'react-native'
 import { RTCView } from 'react-native-webrtc';
 import { connect } from 'react-redux'
@@ -17,7 +16,6 @@ import InCallManager from 'react-native-incall-manager';
 import VideoTimeout from './VideoTimeout';
 import VideoTimer from './VideoTimer';
 import firebase from 'react-native-firebase';
-import { tsThisType } from '@babel/types';
 
 
 const [screenH, screenW] = [
@@ -41,14 +39,6 @@ export class VideoScreen extends React.Component {
     componentDidMount() {
         const { userMode, user, consultationDetails, callInProgress, chatId } = this.props;
         console.log("Props", this.props)
-        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            if (callInProgress) {
-                return false;
-            } else {
-                this.props.navigation.goBack();
-                return true;
-            }
-        });
         if (userMode) {
             if (!consultationDetails) {
                 this.setState({
@@ -99,7 +89,9 @@ export class VideoScreen extends React.Component {
     }
 
     componentWillUnmount() {
-        this.backHandler.remove();
+        this.setState({
+            stopCall: true
+        })
     }
 
     clearInterval = () => {

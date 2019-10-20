@@ -9,6 +9,7 @@ import AudioCard from '../../common/AudioCard';
 import { Button, Icon } from 'react-native-elements';
 import ImageViewerModal from '../../Modals/ImageViewerModal';
 import styles from '../../../Constants/Styles';
+import Sound from 'react-native-sound';
 
 export class ChatScreenBody extends Component {
 
@@ -177,12 +178,12 @@ export class ChatScreenBody extends Component {
         return (
             <Send {...props} containerStyle={{ justifyContent: "center" }}>
                 <Icon
-                    style={{ fontSize: 19, color: 'blue', margin: 5 }}
+                    iconStyle={{ color: '#2fb4dc', marginRight: 10 }}
+                    size={24}
                     type={"font-awesome"}
                     name={"send"}>
                 </Icon>
-
-            </Send>
+            </Send >
         );
     }
 
@@ -233,18 +234,14 @@ export class ChatScreenBody extends Component {
     renderActions = (props) => {
         if (!this.state.userIsTyping) {
             return (
-                <View style={{ width: '20%', flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ width: '20%', flexDirection: 'row', alignItems: 'center' }} >
                     <View >
-                        <TouchableOpacity onPress={this.openPicker}>
-                            <Button type='clear' icon={{ type: 'antDesign', name: 'camera' }} onPress={this.openPicker} />
-                        </TouchableOpacity>
+                        <Button type='clear' icon={{ type: 'antDesign', name: 'camera' }} onPress={this.openPicker} />
                     </View>
-                    <View  >
-                        <TouchableOpacity onPress={this.handleAudio}>
-                            <Button type='clear' icon={{ type: 'font-awesome', name: 'microphone' }} titleStyle={{ color: this.state.startAudio ? 'red' : 'blue' }} onPress={this.handleAudio} />
-                        </TouchableOpacity>
+                    <View >
+                        <Button type='clear' icon={{ type: 'font-awesome', name: 'microphone', color: this.state.startAudio ? 'red' : 'black' }} onPress={this.handleAudio} />
                     </View>
-                </View>
+                </View >
             )
         }
     }
@@ -298,6 +295,7 @@ export class ChatScreenBody extends Component {
                     key={chatId}
                     inverted={true}
                     messages={messages}
+                    extraData={this.props}
                     locale={'tr'}
                     onSend={(message) => this.sendMessage(message)}
                     onInputTextChanged={(text) => { this.changeTypeState(text) }}
@@ -370,6 +368,7 @@ export class ChatScreenBody extends Component {
 
     handleAudio = async () => {
         if (!this.state.startAudio) {
+            console.log("Audio recording has started")
             var id = this.randIDGenerator();
             this.setState({
                 lastAudioID: id
@@ -386,6 +385,7 @@ export class ChatScreenBody extends Component {
             await AudioRecorder.startRecording();
 
         } else {
+            console.log("Audio recording has ended")
             this.setState({
                 startAudio: false
             })
@@ -411,7 +411,17 @@ export class ChatScreenBody extends Component {
                         avatar: user.photoURL
                     },
                 }
-                this.sendMessage([message]);
+                var sound = new Sound(filePath, "", err => {
+                    if (!err) {
+                        console.log('current sound duration is ', sound.getDuration());
+                        if (sound.getDuration() >= 1) {
+                            this.sendMessage([message]);
+                        }
+                    }
+                    else {
+                        console.log("Ses oluşturulurken hata oluştu", this.props.audio);
+                    }
+                })
             };
         }
     }

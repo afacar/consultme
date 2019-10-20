@@ -8,18 +8,20 @@ import { ChatScreenBody } from '../components/ScreenParts/ChatSceen/ChatScreenBo
 import strings from '../Constants/Strings';
 import { Button } from 'react-native-elements';
 import ChatScreenWalletInfo from '../components/ScreenParts/ChatSceen/ChatScreenWalletInfo';
+import colors from '../Constants/Colors';
 
 class ChatScreen extends Component {
 
     static navigationOptions = ({ navigation }) => ({
         title: `${navigation.getParam('title')}`,
-        headerTitleStyle: { textAlign: 'center', alignSelf: 'center' },
+        headerTitleStyle: { textAlign: 'center', alignSelf: 'center', color: 'white' },
         headerStyle: {
-            backgroundColor: 'white',
+            backgroundColor: colors.IOS_DARK_BLUE,
         },
+        headerTintColor: 'white',
         headerRight: (
             <View>
-                <Button title='Video' type='clear' onPress={() => {
+                <Button icon={{ name: 'video', type: 'feather', color: 'white', size: 24 }} type='clear' onPress={() => {
                     navigation.navigate('VideoScreen')
                 }} />
             </View>
@@ -40,13 +42,9 @@ class ChatScreen extends Component {
         const { user, userMode, consultationDetails } = this.props;
         console.log("Props", this.props)
         if (userMode && consultationDetails.type === 'session') {
-            var walletChar = parseInt(user.wallet / consultationDetails.textPrice)
+            var walletChar = parseInt(user.wallet ? user.wallet : 0 / consultationDetails.textPrice)
             var remaining = 0;
-
-            if (walletChar >= 1)
-                remaining = walletChar * 300 + consultationDetails.freeChars - consultationDetails.counter;
-            else
-                remaining = consultationDetails.freeChars - consultationDetails.counter;
+            remaining = walletChar * 300 + consultationDetails.freeChars - consultationDetails.counter;
             composerClosed = false;
             if (remaining <= 0)
                 composerClosed = true;
@@ -145,8 +143,10 @@ const mapStateToProps = (state) => {
     }
 
     if (!app.selectedChat.images) {
+        console.log("messages updated")
         return ({ messages: selectedChat.chat, user: auth.user, chatId, userMode, imageArray, imagesExist: false, consultationDetails })
     } else {
+        console.log("messages updated 1")
         return ({ messages: selectedChat.chat, user: auth.user, chatId, userMode, imageArray: app.selectedChat.images, imagesExist: true, consultationDetails })
     }
 }
