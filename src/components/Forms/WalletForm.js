@@ -2,224 +2,125 @@ import React, { Component } from 'react';
 import { Button, Card, Input } from 'react-native-elements';
 
 import { CardItem } from '../common/CardItem'
-import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { BuyButton } from '../common/Buttons';
+import { Text, View, StyleSheet, TouchableHighlight, ScrollView } from 'react-native';
+import colors from '../../Constants/Colors';
 
 export class WalletForm extends Component {
-
-    renderFive = () => {
-        if (this.props.fiveKontorOpened) {
-            return (
-                <ScrollView>
-                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
-                        <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                            <Text> 5 kontor 5 lira</Text>
-                        </CardItem>
-                    </TouchableOpacity>
-                </ScrollView>
-
-            )
-        }
-    }
-
-    renderTen = () => {
-        if (this.props.tenKontorOpened) {
-            return (
-                <ScrollView>
-                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
-                        <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                            <Text> 10 kontor 10 lira</Text>
-                        </CardItem>
-                    </TouchableOpacity>
-                </ScrollView>
-
-            )
-
-        }
-    }
-
-    renderTwentyFive = () => {
-        if (this.props.twentyFiveKontorOpened) {
-            return (
-                <ScrollView>
-                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
-                        <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                            <Text> 25 kontor 25 lira</Text>
-                        </CardItem>
-                    </TouchableOpacity>
-                </ScrollView>
-
-            )
-
-        }
-    }
-
-    renderFifty = () => {
-        if (this.props.fiftyKontorOpened) {
-            return (
-                <ScrollView>
-                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
-                        <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                            <Text> 50 kontor 50 lira</Text>
-                        </CardItem>
-                    </TouchableOpacity>
-                </ScrollView>
-
-            )
-
-        }
-    }
-
-    renderHundred = () => {
-        if (this.props.fiftyKontorOpened) {
-            return (
-                <ScrollView>
-                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
-                        <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                            <Text> 100 kontor 1oo lira</Text>
-                        </CardItem>
-                    </TouchableOpacity>
-                </ScrollView>
-
-            )
-
-        }
-    }
-
-    renderTwoHundred = () => {
-        if (this.props.fiftyKontorOpened) {
-            return (
-                <ScrollView>
-                    <TouchableOpacity onPress={() => { this.props.makeAllFalse() }}>
-                        <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                            <Text> 200 kontor 200 lira</Text>
-                        </CardItem>
-                    </TouchableOpacity>
-                </ScrollView>
-
-            )
-
-        }
-    }
 
     render() {
         return (
             <ScrollView>
-                <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <View style={{ flex: 1 }}>
                     <Card
-                        containerStyle={{ margin: 5 }}>
-                        <CardItem>
-                            <Input
-                                key='iban'
-                                label='IBAN'
-                                //value={this.state.IBAN ? this.state.IBAN : ""}
-                                placeholder={'TR012345678901234567890123456'}
-                                multiline={false}
-                                onChangeText={(text) => {
-                                    this.setState({ text })
-                                }}
-                                editable={true}
-                                leftIcon={{
-                                    type: 'font-awesome',
-                                    name: 'bank',
-                                    size: 18
-                                }}
-                                leftIconContainerStyle={{ marginLeft: 0 }} />
-                        </CardItem>
-                    </Card>
-                    <Card
-                        containerStyle={styles.sha}>
+                        containerStyle={[styles.cardShadow, { backgroundColor: colors.WHITE_RED }]}>
                         <CardItem>
                             <Input
                                 key='balance'
                                 label="Bakiye"
+                                labelStyle={{ color: 'white' }}
+                                inputStyle={{ color: colors.IOS_BLUE }}
                                 value={this.props.wallet ? this.props.wallet + '' : '0'}
                                 multiline={false}
                                 editable={false}
                                 rightIcon={{
                                     type: 'font-awesome',
                                     name: 'turkish-lira',
-                                    size: 18
+                                    size: 18,
+                                    color: colors.IOS_BLUE
                                 }} />
                         </CardItem>
                     </Card>
+                </View>
 
-                    <View
-                        style={{ flex: 1, alignItems: 'center', paddingTop: 30 }} >
-                        <BuyButton
-                            onPress={() => { this.props.onBuyCreditsPressed() }}
-                        />
+                <View style={{ flex: 1, marginBottom: 10 }}>
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{ flex: 1 }}>
+                            <TouchableHighlight onPress={() => { this.props.onBuyCreditsPressed(10) }} underlayColor={colors.LIGHT_GRAY_BACKGROUND_COLOR}>
+                                <Card containerStyle={{ borderRadius: 10, backgroundColor: colors.ORANGE_RED, paddingBottom: 0 }}>
+                                    <CardItem style={{ justifyContent: 'center' }}>
+                                        <View style={{ flex: 1, alignItems: 'center' }}>
+                                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 18 }}>{`10 Kredi`}</Text>
+                                        </View>
+
+                                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'column' }}>
+                                            <Button
+                                                type='clear'
+                                                title='Paket Seç'
+                                                titleStyle={{ color: colors.LIGHT_YELLOW }}
+                                                onPress={() => { this.props.onBuyCreditsPressed(10) }}
+                                            />
+                                        </View>
+                                    </CardItem>
+                                </Card>
+                            </TouchableHighlight>
+                        </View>
+
+                        <View style={{ flex: 1 }}>
+                            <TouchableHighlight onPress={() => { this.props.onBuyCreditsPressed(25) }} underlayColor={colors.LIGHT_GRAY_BACKGROUND_COLOR}>
+                                <Card containerStyle={{ borderRadius: 10, backgroundColor: colors.LIGHT_GREEN, paddingBottom: 0 }}>
+                                    <CardItem style={{ justifyContent: 'center' }}>
+                                        <View style={{ flex: 1, alignItems: 'center' }}>
+                                            <Text style={{ textAlign: 'center', color: colors.IOS_RED, fontSize: 18 }}>{`25 Kredi`}</Text>
+                                        </View>
+
+                                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'column' }}>
+                                            <Button
+                                                type='clear'
+                                                title='Paket Seç'
+                                                titleStyle={{ color: colors.LIGHT_BLUE }}
+                                                onPress={() => { this.props.onBuyCreditsPressed(25) }}
+                                            />
+                                        </View>
+                                    </CardItem>
+                                </Card>
+                            </TouchableHighlight>
+                        </View>
                     </View>
-                    <View
-                        style={{ flex: 1, flexDirection: 'row', paddingTop: 30 }} >
 
-                        <TouchableOpacity
-                            onPress={() => { this.props.openFiveDetails() }}
-                        >
-                            <Card containerStyle={styles.carST}>
-                                <CardItem style={{ alignItems: 'center' }}>
-                                    <Text style={{ fontSize: 18 }}>5 kontor</Text>
-                                </CardItem>
-                                {this.renderFive()}
-                            </Card>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => { this.props.openTenDetails() }}
-                        >
-                            <Card containerStyle={styles.carST}>
-                                <CardItem style={{ alignItems: 'center' }}>
-                                    <Text style={{ fontSize: 18 }}>10 kontor</Text>
-                                </CardItem>
-                                {this.renderTen()}
-                            </Card>
-                        </TouchableOpacity>
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{ flex: 1 }}>
+                            <TouchableHighlight onPress={() => { this.props.onBuyCreditsPressed(50) }} underlayColor={colors.LIGHT_GRAY_BACKGROUND_COLOR}>
+                                <Card containerStyle={{ borderRadius: 10, backgroundColor: colors.IOS_BLUE, paddingBottom: 0 }}>
+                                    <CardItem style={{ justifyContent: 'center' }}>
+                                        <View style={{ flex: 1, alignItems: 'center' }}>
+                                            <Text style={{ textAlign: 'center', color: colors.LIGHT_YELLOW, fontSize: 18 }}>{`50 Kredi`}</Text>
+                                        </View>
 
-                        <TouchableOpacity
-                            onPress={() => { this.props.openTwentyFiveDetails() }}
-                        >
-                            <Card containerStyle={styles.carST}>
-                                <CardItem style={{ alignItems: 'center' }}>
-                                    <Text style={{ fontSize: 18 }}>25 kontor</Text>
-                                </CardItem>
-                                {this.renderTwentyFive()}
-                            </Card>
-                        </TouchableOpacity>
+                                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'column' }}>
+                                            <Button
+                                                type='clear'
+                                                title='Paket Seç'
+                                                titleStyle={{ color: 'white' }}
+                                                onPress={() => { this.props.onBuyCreditsPressed(50) }}
+                                            />
+                                        </View>
+                                    </CardItem>
+                                </Card>
+                            </TouchableHighlight>
+                        </View>
+
+                        <View style={{ flex: 1 }}>
+                            <TouchableHighlight onPress={() => { this.props.onBuyCreditsPressed(100) }} underlayColor={colors.LIGHT_GRAY_BACKGROUND_COLOR}>
+                                <Card containerStyle={{ borderRadius: 10, backgroundColor: colors.LIGHT_YELLOW, paddingBottom: 0 }}>
+                                    <CardItem style={{ justifyContent: 'center' }}>
+                                        <View style={{ flex: 1, alignItems: 'center' }}>
+                                            <Text style={{ textAlign: 'center', color: colors.WHITE_BLUE, fontSize: 18 }}>{`100 Kredi`}</Text>
+                                        </View>
+
+                                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'column' }}>
+                                            <Button
+                                                type='clear'
+                                                title='Paket Seç'
+                                                titleStyle={{ color: colors.DARK_RED }}
+                                                onPress={() => { this.props.onBuyCreditsPressed(100) }}
+                                            />
+                                        </View>
+                                    </CardItem>
+                                </Card>
+                            </TouchableHighlight>
+                        </View>
                     </View>
-                    <View
-                        style={{ flex: 1, flexDirection: 'row', paddingTop: 30 }} >
-                        <TouchableOpacity
-                            onPress={() => { this.props.openFiftyDetails() }}
-                        >
-                            <Card containerStyle={styles.carST}>
-                                <CardItem style={{ alignItems: 'center' }}>
-                                    <Text style={{ fontSize: 18 }}>50 kontor</Text>
-                                </CardItem>
-                                {this.renderFifty()}
-                            </Card>
-                        </TouchableOpacity>
 
-                        <TouchableOpacity
-                            onPress={() => { this.props.openHundredDetails() }}
-                        >
-                            <Card containerStyle={styles.carST}>
-                                <CardItem style={{ alignItems: 'center' }}>
-                                    <Text style={{ fontSize: 18 }}>100 kontor</Text>
-                                </CardItem>
-                                {this.renderHundred()}
-                            </Card>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            onPress={() => { this.props.openTwoHundredDetails() }}
-                        >
-                            <Card containerStyle={styles.carST}>
-                                <CardItem style={{ alignItems: 'center' }}>
-                                    <Text style={{ fontSize: 18 }}>200 kontor</Text>
-                                </CardItem>
-                                {this.renderTwoHundred()}
-                            </Card>
-                        </TouchableOpacity>
-                    </View>
                 </View>
             </ScrollView>
         )
@@ -227,7 +128,7 @@ export class WalletForm extends Component {
 }
 
 const styles = StyleSheet.create({
-    sha: {
+    cardShadow: {
         borderWidth: 0,
         borderRadius: 10,
         borderColor: 'grey',
@@ -243,7 +144,6 @@ const styles = StyleSheet.create({
         elevation: 24,
         marginLeft: 5,
         marginRight: 5,
-        marginTop: 40,
     },
     carST: {
         height: 100,

@@ -9,26 +9,23 @@ import { WalletForm } from '../components/Forms/WalletForm';
 import IyziPaymentErrors from '../Constants/Errors';
 
 import Base64 from '../Utils/Base64';
+import colors from '../Constants/Colors';
 
 class WalletScreen extends Component {
 
     static navigationOptions = ({ navigation }) => ({
         title: `Cüzdanım`,
-        headerTitleStyle: { textAlign: 'center', alignSelf: 'center' },
+        headerTitleStyle: { textAlign: 'center', alignSelf: 'center', color: 'white' },
         headerStyle: {
-            backgroundColor: 'white',
+            backgroundColor: colors.PINK_RED,
         },
+        headerTintColor: 'white',
     });
 
     state = {
-        wallet: 0,
+        wallet: this.props.user.wallet,
+        color: 0,
         buyCredits: false,
-        fiveKontorOpened: false,
-        tenKontorOpened: false,
-        twentyFiveKontorOpened: false,
-        fiftyKontorOpened: false,
-        hundredKontorOpened: false,
-        twoHundredKontorOpened: false,
         checkOutFormSubmited: false,
         disabled: false,
         cardName: 'Javid Haji-zada',
@@ -36,7 +33,7 @@ class WalletScreen extends Component {
         month: '12',
         year: '23',
         CVC: '132',
-        value: '23',
+        value: '',
         city: 'Ankara',
         address: 'ODTU Teknokent',
         zipCode: '60001',
@@ -61,81 +58,29 @@ class WalletScreen extends Component {
         this.checkNewPayment();
     }
 
-    onBuyCreditsPressed = () => {
+    onBuyCreditsPressed = (value) => {
+        switch (parseInt(value)) {
+            case 10:
+                this.setState({
+                    color: 1,
+                })
+            case 25:
+                this.setState({
+                    color: 2,
+                })
+            case 50:
+                this.setState({
+                    color: 3,
+                })
+            case 100:
+                this.setState({
+                    color: 4,
+                })
+        }
         this.setState({
             buyCredits: true,
-        })
-    }
-
-    openFiveDetails = () => {
-        this.setState({
-            fiveKontorOpened: true,
-            tenKontorOpened: false,
-            twentyFiveKontorOpened: false,
-            fiftyKontorOpened: false,
-            hundredKontorOpened: false,
-            twoHundredKontorOpened: false
-        })
-    }
-    openTenDetails = () => {
-        this.setState({
-            fiveKontorOpened: false,
-            tenKontorOpened: true,
-            twentyFiveKontorOpened: false,
-            fiftyKontorOpened: false,
-            hundredKontorOpened: false,
-            twoHundredKontorOpened: false
-        })
-    }
-    openTwentyFiveDetails = () => {
-        this.setState({
-            fiveKontorOpened: false,
-            tenKontorOpened: false,
-            twentyFiveKontorOpened: true,
-            fiftyKontorOpened: false,
-            hundredKontorOpened: false,
-            twoHundredKontorOpened: false
-        })
-    }
-    openFiftyDetails = () => {
-        this.setState({
-            fiveKontorOpened: false,
-            tenKontorOpened: false,
-            twentyFiveKontorOpened: false,
-            fiftyKontorOpened: true,
-            hundredKontorOpened: false,
-            twoHundredKontorOpened: false
-        })
-    }
-    openHundredDetails = () => {
-        this.setState({
-            fiveKontorOpened: false,
-            tenKontorOpened: false,
-            twentyFiveKontorOpened: false,
-            fiftyKontorOpened: false,
-            hundredKontorOpened: true,
-            twoHundredKontorOpened: false
-        })
-    }
-    openTwoHundredDetails = () => {
-        this.setState({
-            fiveKontorOpened: false,
-            tenKontorOpened: false,
-            twentyFiveKontorOpened: false,
-            fiftyKontorOpened: false,
-            hundredKontorOpened: false,
-            twoHundredKontorOpened: true
-        })
-    }
-
-    makeAllFalse = () => {
-        this.setState({
-            fiveKontorOpened: false,
-            tenKontorOpened: false,
-            twentyFiveKontorOpened: false,
-            fiftyKontorOpened: false,
-            hundredKontorOpened: false,
-            twoHundredKontorOpened: false
+            value,
+            payButtonTitle: `${value}TL öde`
         })
     }
 
@@ -242,22 +187,6 @@ class WalletScreen extends Component {
         } else if (!this.validateCVC()) {
             this.setState({
                 CVCError: 'CVC boş bırakılamaz.'
-            })
-        } else if (!this.validateValue()) {
-            this.setState({
-                valueError: 'Ödeme yapacağınız tutarı girin. Girdiğiniz tutar 5TL-den çok olmalıdır.'
-            })
-        } else if (!this.validateCity()) {
-            this.setState({
-                cityError: 'Şehir boş olmamalıdır.'
-            })
-        } else if (!this.validateAddress()) {
-            this.setState({
-                addressError: 'Adres boş olmamalıdır.'
-            })
-        } else if (!this.validateZipCode()) {
-            this.setState({
-                zipCodeError: 'Posta kodu boş olmamalıdır.'
             })
         }
         else {
@@ -376,19 +305,12 @@ class WalletScreen extends Component {
             year: '',
             CVC: '',
             value: '',
-            city: '',
-            address: '',
-            zipCode: '',
-            threeDSChecked: false,
+            threeDSChecked: true,
             cardNumberError: '',
             nameError: '',
             monthError: '',
             yearError: '',
             CVCError: '',
-            valueError: '',
-            cityError: '',
-            addressError: '',
-            zipCodeError: '',
             payButtonTitle: 'Kart Bilgilerini girin',
             htmlContentReceived: false,
             paymentSuccessfull: false,
@@ -419,31 +341,19 @@ class WalletScreen extends Component {
             <ScrollView>
                 {!this.state.buyCredits &&
                     (
-                        <WalletForm onBuyCreditsPressed={this.onBuyCreditsPressed} openFiveDetails={this.openFiveDetails} openTenDetails={this.openTenDetails}
-                            openTwentyFiveDetails={this.openTwentyFiveDetails} openFiftyDetails={this.openFiftyDetails} openHundredDetails={this.openHundredDetails} openTwoHundredDetails={this.openTwoHundredDetails}
-                            fiveKontorOpened={this.state.fiveKontorOpened} tenKontorOpened={this.state.tenKontorOpened} twentyFiveKontorOpened={this.state.twentyFiveKontorOpened}
-                            makeAllFalse = {this.makeAllFalse}
-                            fiftyKontorOpened={this.state.fiftyKontorOpened}
-                            hundredKontorOpened={this.state.hundredKontorOpened}
-                            twoHundredKontorOpened={this.state.twoHundredKontorOpened}
-
-                        />
+                        <WalletForm onBuyCreditsPressed={this.onBuyCreditsPressed} />
                     )
                 }
                 {this.state.buyCredits &&
                     (
                         <CheckOutForm cardName={this.state.cardName} cardNumber={this.state.cardNumber}
                             month={this.state.month} year={this.state.year} CVC={this.state.CVC} value={this.state.value}
-                            threeDSChecked={this.state.threeDSChecked} city={this.state.city} address={this.state.address}
-                            zipCode={this.state.zipCode} showCheckOutForm={this.state.buyCredits}
+                            threeDSChecked={this.state.threeDSChecked} showCheckOutForm={this.state.buyCredits}
                             onCardNameChanged={this.onCardNameChanged} onCardNumberChanged={this.onCardNumberChanged}
                             onMonthChanged={this.onMonthChanged} onYearChanged={this.onYearChanged}
-                            onCVCChanged={this.onCVCChanged} onValueChanged={this.onValueChanged}
-                            onThreeDSChecked={this.onThreeDSChecked} onCityChanged={this.onCityChanged}
-                            onAddressChanged={this.onAddressChanged} onZipCodeChanged={this.onZipCodeChanged}
+                            onCVCChanged={this.onCVCChanged} onThreeDSChecked={this.onThreeDSChecked}
                             cardNumberError={this.state.cardNumberError} cardNameError={this.state.nameError} CVCError={this.state.CVCError}
-                            monthError={this.state.monthError} yearError={this.state.yearError} valueError={this.state.valueError}
-                            cityError={this.state.cityError} addressError={this.state.addressError} zipCodeError={this.state.zipCodeError}
+                            monthError={this.state.monthError} yearError={this.state.yearError}
                             payButtonTitle={this.state.payButtonTitle} disabled={this.state.disabled}
                             onPayButtonPressed={this.onPayButtonPressed} onCancelPayment={this.onCancelPayment}
                             checkOutFormSubmitted={this.state.checkOutFormSubmitted} paymentSuccessfull={this.state.paymentSuccessfull}
@@ -459,7 +369,7 @@ class WalletScreen extends Component {
 
     checkNewPayment = () => {
         console.log("checkNewPayment");
-        this.props.checkNewPayment(new Date().getTime(),(newPayment) => {
+        this.props.checkNewPayment(new Date().getTime(), (newPayment) => {
             console.log("New Payment on wallet screen", newPayment);
             var result = newPayment.result
             console.log("New Payment Result", result);
@@ -497,7 +407,7 @@ class WalletScreen extends Component {
                                 }
                                 this.setState({
                                     htmlContentReceived: false,
-                                    paymentErrorMessage: IyziPaymentErrors[paymentResult.data.errorCode],
+                                    paymentErrorMessage: paymentResult.data.errorMessage ? paymentResult.data.errorMessage : IyziPaymentErrors[paymentResult.data.errorCode],
                                     paymentSuccessfull: false,
                                     threedsPaymentLoading: false,
                                     paymentFailed: true

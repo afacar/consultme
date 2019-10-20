@@ -92,59 +92,6 @@ export default class CheckOutForm extends Component {
                                         </View>
                                     </View>
 
-
-                                    <View style={{ flex: 1 }}>
-                                        <Input
-                                            key='value'
-                                            editable={!this.props.disabled}
-                                            keyboardType='number-pad'
-                                            placeholder='Yüklemek istediğiniz tutarı girin.'
-                                            maxLength={4}
-                                            errorMessage={this.props.valueError}
-                                            onChangeText={(value) => { this.props.onValueChanged(value) }}
-                                            value={this.props.value || ''}
-                                            containerStyle={{ marginTop: 10 }}
-                                        />
-                                    </View>
-
-                                    <View style={{ flex: 1 }}>
-                                        <Input
-                                            key='city'
-                                            editable={!this.props.disabled}
-                                            keyboardType='default'
-                                            placeholder='Yaşadığınız şehir'
-                                            errorMessage={this.props.cityError}
-                                            onChangeText={(value) => { this.props.onCityChanged(value) }}
-                                            value={this.props.city || ''}
-                                            containerStyle={{ marginTop: 10 }}
-                                        />
-
-                                        <Input
-                                            key='address'
-                                            editable={!this.props.disabled}
-                                            keyboardType='default'
-                                            placeholder='Tam adresinizi girin'
-                                            errorMessage={this.props.addressError}
-                                            onChangeText={(value) => { this.props.onAddressChanged(value) }}
-                                            value={this.props.address || ''}
-                                            containerStyle={{ marginTop: 10 }}
-                                        />
-                                    </View>
-
-                                    <View style={{ flex: 1 }}>
-                                        <Input
-                                            key='zipCode'
-                                            editable={!this.props.disabled}
-                                            keyboardType='number-pad'
-                                            placeholder='Posta kodu'
-                                            errorMessage={this.props.zipCodeError}
-                                            onChangeText={(value) => { this.props.onZipCodeChanged(value) }}
-                                            value={this.props.zipCode || ''}
-                                            containerStyle={{ marginTop: 10 }}
-                                        />
-
-                                    </View>
-
                                     <CheckBox title='3D Secure' onPress={() => { this.props.onThreeDSChecked() }} checked={this.props.threeDSChecked} />
 
                                     <Button disabled={this.props.disabled} title={this.props.payButtonTitle} titleStyle={{ color: 'white' }}
@@ -158,7 +105,7 @@ export default class CheckOutForm extends Component {
                             )
                         }
                         {
-                            this.props.checkOutFormSubmitted && (!this.props.threedsPaymentResult || this.props.threedsPaymentLoading)&& (
+                            this.props.checkOutFormSubmitted && (!this.props.threedsPaymentResult || this.props.threedsPaymentLoading) && (
                                 <View style={styles.screenCenter}>
                                     <ActivityIndicator size='large' color={colors.IOS_BLUE} />
                                 </View>
@@ -172,7 +119,7 @@ export default class CheckOutForm extends Component {
                             </View>
                         )}
                         {
-                            this.props.checkOutFormSubmitted && this.props.threedsPaymentResult && !this.props.threedsPaymentLoading &&  this.props.paymentSuccessfull && (
+                            this.props.checkOutFormSubmitted && this.props.threedsPaymentResult && !this.props.threedsPaymentLoading && this.props.paymentSuccessfull && (
                                 <ScrollView style={styles.checkOutFormStyle} contentContainerStyle={{ justifyContent: 'flex-start', }}>
                                     <Button
                                         disabled={true}

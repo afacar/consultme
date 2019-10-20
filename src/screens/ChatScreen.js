@@ -16,7 +16,7 @@ class ChatScreen extends Component {
         title: `${navigation.getParam('title')}`,
         headerTitleStyle: { textAlign: 'center', alignSelf: 'center', color: 'white' },
         headerStyle: {
-            backgroundColor: colors.IOS_DARK_BLUE,
+            backgroundColor: colors.DARK_BLUE,
         },
         headerTintColor: 'white',
         headerRight: (

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, View, StyleSheet, TouchableHighlight } from 'react-native';
 import { ListItem, Button } from 'react-native-elements';
 
 import { connect } from 'react-redux'
@@ -14,42 +13,47 @@ class SettingsScreen extends Component {
     render() {
         return (
             <ScrollView style={styles.containerStyle}>
-                <TouchableOpacity onPress={() => this.navigateNextScreen('profile')}>
-                    <ListItem
-                        key='profile'
-                        title='Profil Ayarları'
-                        titleStyle={{ fontSize: 21 }}
-                        onPress={() => this.navigateNextScreen('profile')}
-                        leftIcon={{ color: '#0066ff', type: 'entypo', name: 'user' }}
-                        rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
-                        containerStyle={styles.btn}
-                    />
-                </TouchableOpacity>
+                <View style={styles.itemStyle}>
+                    <TouchableHighlight onPress={() => this.navigateNextScreen('profile')} underlayColor='white'>
+                        <ListItem
+                            key='profile'
+                            title='Profil Ayarları'
+                            titleStyle={{ fontSize: 21 }}
+                            onPress={() => this.navigateNextScreen('profile')}
+                            leftIcon={{ color: '#0066ff', type: 'entypo', name: 'user' }}
+                            // rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
+                            containerStyle={styles.btn}
+                        />
+                    </TouchableHighlight>
+                </View>
 
-                <TouchableOpacity onPress={() => this.navigateNextScreen('archive')}>
-                    <ListItem
-                        key='archive'
-                        title='Arşiv'
-                        titleStyle={{ fontSize: 21 }}
-                        onPress={() => this.navigateNextScreen('archive')}
-                        leftIcon={{ color: '#cc3300', type: 'material', name: 'archive' }}
-                        rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
-                        containerStyle={styles.btn}
-                    />
-                </TouchableOpacity>
+                <View style={styles.itemStyle}>
+                    <TouchableHighlight onPress={() => this.navigateNextScreen('archive')} underlayColor='white'>
+                        <ListItem
+                            key='archive'
+                            title='Arşiv'
+                            titleStyle={{ fontSize: 21 }}
+                            onPress={() => this.navigateNextScreen('archive')}
+                            leftIcon={{ color: '#cc3300', type: 'material', name: 'archive' }}
+                            // rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
+                            containerStyle={styles.btn}
+                        />
+                    </TouchableHighlight>
+                </View>
 
-                <TouchableOpacity onPress={() => this.navigateNextScreen('wallet')}>
-                    <ListItem
-                        key='wallet'
-                        title='Cüzdanım'
-                        titleStyle={{ fontSize: 21 }}
-                        onPress={() => this.navigateNextScreen('wallet')}
-                        leftIcon={{ color: '#009933', type: 'entypo', name: 'wallet' }}
-                        rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
-                        containerStyle={styles.btn}
-                    />
-                </TouchableOpacity>
-
+                <View style={styles.itemStyle}>
+                    <TouchableHighlight onPress={() => this.navigateNextScreen('wallet')} underlayColor='white'>
+                        <ListItem
+                            key='wallet'
+                            title='Cüzdanım'
+                            titleStyle={{ fontSize: 21 }}
+                            onPress={() => this.navigateNextScreen('wallet')}
+                            leftIcon={{ color: '#009933', type: 'entypo', name: 'wallet' }}
+                            // rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
+                            containerStyle={styles.btn}
+                        />
+                    </TouchableHighlight>
+                </View>
 
                 {
                     !this.props.user.isProvider && (
@@ -90,7 +94,7 @@ mapStateToProps = (state) => {
     return { user: state.auth.user }
 }
 
-const styles = {
+const styles = StyleSheet.create({
     containerStyle: {
         flex: 1,
         paddingTop: 10,
@@ -98,9 +102,11 @@ const styles = {
     },
     btn: {
         borderBottomWidth: 1,
-        borderBottomLeftRadius: 50,
-        backgroundColor: "#f1f1f1"
+        backgroundColor: "white",
+    },
+    itemStyle: {
+        marginBottom: 10
     }
-};
+});
 
 export default connect(mapStateToProps, null)(SettingsScreen)

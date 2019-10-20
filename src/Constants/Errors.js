@@ -3,6 +3,7 @@ const IyziPaymentErrors = {
     6001: "Ödeme bilgileri güvenlik denetimini geçemedi",
     5099: "3D Secure işlemi oluşturulurken hata oluştu",
     5115: "Bu ödemenin durumu 3dsecure için geçerli değil",
+    5081: "Ödeme işlemi sırasında hata oluştu",
     // 3d secure hataları
     0: "3-D Secure imzası geçersiz",
     1: "Hatalı kod girildi",
