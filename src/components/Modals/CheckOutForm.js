@@ -120,26 +120,26 @@ export default class CheckOutForm extends Component {
                         )}
                         {
                             this.props.checkOutFormSubmitted && ((this.props.threedsPaymentResult && !this.props.threedsPaymentLoading) || this.props.paymentFinished) && this.props.paymentSuccessfull && (
-                                <ScrollView style={styles.checkOutFormStyle} contentContainerStyle={{ justifyContent: 'flex-start', }}>
+                                <ScrollView style={styles.checkOutFormStyle} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <Button
                                         disabled={true}
                                         icon={<SuccessIcon size={48} />}
                                         type='clear'
                                     />
-                                    <Text>Ödeme işleminiz başarı ile gerçekleşmiştir</Text>
+                                    <Text style={{fontSize: 24, textAlign: 'center'}}>Ödeme işleminiz başarı ile gerçekleşmiştir</Text>
                                 </ScrollView>
                             )
                         }
                         {
                             this.props.checkOutFormSubmitted && this.props.threedsPaymentResult && !this.props.threedsPaymentLoading && this.props.paymentFailed && (
-                                <ScrollView style={styles.checkOutFormStyle} contentContainerStyle={{ justifyContent: 'center', }}>
+                                <ScrollView style={styles.checkOutFormStyle} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <Button
                                         disabled={true}
                                         icon={<FailIcon size={48} />}
                                         type='clear'
                                     />
-                                    <Text style={{ fontSize: 24 }}>Ödeme işleminiz başarısız oldu</Text>
-                                    <Text style={{ fontSize: 24, color: colors.IOS_RED }}>{this.props.paymentErrorMessage}</Text>
+                                    <Text style={{ fontSize: 24, textAlign: 'center' }}>Ödeme işleminiz başarısız oldu</Text>
+                                    <Text style={{ fontSize: 24, textAlign: 'center', color: colors.IOS_RED }}>{this.props.paymentErrorMessage}</Text>
                                 </ScrollView>
                             )
                         }

@@ -71,11 +71,11 @@ class ConsultantListScreen extends Component {
                                 } else if (status == 'continue') {
 
                                 }
-                                this.props.setSelectedChatId(consultant.uid, true)
-                                firebase.database().ref(`users/${consultant.uid}/CCID`).once('value', ccid => {
-                                    console.log("CCID of opponent", ccid)
-                                    this.props.videoCallOpponentsIds([ccid.val()])
-                                })
+                                // this.props.setSelectedChatId(consultant.uid, true)
+                                // firebase.database().ref(`users/${consultant.uid}/CCID`).once('value', ccid => {
+                                //     console.log("CCID of opponent", ccid)
+                                //     this.props.videoCallOpponentsIds([ccid.val()])
+                                // })
                                 this.props.navigation.navigate('SplashScreen');
                             })
 

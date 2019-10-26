@@ -20,7 +20,7 @@ class WalletScreen extends Component {
         title: `Cüzdanım`,
         headerTitleStyle: { textAlign: 'center', alignSelf: 'center', color: 'white' },
         headerStyle: {
-            backgroundColor: colors.PINK_RED,
+            backgroundColor: colors.IOS_BLUE,
         },
         headerTintColor: 'white',
     });
@@ -214,7 +214,7 @@ class WalletScreen extends Component {
         } else {
             console.log("Make payment error", IyziPaymentErrors[threedsPaymentResult.data.errorCode]);
             console.log("Make payment error cont.", threedsPaymentResult);
-            this.setState({ paymentErrorMessage: IyziPaymentErrors[threedsPaymentResult.data.errorCode], paymentLoading: false, threedsPaymentLoading: false, paymentResult: false })
+            this.setState({ paymentErrorMessage: IyziPaymentErrors[threedsPaymentResult.data.errorCode], threedsPaymentLoading: false, paymentResult: false })
             setTimeout(this.resetState, timeout);
         }
     }
@@ -342,7 +342,7 @@ class WalletScreen extends Component {
                             checkOutFormSubmitted={this.state.checkOutFormSubmitted} paymentSuccessfull={this.state.paymentSuccessfull}
                             paymentFailed={this.state.paymentFailed} htmlContentReceived={this.state.htmlContentReceived}
                             threedsPaymentResult={this.state.threedsPaymentResult} paymentErrorMessage={this.state.paymentErrorMessage}
-                            resetState={this.resetState} threedsPaymentLoading={this.state.threedsPaymentLoading}
+                            resetState={this.resetState} threedsPaymentLoading={this.state.threedsPaymentLoading} paymentLoading={this.state.paymentLoading}
                         />
                     )
                 }

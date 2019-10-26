@@ -51,7 +51,7 @@ export const fetchChatConsultationDetails = (user, callback) => async (dispatch)
         chatsSnap.forEach(chatIdSnap => {
             var chatId = chatIdSnap.key;
             let consultationDetailsUrl = `consultations/${chatId}/${user.uid}/consultationDetails`;
-            firebase.database().ref(consultationDetailsUrl).once('value', consultationDetailsSnap => {
+            firebase.database().ref(consultationDetailsUrl).on('value', consultationDetailsSnap => {
                 callback({ consultationDetails: consultationDetailsSnap.val(), chatId: chatId })
             })
         })

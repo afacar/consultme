@@ -56,7 +56,7 @@ export const startThreeDSPayment = (card, user, price) => (dispatch) => {
         buyer: {
             id: _user.uid,
             name,
-            surname: surname,
+            surname: surname || 'AFACAR',
             gsmNumber,
             email,
             identityNumber: '11111111111',
@@ -148,7 +148,7 @@ export const startPayment = (card, user, price) => (dispatch) => {
         buyer: {
             id: _user.uid,
             name,
-            surname: surname,
+            surname: surname || 'AFACAR',
             gsmNumber,
             email,
             identityNumber: '11111111111',
@@ -235,7 +235,7 @@ export const checkNewPayment = (startTime, callback) => async (dispatch) => {
         console.log("New payment", newPayment.val());
         var convId = newPayment.val().result.conversationId;
         var time = convId.substring(convId.indexOf('_') + 1, convId.length);
-        if (parseInt(startTime) < parseInt(time)){
+        if (parseInt(startTime) < parseInt(time)) {
             callback(newPayment.val());
         }
     })

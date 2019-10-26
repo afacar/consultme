@@ -12,12 +12,12 @@ export class WalletForm extends Component {
             <ScrollView>
                 <View style={{ flex: 1 }}>
                     <Card
-                        containerStyle={[styles.cardShadow, { backgroundColor: colors.WHITE_RED }]}>
+                        containerStyle={[styles.cardShadow, { backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR }]}>
                         <CardItem>
                             <Input
                                 key='balance'
                                 label="Bakiye"
-                                labelStyle={{ color: 'white' }}
+                                labelStyle={{ color: colors.DARK_BLUE }}
                                 inputStyle={{ color: colors.IOS_BLUE }}
                                 value={this.props.wallet ? this.props.wallet + '' : '0'}
                                 multiline={false}

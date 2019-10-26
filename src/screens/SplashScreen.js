@@ -9,16 +9,23 @@ import { connect } from 'react-redux';
 import UserService from '../Backend/ConnectyCube/services/UserService'
 import ChatService from '../Backend/ConnectyCube/services/ChatService'
 
+const preparingText1 = 'Uygulama Başlatılıyor.';
+const preparingText2 = 'Uygulama Başlatılıyor..';
+const preparingText3 = 'Uygulama Başlatılıyor...';
+
 class SplashScreen extends Component {
 
 
     state = {
-        isProvider: false
+        isProvider: false,
+        preparing: true,
+        counter: 0,
+        preparingText: 'Uygulama Başlatılıyor',
     }
 
-
-
     componentDidMount = async () => {
+        this.setInterval();
+        console.log("here")
         const firebaseUser = firebase.auth().currentUser;
         var user = {
             name: '',
@@ -36,24 +43,27 @@ class SplashScreen extends Component {
             var ccid = '';
             var ccpass = '';
             //get isProvider, ccid, ccpass and wallet info
+            console.log("here 1")
             await firebase.database().ref('users').child(user.uid).once('value', snapshot => {
                 if (snapshot.child('isProvider').exists()) {
                     user.isProvider = true;
-                }else{
+                } else {
                     user.isProvider = false;
                 }
                 ccid = snapshot.child('CCID').val();
                 ccpass = snapshot.child("CCPASS").val()
             })
+            console.log("here 2")
 
             firebase.database().ref('wallets').child(user.uid).on('value', snapshot => {
                 console.log("Wallet in splash screen", snapshot.val())
                 if (snapshot.exists()) {
-                    user.wallet = snapshot.val();
+                    user.wallet = snapshot.val() || 0;
                     console.log("Wallet in splash screen", snapshot.val())
                 }
                 this.props.saveUser(user);
             })
+            console.log("here 3")
 
             // fetch and save profiles of people, current user getting consultation from
             this.props.fetchUserChats(user, (profile) => {
@@ -76,6 +86,7 @@ class SplashScreen extends Component {
             this.props.fetchChatConsultationDetails(user, (consultation) => {
                 this.props.saveConsultationDetails(consultation)
             })
+            console.log("here 4")
 
             if (user.isProvider) {
                 this.props.fetchConsultantChats(user, (profile) => {
@@ -142,12 +153,37 @@ class SplashScreen extends Component {
         }
     }
 
+    setInterval = () => {
+        this.preparingInterval = setInterval(() => {
+            if (this.state.counter % 3 == 0) {
+                this.setState({
+                    preparingText: preparingText1
+                })
+            } else if (this.state.counter % 3 == 1) {
+                this.setState({
+                    preparingText: preparingText2
+                })
+            } else if (this.state.counter % 3 == 2) {
+                this.setState({
+                    preparingText: preparingText3,
+                })
+            } this.setState({
+                counter: this.state.counter + 1,
+            })
+        }, 250)
+    }
+
     render() {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Consult Me</Text>
+                <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Consult Me</Text>
+                <Text style={{ fontSize: 16, textAlign: 'center' }}>{this.state.preparingText}</Text>
             </View>
         )
+    }
+
+    componentWillUnmount = () => {
+        clearInterval(this.preparingInterval)
     }
 
 }

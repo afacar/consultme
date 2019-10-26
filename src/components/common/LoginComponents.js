@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { CardItem } from './CardItem';
 import { Input, Button, Avatar, Card, Icon } from 'react-native-elements';
 import { LoginIcon, VerifyIcon, NextIcon } from '../common/Icons';
@@ -10,7 +10,7 @@ import strings from '../../Constants/Strings';
 export class LoginPhoneNumberComponent extends Component {
     render() {
         return (
-            <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column', margin: 5 }}>
+            <ScrollView style={{ flex: 1, alignItems: 'center', flexDirection: 'column', margin: 5 }}>
                 <Card>
                     <Text style={{ textAlign: 'left', fontSize: 18, color: 'black', marginBottom: 5 }}>
                         Consult Me telefon numaranızı doğrulamanız için size kod gönderecektir. Lütfen, numaranızı girin.
@@ -37,7 +37,7 @@ export class LoginPhoneNumberComponent extends Component {
                 <Text style={{ textAlign: 'left', fontSize: 12, color: 'grey', marginBottom: 5 }}>
                     Carrier SMS charges may apply.
                 </Text>
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -45,7 +45,7 @@ export class LoginPhoneNumberComponent extends Component {
 export class PhoneNumberVerificationComponent extends Component {
     render() {
         return (
-            <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column', margin: 5 }}>
+            <ScrollView style={{ flex: 1, alignItems: 'center', flexDirection: 'column', margin: 5 }}>
                 <Card>
                     <Text style={{ textAlign: 'left', fontSize: 18, color: 'black', marginBottom: 5 }}>
                         Telefonunuza gönderilen kodu girin.
@@ -73,7 +73,7 @@ export class PhoneNumberVerificationComponent extends Component {
                 <Text style={{ textAlign: 'justify', fontSize: 12, color: 'grey', marginBottom: 5 }}>
                     Carrier SMS charges may apply.
                 </Text>
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -81,7 +81,7 @@ export class PhoneNumberVerificationComponent extends Component {
 export class NameComponent extends Component {
     render() {
         return (
-            <View style={{ margin: 10, alignItems: 'center', flex: 1 }}>
+            <ScrollView style={{ margin: 10, alignItems: 'center', flex: 1 }}>
                 <View style={{ flexDirection: 'column' }} >
                     <Input
                         style={{ flex: 2 }}
@@ -102,7 +102,7 @@ export class NameComponent extends Component {
                 <Text style={{ textAlign: 'justify', fontSize: 12, color: 'grey', marginBottom: 5 }}>
                     Carrier SMS charges may apply.
                 </Text>
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -112,7 +112,7 @@ export class ProfilePictureComponent extends Component {
 
     render() {
         return (
-            <View style={{ margin: 10, alignItems: 'center', flexDirection: 'column', flex: 1 }}>
+            <ScrollView style={{ margin: 10, alignItems: 'center', flexDirection: 'column', flex: 1 }}>
                 <Text style={{ fontSize: 18, color: 'black', marginBottom: 5 }}>
                     Lütfen profil resminizi seçin.
             </Text>
@@ -153,7 +153,7 @@ export class ProfilePictureComponent extends Component {
                 </View>
                 <Text style={{ textAlign: 'center', fontSize: 12, color: 'grey' }}>Eğer daha önce danışmanlık kayıdı yaptırdıysanız devam edebilirsiniz. </Text>
 
-            </View>
+            </ScrollView>
         );
     }
 }

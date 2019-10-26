@@ -35,7 +35,7 @@ export const startConsultancy = (user, consultant, callback) => async (dispatch)
     let userNewConsultationRef = `users/${userId}/consultationsFrom`;
     let consultantNewConsultationRef = `users/${cId}/consultationsTo/${userId}`;
     var consultationDetails = consultant.consultationDetails;
-    consultationDetails.freeChars  = 300;
+    consultationDetails.freeChars = 300;
     consultationDetails.counter = 0;
 
 
@@ -57,4 +57,37 @@ export const startConsultancy = (user, consultant, callback) => async (dispatch)
     })
     db.ref(userNewConsultationRef).child(`${cId}`).set(true);
     db.ref(consultantNewConsultationRef).set(true);
+}
+
+export const startSubscription = (userId, consultantID) => async () => {
+    let consultationDetailsRef = `consultations/${consultantID}/${userId}/consultationDetails`;
+
+    var db = firebase.database();
+    db.ref(consultationDetailsRef).child('subscriptionPrice').once('value', priceSnap => {
+        var price = priceSnap.val();
+        var product = {
+            name: userId + '-' + consultantID
+        }
+
+        var paymentPlan = {
+            productReferenceCode: product.name,
+            name: product.name,
+            price: parseFloat(price),
+            currencyCode: 'TL',
+            paymentInterval: "DAILY",
+            paymentIntervalCount: 1,
+            planPaymentType: 'RECURRING'
+        }
+        db.ref(consultationDetailsRef).child('type').update('subscription');
+    })
+}
+
+export const cancelSubscription = (userId, consultantID) => async () => {
+    let consultationDetailsRef = `consultations/${consultantID}/${userId}/consultationDetails/type`;
+
+    var db = firebase.database();
+    var product = {
+        name: userId + '-' + consultantID
+    }
+    db.ref(consultationDetailsRef).update('session');
 }

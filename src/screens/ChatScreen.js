@@ -42,9 +42,9 @@ class ChatScreen extends Component {
         const { user, userMode, consultationDetails } = this.props;
         console.log("Props", this.props)
         if (userMode && consultationDetails.type === 'session') {
-            var walletChar = parseInt(user.wallet ? user.wallet : 0 / consultationDetails.textPrice)
+            var walletChar = parseInt(user.wallet / parseInt(consultationDetails.textPrice))
             var remaining = 0;
-            remaining = walletChar * 300 + consultationDetails.freeChars - consultationDetails.counter;
+            remaining = parseInt(walletChar * 300) + parseInt(consultationDetails.freeChars) - parseInt(consultationDetails.counter);
             composerClosed = false;
             if (remaining <= 0)
                 composerClosed = true;
@@ -62,6 +62,14 @@ class ChatScreen extends Component {
         this.props.saveConsultantMessages(message);
     }
 
+    startSubscription = () => {
+        this.props.startSubscription(this.props.user.uid, this.props.chatId);
+    }
+
+    cancelSubscription = () => {
+        this.props.cancelSubscription(this.props.user.uid, this.props.chatId);
+    }
+
     render() {
         const { messages, user, chatId, userMode, imagesExist, imageArray, consultationDetails } = this.props;
         if (!imagesExist) {
@@ -71,7 +79,7 @@ class ChatScreen extends Component {
             <View style={[styles.fullScreen, { margin: 0 }]}>
                 {
                     userMode && consultationDetails.type === 'session' && (
-                        <ChatScreenWalletInfo wallet={this.props.user.wallet} remaining={this.state.remaining} />
+                        <ChatScreenWalletInfo wallet={this.props.user.wallet} remaining={this.state.remaining} consultationType={consultationDetails.type} startSubscription={this.startSubscription} cancelSubscription={this.cancelSubscription} />
                     )
                 }
                 <ChatScreenBody changeRemaining={this.changeRemaining} remaining={this.state.remaining} messages={messages} user={user} closeComposer={this.closeComposer} composerClosed={this.state.composerClosed}
