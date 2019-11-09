@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Button } from 'react-native-elements';
-import * as styles from '../../Constants/Styles';
+import  styles from '../../Constants/Styles';
 
 import { SaveIcon, SignOutIcon, FilterIcon, CashIcon,PlayIcon, PauseIcon, MicIcon, CameraIcon } from './Icons';
 
@@ -21,7 +21,7 @@ export class SaveButton extends Component {
           justifyContent: 'center'
         }]}
         titleStyle={[this.props.titleStyle, { paddingLeft: 5, fontSize: 18 }]}
-        buttonStyle={[this.props.buttonStyle, styles.default.buttonStyle]}
+        buttonStyle={[this.props.buttonStyle, styles.buttonStyle]}
       />
     );
   }
@@ -41,7 +41,7 @@ export class SignOutButton extends Component {
           justifyContent: 'center'
         }]}
         titleStyle={[this.props.titleStyle, { paddingLeft: 5, fontSize: 18 }]}
-        buttonStyle={[this.props.buttonStyle, styles.default.buttonStyle]}
+        buttonStyle={[this.props.buttonStyle, styles.buttonStyle]}
       />
     );
   }
@@ -79,7 +79,7 @@ export class FilterButton extends Component {
           justifyContent: 'center'
         }]}
         titleStyle={[this.props.titleStyle, { paddingLeft: 5, paddingRight: 5, fontSize: 19 }]}
-        buttonStyle={[this.props.buttonStyle, styles.default.searchButtonStyle]}
+        buttonStyle={[this.props.buttonStyle, styles.searchButtonStyle]}
       />
     );
   }
@@ -99,7 +99,7 @@ export class BuyButton extends Component {
           justifyContent: 'center'
         }]}
         titleStyle={[this.props.titleStyle, { paddingLeft: 5, paddingRight: 5, fontSize: 18 }]}
-        buttonStyle={[this.props.buttonStyle, styles.default.buttonStyle]}
+        buttonStyle={[this.props.buttonStyle, styles.buttonStyle]}
       />
     );
   }

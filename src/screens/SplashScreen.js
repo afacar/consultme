@@ -44,9 +44,10 @@ class SplashScreen extends Component {
             var ccpass = '';
             //get isProvider, ccid, ccpass and wallet info
             console.log("here 1")
-            await firebase.database().ref('users').child(user.uid).once('value', snapshot => {
-                if (snapshot.child('isProvider').exists()) {
+            await firebase.database().ref('verifiedConsultants').child(user.uid).once('value', snapshot => {
+                if (snapshot.exists()) {
                     user.isProvider = true;
+                    user.consultationDetails = snapshot.child('consultationDetails').val();
                 } else {
                     user.isProvider = false;
                 }
@@ -76,6 +77,10 @@ class SplashScreen extends Component {
                 this.props.saveUserLastMessage(lastMessageObj);
             })
 
+            // fetch and set number of unread messages 
+            this.props.fetchUserUnreadMessages(user, (unread) => {
+                this.props.saveUserUnreadMessageCount(unread);
+            })
             // fetch messages from current user's consultants
             this.props.fetchUserMessages(user, (message) => {
                 message.userMode = true;
@@ -102,6 +107,10 @@ class SplashScreen extends Component {
                     message.userMode = false;
                     console.log("New consultant message on splash screen ", message)
                     this.props.saveConsultantMessages(message)
+                })
+
+                this.props.fetchConsultantUnreadMessages(user, (unread) => {
+                    this.props.saveConsultantUnreadMessageCount(unread);
                 })
             }
             console.log("CCID", ccid)

@@ -3,15 +3,16 @@ import { View, ScrollView, Text, TouchableOpacity, ActivityIndicator } from 'rea
 import { ListPicker, CardItem } from './index'
 import styles from "../../Constants/Styles";
 import { Input, Button, Card, Icon } from 'react-native-elements';
+import ConsultantPricingForm from './ConsultantPricingForm';
 
 export class ApplicationFirstComponent extends Component {
     render() {
         return (
-            <ScrollView style={[styles.fullScreen, { margin: 10 }]}>
+            <ScrollView style={[styles.fullScreen, { borderWidth: 0.5, padding: 5, borderRadius: 20, paddingBottom: 10 }]}>
                 <Text style={styles.welcomeText} >Danışmanlık başvurusuna hoşgeldiniz!</Text>
                 <CardItem style={{ marginTop: 10 }}>
                     <ListPicker
-                        defaultValue = {"Branş seçiniz"}
+                        defaultValue={"Branş seçiniz"}
                         selectedValue={this.props.branch}
                         onValueChange={(branch, itemIndex) => this.props.selectBranch({ branch })}
                         options={['Doktor', 'Dietisyen', 'Psikolog', 'Eğitim Danışmanı']}
@@ -60,7 +61,7 @@ export class ApplicationFirstComponent extends Component {
                     />
                 </CardItem>
 
-                <CardItem style={{ marginTop: 10, borderWidth: 1 }}>
+                <CardItem style={{ marginTop: 10, borderWidth: 1, borderRadius: 15 }}>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 1, }}>
                             <Button
@@ -93,141 +94,121 @@ export class ApplicationFirstComponent extends Component {
 
 export class ApplicationSecondComponent extends Component {
 
-    renderSubscriptionDetails = () => {
-        if (this.props.subscriptionOpened) {
-            return (
-                <CardItem style={{ alignItems: 'center' }}>
-                    <Input
-                        key={'subs_price'}
-                        label={'Abonelik ücreti ( tl / ay)'}
-                        multiline={false}
-                        maxLength={4}
-                        value={this.props.subscriptionPrice || ''}
-                        onChangeText={(value) => { this.props.onSubscriptionPriceChanged(value) }}
-                    />
-                </CardItem>
-            )
-        }
-    }
+    // renderSubscriptionDetails = () => {
+    //     if (this.props.subscriptionOpened) {
+    //         return (
+    //             <CardItem style={{ alignItems: 'center' }}>
+    //                 <Input
+    //                     key={'subs_price'}
+    //                     label={'Abonelik ücreti ( tl / ay)'}
+    //                     multiline={false}
+    //                     maxLength={4}
+    //                     value={this.props.subscriptionPrice || ''}
+    //                     onChangeText={(value) => { this.props.onSubscriptionPriceChanged(value) }}
+    //                 />
+    //             </CardItem>
+    //         )
+    //     }
+    // }
 
-    renderSessionDetails = () => {
-        if (this.props.sessionOpened) {
-            return (
-                <ScrollView>
-                    <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                        <Input
-                            key={'text_price'}
-                            label={'Mesaj ücreti (300 karakter)'}
-                            multiline={false}
-                            maxLength={4}
-                            placeholder={'Ücreti giriniz'}
-                            value={this.props.textPrice || ''}
-                            onChangeText={(value) => { this.props.onSessionTextPriceChanged(value) }}
-                        />
+    // renderSessionDetails = () => {
+    //     if (this.props.sessionOpened) {
+    //         return (
+    //             <ScrollView>
+    //                 <CardItem style={{ flex: 1, borderWidth: 1, }}>
+    //                     <Input
+    //                         key={'text_price'}
+    //                         label={'Mesaj ücreti (300 karakter)'}
+    //                         multiline={false}
+    //                         maxLength={4}
+    //                         placeholder={'Ücreti giriniz'}
+    //                         value={this.props.textPrice || ''}
+    //                         onChangeText={(value) => { this.props.onSessionTextPriceChanged(value) }}
+    //                     />
 
-                    </CardItem>
+    //                 </CardItem>
 
-                    <CardItem style={{ flex: 1, borderWidth: 1, }}>
-                        <Input
-                            key={'video_price'}
-                            label={'Görüntülü arama ücreti ( tl / dk )'}
-                            multiline={false}
-                            maxLength={4}
-                            placeholder={'Ücreti giriniz'}
-                            value={this.props.audioPrice || ''}
-                            onChangeText={(value) => { this.props.onSessionAudioPriceChanged(value) }}
-                        />
+    //                 <CardItem style={{ flex: 1, borderWidth: 1, }}>
+    //                     <Input
+    //                         key={'video_price'}
+    //                         label={'Görüntülü arama ücreti ( tl / dk )'}
+    //                         multiline={false}
+    //                         maxLength={4}
+    //                         placeholder={'Ücreti giriniz'}
+    //                         value={this.props.audioPrice || ''}
+    //                         onChangeText={(value) => { this.props.onSessionAudioPriceChanged(value) }}
+    //                     />
 
-                    </CardItem>
+    //                 </CardItem>
 
-                    <CardItem style={{ flex: 1, borderWidth: 1, }}>
+    //                 <CardItem style={{ flex: 1, borderWidth: 1, }}>
 
-                        <Input
-                            key={'audio_price'}
-                            label={'Sesli arama ücreti ( tl / dk )'}
-                            multiline={false}
-                            maxLength={4}
-                            placeholder={'Ücreti giriniz'}
-                            value={this.props.videoPrice || ''}
-                            onChangeText={(value) => { this.props.onSessionVideoPriceChanged(value) }}
-                        />
-                    </CardItem>
-                </ScrollView>
-            )
-        }
-    }
+    //                     <Input
+    //                         key={'audio_price'}
+    //                         label={'Sesli arama ücreti ( tl / dk )'}
+    //                         multiline={false}
+    //                         maxLength={4}
+    //                         placeholder={'Ücreti giriniz'}
+    //                         value={this.props.videoPrice || ''}
+    //                         onChangeText={(value) => { this.props.onSessionVideoPriceChanged(value) }}
+    //                     />
+    //                 </CardItem>
+    //             </ScrollView>
+    //         )
+    //     }
+    // }
 
-    renderIcon = (type) => {
-        if (type == 'subscription') {
-            if (this.props.subscriptionOpened) {
-                return (
-                    <Icon
-                        type='antdesign'
-                        name='caretup'
-                        size={24}
-                        color={'green'}
-                    />
-                )
-            } else {
-                return (
-                    <Icon
-                        type='antdesign'
-                        name='caretdown'
-                        size={24}
-                        color={'green'}
-                    />
-                )
-            }
-        }
-        if (type == 'session') {
-            if (this.props.sessionOpened) {
-                return (
-                    <Icon
-                        type='antdesign'
-                        name='caretup'
-                        size={24}
-                        color={'green'}
-                    />
-                )
-            } else {
-                return (
-                    <Icon
-                        type='antdesign'
-                        name='caretdown'
-                        size={24}
-                        color={'green'}
-                    />
-                )
-            }
-        }
-    }
+    // renderIcon = (type) => {
+    //     if (type == 'subscription') {
+    //         if (this.props.subscriptionOpened) {
+    //             return (
+    //                 <Icon
+    //                     type='antdesign'
+    //                     name='caretup'
+    //                     size={24}
+    //                     color={'green'}
+    //                 />
+    //             )
+    //         } else {
+    //             return (
+    //                 <Icon
+    //                     type='antdesign'
+    //                     name='caretdown'
+    //                     size={24}
+    //                     color={'green'}
+    //                 />
+    //             )
+    //         }
+    //     }
+    //     if (type == 'session') {
+    //         if (this.props.sessionOpened) {
+    //             return (
+    //                 <Icon
+    //                     type='antdesign'
+    //                     name='caretup'
+    //                     size={24}
+    //                     color={'green'}
+    //                 />
+    //             )
+    //         } else {
+    //             return (
+    //                 <Icon
+    //                     type='antdesign'
+    //                     name='caretdown'
+    //                     size={24}
+    //                     color={'green'}
+    //                 />
+    //             )
+    //         }
+    //     }
+    // }
     render() {
         return (
-            <ScrollView style={[styles.fullScreen, { margin: 10 }]}>
-                <Text style={styles.welcomeText} >Ücretlendirme şeklinizi belirleyin!</Text>
-                <TouchableOpacity onPress={() => { this.props.openSubscriptionDetails() }}>
-                    <Card style={{ marginTop: 10 }}>
-                        <CardItem style={{ alignItems: 'center' }}>
-                            <Text style={{ fontSize: 18 }}>Aylık abone</Text>
-                        </CardItem>
-                        {this.renderIcon('subscription')}
-                        {this.renderSubscriptionDetails()}
-                    </Card>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => { this.props.openSessionDetails() }} >
-                    <Card style={{ marginTop: 10 }}>
-                        <CardItem style={{ alignItems: 'center' }}>
-                            <Text style={{ fontSize: 18, textAlign: 'center' }}>Oturum başına ücretlendirme</Text>
-                        </CardItem>
-                        {this.renderIcon('session')}
-                        {this.renderSessionDetails()}
-                    </Card>
-                </TouchableOpacity >
-
-                <Text style={{ textAlign: 'center', marginTop: 10, fontSize: 18 }}>{this.props.footerText}</Text>
-
-                <CardItem style={{ marginTop: 10, borderWidth: 1 }}>
+            <ScrollView style={[styles.fullScreen, { borderWidth: 0.5, padding: 5, borderRadius: 20, paddingBottom: 10 }]}>
+                <Text style={styles.welcomeText} >Ücretlendirme detaylarını belirleyin!</Text>
+                <ConsultantPricingForm onSubscriptionPriceChanged={this.props.onSubscriptionPriceChanged} onTextPriceChanged={this.props.onTextPriceChanged}
+                    onAudioPriceChanged={this.props.onAudioPriceChanged} onVideoPriceChanged={this.props.onVideoPriceChanged} user={this.props.user} consultationDetails={this.props.consultationDetails} />
+                <CardItem style={{ marginTop: 10, borderWidth: 1, borderRadius: 15 }}>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 1, }}>
                             <Button

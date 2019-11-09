@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Text, ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { CardItem } from './CardItem';
+import { CardItem } from '../common/CardItem';
 import { Input, Button, Avatar, Card, Icon } from 'react-native-elements';
 import { LoginIcon, VerifyIcon, NextIcon } from '../common/Icons';
 import { Switch } from 'react-native-gesture-handler';
-import SwitchExample from './Switch.js'
+import SwitchExample from '../common/Switch.js'
 import strings from '../../Constants/Strings';
 
 export class LoginPhoneNumberComponent extends Component {
     render() {
         return (
-            <ScrollView style={{ flex: 1, alignItems: 'center', flexDirection: 'column', margin: 5 }}>
+            <ScrollView style={{ flex: 1,  flexDirection: 'column', margin: 5 }} contentContainerStyle={{alignItems: 'center'}}>
                 <Card>
                     <Text style={{ textAlign: 'left', fontSize: 18, color: 'black', marginBottom: 5 }}>
                         Consult Me telefon numaranızı doğrulamanız için size kod gönderecektir. Lütfen, numaranızı girin.
@@ -45,7 +45,7 @@ export class LoginPhoneNumberComponent extends Component {
 export class PhoneNumberVerificationComponent extends Component {
     render() {
         return (
-            <ScrollView style={{ flex: 1, alignItems: 'center', flexDirection: 'column', margin: 5 }}>
+            <ScrollView style={{ flex: 1,  flexDirection: 'column', margin: 5 }} contentContainerStyle={{alignItems: 'center'}}>
                 <Card>
                     <Text style={{ textAlign: 'left', fontSize: 18, color: 'black', marginBottom: 5 }}>
                         Telefonunuza gönderilen kodu girin.
@@ -81,7 +81,7 @@ export class PhoneNumberVerificationComponent extends Component {
 export class NameComponent extends Component {
     render() {
         return (
-            <ScrollView style={{ margin: 10, alignItems: 'center', flex: 1 }}>
+            <ScrollView style={{ flex: 1,  flexDirection: 'column', margin: 5 }} contentContainerStyle={{alignItems: 'center'}}>
                 <View style={{ flexDirection: 'column' }} >
                     <Input
                         style={{ flex: 2 }}
@@ -112,7 +112,7 @@ export class ProfilePictureComponent extends Component {
 
     render() {
         return (
-            <ScrollView style={{ margin: 10, alignItems: 'center', flexDirection: 'column', flex: 1 }}>
+            <ScrollView style={{ flex: 1,  flexDirection: 'column', margin: 5 }} contentContainerStyle={{alignItems: 'center'}}>
                 <Text style={{ fontSize: 18, color: 'black', marginBottom: 5 }}>
                     Lütfen profil resminizi seçin.
             </Text>

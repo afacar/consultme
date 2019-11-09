@@ -69,12 +69,11 @@ class ConsultantCard extends Component {
                                 {consultant.name}
                             </Text>
                             <Text>
-                                {'Branch: ' + consultationDetails.branch}
+                                {'Branş: ' + consultationDetails.branch}
                             </Text>
                             <Text>
-                                {'Address: ' + consultationDetails.address}
+                                {'Adres: ' + consultationDetails.address}
                             </Text>
-                            {this.renderPricingType()}
                         </View>
                     </View>
                     <View style={{

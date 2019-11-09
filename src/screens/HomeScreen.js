@@ -315,7 +315,7 @@ const mapStateToProps = (state) => {
     console.log("state", state)
     const { auth, chat } = state;
     const { user } = auth
-    const { consultant_chats, user_chats, user_last_messages, consultant_last_messages, consultant_profiles, user_profiles, consultation_details } = chat;
+    const { consultant_chats, user_chats, user_last_messages, consultant_last_messages, consultant_profiles, user_profiles, consultation_details, user_unread_count, consultant_unread_count } = chat;
     var userChats = [];
     var consultantChats = [];
 
@@ -324,8 +324,10 @@ const mapStateToProps = (state) => {
 
     for (var i = 0; i < userProfileArray.length; i++) {
         var userProfile = userProfileArray[i];
+        console.log("User profile uid", userProfile.uid)
         var chatObj = {
-            lastMessage: consultant_last_messages[userProfile.uid]
+            lastMessage: consultant_last_messages[userProfile.uid],
+            unreadCount: consultant_unread_count[userProfile.uid]
         };
         chatObj.user = userProfile;
         chatObj.chat = user_chats[userProfile.uid]
@@ -334,13 +336,17 @@ const mapStateToProps = (state) => {
 
     for (var i = 0; i < consultantProfileArray.length; i++) {
         var userProfile = consultantProfileArray[i];
+        console.log("Consultant profile uid", userProfile.uid)
         var chatObj = {
-            lastMessage: user_last_messages[userProfile.uid]
+            lastMessage: user_last_messages[userProfile.uid],
+            unreadCount: user_unread_count[userProfile.uid]
         };
         chatObj.user = userProfile;
         chatObj.chat = consultant_chats[userProfile.uid]
         userChats.push(chatObj);
     };
+
+    console.log("userChats", userChats)
 
     return { user, consultant_chats: consultantChats, user_chats: userChats, consultant_profiles, user_profiles, consultation_details }
 }

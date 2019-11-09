@@ -21,6 +21,68 @@ export const fetchUserChats = (user, callback) => async (dispatch) => {
     })
 }
 
+export const fetchUserUnreadMessages = (user, callback) => async () => {
+    let unreadURL = `chats/${user.uid}/`;
+    var db = firebase.database();
+    db.ref(unreadURL).on('child_added', unreadSnap => {
+        console.log("UnreadSnap", unreadSnap.val())
+        var consultantId = unreadSnap.key;
+        var unread = unreadSnap.val()[user.uid].unread;
+        var unreadObj = {
+            id: consultantId,
+            unread
+        }
+        console.log("UnreadObj in chat actions", unreadObj)
+        callback(unreadObj);
+    })
+    db.ref(unreadURL).on('child_changed', unreadSnap => {
+        console.log("UnreadSnap", unreadSnap.val())
+        var consultantId = unreadSnap.key;
+        var unread = unreadSnap.val()[user.uid].unread;
+        var unreadObj = {
+            id: consultantId,
+            unread
+        }
+        console.log("UnreadObj in chat actions", unreadObj)
+        callback(unreadObj);
+    })
+}
+
+export const fetchConsultantUnreadMessages = (user, callback) => async () => {
+    let unreadURL = `chats/${user.uid}/${user.uid}`;
+    var db = firebase.database();
+    db.ref(unreadURL).on('child_added', unreadSnap => {
+        var userID = unreadSnap.key;
+        var unread = unreadSnap.child('unread').val();
+        var unreadObj = {
+            id: userID,
+            unread
+        }
+        callback(unreadObj);
+    })
+    db.ref(unreadURL).on('child_changed', unreadSnap => {
+        var userID = unreadSnap.key;
+        var unread = unreadSnap.child('unread').val();
+        var unreadObj = {
+            id: userID,
+            unread
+        }
+        callback(unreadObj);
+    })
+}
+
+export const resetUnread = (userMode, userID, chatId) => () => {
+    let unreadURL = '';
+    if (userMode)
+        unreadURL = `chats/${userID}/${chatId}/${userID}`
+    else
+        unreadURL = `chats/${userID}/${userID}/${chatId}`
+    var db = firebase.database();
+    db.ref(unreadURL).set({
+        unread: 0
+    });
+}
+
 export const fetchUserLastMessages = (user, callback) => async (dispatch) => {
     let consultantChatsUrl = `users/${user.uid}/consultationsFrom`;
     firebase.database().ref(consultantChatsUrl).on('child_added', chatsSnap => {

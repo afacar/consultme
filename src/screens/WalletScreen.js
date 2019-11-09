@@ -261,21 +261,6 @@ class WalletScreen extends Component {
         return true;
     }
 
-    validateCity = () => {
-        const { city } = this.state;
-        return city ? true : false
-    }
-
-    validateAddress = () => {
-        const { address } = this.state;
-        return address ? true : false
-    }
-
-    validateZipCode = () => {
-        const { zipCode } = this.state;
-        return zipCode ? true : false
-    }
-
     resetState = () => {
         this.setState({
             buyCredits: false,
@@ -324,7 +309,7 @@ class WalletScreen extends Component {
             <ScrollView>
                 {!this.state.buyCredits &&
                     (
-                        <WalletForm onBuyCreditsPressed={this.onBuyCreditsPressed} wallet={this.props.user.wallet} />
+                        <WalletForm onBuyCreditsPressed={this.onBuyCreditsPressed} user={this.props.user} />
                     )
                 }
                 {this.state.buyCredits &&

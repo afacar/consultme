@@ -1,5 +1,5 @@
 import {
-    CONSULTANT_CHAT, USER_CHAT, CHATS_AUDIO, NEW_MESSAGE, CONSULTATION_DETAILS, CHAT_CONSULTANT_PROFILE, CHAT_USER_PROFILE, CHAT_CONSULTANT_LAST_MESSAGE, CHAT_USER_LAST_MESSAGE
+    CONSULTANT_CHAT, USER_CHAT, CHATS_AUDIO, NEW_MESSAGE, CONSULTATION_DETAILS, CHAT_CONSULTANT_PROFILE, CHAT_USER_PROFILE, CHAT_CONSULTANT_LAST_MESSAGE, CHAT_USER_LAST_MESSAGE, CHAT_CONSULTANT_UNREAD, CHAT_USER_UNREAD
 } from '../actions/action_types';
 
 const INITIAL_STATE = {
@@ -20,6 +20,12 @@ const INITIAL_STATE = {
 
     },
     consultant_last_messages: {
+
+    },
+    user_unread_count: {
+
+    },
+    consultant_unread_count: {
 
     },
     currentAudio: {
@@ -61,6 +67,22 @@ export default function (state = INITIAL_STATE, action) {
             const lastMessage = action.payload.lastMessage;
             consultant_last_messages[action.payload.chatId] = lastMessage
             return { ...state, consultant_last_messages };
+        }
+
+        case CHAT_USER_UNREAD: {
+            const { user_unread_count } = state;
+            const unreadObj = action.payload
+            if (unreadObj)
+                user_unread_count[unreadObj.id] = unreadObj.unread;
+            return { ...state, user_unread_count }
+        }
+
+        case CHAT_CONSULTANT_UNREAD: {
+            const { consultant_unread_count } = state;
+            const unreadObj = action.payload
+            if (unreadObj)
+                consultant_unread_count[unreadObj.id] = unreadObj.unread;
+            return { ...state, consultant_unread_count }
         }
 
         case CHATS_AUDIO:

@@ -8,6 +8,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import ArchivedChatsScreen from '../screens/ArchivedChatsScreen';
 import WalletScreen from '../screens/WalletScreen';
 import ChatScreen from '../screens/ChatScreen';
+import ConsultationSettingsScreen from '../screens/ConsultationSettingsScreen';
 import VideoScreen from '../Backend/ConnectyCube/Videoscreen';
 
 export default MainNavigator = createStackNavigator({
@@ -19,7 +20,8 @@ export default MainNavigator = createStackNavigator({
     ArchivedChatsScreen,
     WalletScreen,
     ChatScreen,
-    VideoScreen
+    VideoScreen,
+    ConsultationSettingsScreen
 }, {
         initialRouteName: 'HomeScreen'
     }

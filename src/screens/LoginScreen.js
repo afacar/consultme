@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import * as actions from '../appstate/actions';
 
 import styles from '../Constants/Styles';
-import { LoginPhoneNumberComponent, ProfilePictureComponent, PhoneNumberVerificationComponent } from '../components/common';
+import { LoginPhoneNumberComponent, ProfilePictureComponent, PhoneNumberVerificationComponent } from '../components/ScreenParts/LoginComponents';
 
 import UserService from '../Backend/ConnectyCube/services/UserService';
 import ChatService from '../Backend/ConnectyCube/services/ChatService';

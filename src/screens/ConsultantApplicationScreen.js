@@ -24,12 +24,14 @@ class ConsultantApplicationScreen extends Component {
         firstComponentCompleted: false,
         secondComponentCompleted: false,
 
+        consultationDetails: {
+            subscriptionPrice: '',
+            textPrice: '',
+            videoPrice: '',
+            audioPrice: '',
+        },
         subscriptionOpened: false,
         sessionOpened: false,
-        subscriptionPrice: '',
-        textPrice: '',
-        videoPrice: '',
-        audioPrice: '',
         footerText: 'Ücretlendirme şekli seçin'
     }
 
@@ -97,89 +99,81 @@ class ConsultantApplicationScreen extends Component {
 
 
     onSubscriptionPriceChanged = (price) => {
+        var { consultationDetails } = this.state;
+        consultationDetails.subscriptionPrice = price;
         this.setState({
-            subscriptionPrice: price,
-            errorMessage: ''
+            consultationDetails
         })
     }
 
-    onSessionTextPriceChanged = (textPrice) => {
-        this.setState({ textPrice, errorMessage: '' })
+    onTextPriceChanged = (price) => {
+        var { consultationDetails } = this.state;
+        consultationDetails.textPrice = price;
+        this.setState({
+            consultationDetails
+        })
     }
 
-    onSessionVideoPriceChanged = (videoPrice) => {
-        this.setState({ videoPrice, errorMessage: '' })
+    onAudioPriceChanged = (price) => {
+        var { consultationDetails } = this.state;
+        consultationDetails.audioPrice = price;
+        this.setState({
+            consultationDetails
+        })
     }
 
-    onSessionAudioPriceChanged = (audioPrice) => {
-        this.setState({ audioPrice, errorMessage: '' })
+    onVideoPriceChanged = (price) => {
+        var { consultationDetails } = this.state;
+        consultationDetails.videoPrice = price;
+        this.setState({
+            consultationDetails
+        })
     }
 
     onSecondComponentCompleted = async () => {
         this.props.user.isProvider = true
         const { branch, subBranch, interest, address, sessionOpened, subscriptionOpened } = this.state
-        if (subscriptionOpened) {
-            const { subscriptionPrice } = this.state
-            if (!subscriptionPrice) {
-                this.setState({ errorMessage: 'Abonelik ücreti boş bıraklamaz' })
-            } else {
-                var consultationDetails = {
-                    branch,
-                    subBranch,
-                    interest,
-                    address,
-                    subBranch,
-                    subscriptionPrice,
-                    type: 'subscription'
-                }
-                this.setState({
-                    disabled: true,
-                    secondComponentCompleted: true,
-                    loading: true
-                })
-                await this.props.createNewConsultant(this.props.user, consultationDetails)
-                this.setState({
-                    disabled: false,
-                    loading: false
-                })
+        const { subscriptionPrice, textPrice, audioPrice, videoPrice } = this.state.consultationDetails;
+        if (!subscriptionPrice) {
+            this.setState({ errorMessage: 'Abonelik ücreti boş bıraklamaz' })
+            return;
+        } else if (!textPrice) {
+            this.setState({ errorMessage: 'Mesaj ücreti boş bıraklamaz' })
+            return;
+        } else if (!videoPrice) {
+            this.setState({ errorMessage: 'Görüntülü arama ücreti boş bıraklamaz. En az ücret 0.5tl.' })
+            return;
+        } else if (!audioPrice) {
+            this.setState({ errorMessage: 'Sesli arama ücreti boş bıraklamaz. En az ücret 0.5tl.' })
+            return;
+        } else if (videoPrice < 0.5) {
+            this.setState({ errorMessage: 'Görüntülü arama ücreti 0.5tl-den büyük olmalıdır.' })
+            return;
 
-            }
-        } else if (sessionOpened) {
-            const { textPrice, audioPrice, videoPrice } = this.state;
-            if (!textPrice) {
-                this.setState({ errorMessage: 'Mesaj ücreti boş bıraklamaz' })
-            } else if (!videoPrice) {
-                this.setState({ errorMessage: 'Görüntülü arama ücreti boş bıraklamaz. En az ücret 0.5tl.' })
-            } else if (!audioPrice) {
-                this.setState({ errorMessage: 'Sesli arama ücreti boş bıraklamaz. En az ücret 0.5tl.' })
-            } else if (videoPrice < 0.5) {
-                this.setState({ errorMessage: 'Görüntülü arama ücreti 0.5tl-den büyük olmalıdır.' })
-            } else if (audioPrice < 0.5) {
-                this.setState({ errorMessage: 'Sesli arama ücreti 0.5tl-den büyük olmalıdır.' })
-            } else {
-                var consultationDetails = {
-                    branch,
-                    subBranch,
-                    interest,
-                    address,
-                    textPrice,
-                    audioPrice,
-                    videoPrice,
-                    type: 'session'
-                }
-                this.setState({
-                    disabled: true,
-                    loading: true,
-                    secondComponentCompleted: true,
-                })
-                await this.props.createNewConsultant(this.props.user, consultationDetails)
-                this.setState({
-                    disabled: false,
-                    loading: false
-                })
-               
-            }
+        } else if (audioPrice < 0.5) {
+            this.setState({ errorMessage: 'Sesli arama ücreti 0.5tl-den büyük olmalıdır.' })
+            return;
         }
+        var consultationDetails = {
+            branch,
+            subBranch,
+            interest,
+            address,
+            textPrice,
+            audioPrice,
+            videoPrice,
+            subscriptionPrice
+        }
+        this.setState({
+            disabled: true,
+            loading: true,
+            secondComponentCompleted: true,
+        })
+        await this.props.createNewConsultant(this.props.user, consultationDetails)
+        this.setState({
+            disabled: false,
+            loading: false
+        })
 
         this.props.navigation.navigate('SplashScreen')
     }
@@ -203,16 +197,16 @@ class ConsultantApplicationScreen extends Component {
                 <ApplicationSecondComponent
                     openSubscriptionDetails={this.openSubscriptionDetails} openSessionDetails={this.openSessionDetails}
                     subscriptionPrice={this.state.subscriptionPrice} onSubscriptionPriceChanged={this.onSubscriptionPriceChanged}
-                    textPrice={this.state.textPrice} onSessionTextPriceChanged={this.onSessionTextPriceChanged}
-                    audioPrice={this.state.audioPrice} onSessionAudioPriceChanged={this.onSessionAudioPriceChanged}
-                    videoPrice={this.state.videoPrice} onSessionVideoPriceChanged={this.onSessionVideoPriceChanged}
+                    textPrice={this.state.textPrice} onTextPriceChanged={this.onTextPriceChanged}
+                    audioPrice={this.state.audioPrice} onAudioPriceChanged={this.onAudioPriceChanged}
+                    videoPrice={this.state.videoPrice} onVideoPriceChanged={this.onVideoPriceChanged}
                     onNextPressed={this.onSecondComponentCompleted}
                     onBackPressed={this.backPressedOnSecond}
                     errorMessage={this.state.errorMessage}
                     footerText={this.state.footerText}
-                    subscriptionOpened={this.state.subscriptionOpened}
-                    sessionOpened={this.state.sessionOpened}
                     disabled={this.state.disabled}
+                    user={this.props.user}
+                    consultationDetails={this.state.consultationDetails}
                 />
             )
         }

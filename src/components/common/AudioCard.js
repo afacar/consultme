@@ -71,13 +71,13 @@ class AudioCard extends Component {
                     justifyContent: 'center',
                     padding: 8
                 }}>
-                    <View style={{ backgroundColor: 'transparent', flex: 1, alignItems: "center" }}>
+                    <View style={{ backgroundColor: 'transparent', flex: 1, alignItems: 'center' }}>
                         <View style={{ justifyContent: 'center', flex: 1 }}>
                             {this.renderPlayPause()}
                         </View>
                     </View>
                     <View style={{
-                        flex: 5,
+                        flex: 2,
                         justifyContent: 'center',
                         flexDirection: 'column',
                     }}>
@@ -146,23 +146,23 @@ class AudioCard extends Component {
 
     renderPlayPause = () => {
         if (this.state.playing) {
-            return <PauseButton onPress={this.pausePlaying} />
+            return <PauseButton onPress={this.pausePlaying} buttonStyle={{ marginHorizontal: '0%' }} />
         } else if (!this.state.playing) {
-            return <PlayButton onPress={this.startPlaying} />
+            return <PlayButton onPress={this.startPlaying} buttonStyle={{ marginHorizontal: '0%' }} />
         }
         if (this.props.currentAudio) {
             if (this.props.currentAudio.id === this.props.id) {
-                return <PauseButton onPress={this.pausePlaying} />
+                return <PauseButton onPress={this.pausePlaying} buttonStyle={{ marginHorizontal: '0%' }} />
             } else {
                 const sound = this.state.sound;
                 if (sound) {
                     sound.pause();
                 }
-                return <PlayButton onPress={this.startPlaying} />
+                return <PlayButton onPress={this.startPlaying} buttonStyle={{ marginHorizontal: '0%' }} />
             }
         }
         else
-            return <PlayButton onPress={this.startPlaying} />
+            return <PlayButton onPress={this.startPlaying} buttonStyle={{ marginHorizontal: '0%' }} />
     }
 
 

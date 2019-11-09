@@ -8,13 +8,12 @@ export class ChatItem extends Component {
   }
 
   render() {
-    var { chat, user, currentUser, lastMessage } = this.props
+    var { chat, user, currentUser, lastMessage, unread } = this.props
+    console.log("Unread in chat item", unread)
     var title = user.name
     let subtitle = '';
     if (lastMessage) {
       userName = (lastMessage.user._id === currentUser.uid) ? 'Siz: ' : user.name + ': ';
-      // if (chat.unread > 0)
-      //   badge = { value: theChat.unread, status: 'primary', textStyle: { fontSize: 15 } }
       if (lastMessage.text) {
         subtitle = userName + lastMessage.text;
         if (subtitle.length > 30)
@@ -52,11 +51,11 @@ export class ChatItem extends Component {
           leftAvatar={{ source: { uri: user.photoURL } }}
           rightTitle={lastMessageTime}
           rightTitleStyle={{ position: 'absolute', bottom: 5 }}
-          badge={{
-            value: 1,
+          badge={unread > 0 ? {
+            value: unread,
             textStyle: { color: 'white' },
             badgeStyle: { position: 'absolute', left: -50, top: 0 }
-          }}
+          } : undefined}
 
           containerStyle={{ borderBottomWidth: 0.5, borderBottomEndRadius: 50, borderBottomStartRadius: 100 }} />
       </TouchableOpacity>

@@ -6,19 +6,29 @@ import { Button } from 'react-native-elements';
 class ChatScreenWalletInfo extends Component {
 
     render() {
-        const { wallet, remaining } = this.props;
+        var { user, remaining, consultationType } = this.props;
+        console.log("User in CSWI", user)
+        const wallet = user.wallet
+        if (remaining < 0)
+            remaining = 0;
         return (
             <View style={{ width: '100%', backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR, flexDirection: 'row', marginVertical: 5 }}>
                 <View style={{ flex: 1, flexDirection: 'column', alignSelf: 'flex-start', alignItems: 'center', justifyContent: 'center' }}>
                     <Text>Kalan Kredi</Text>
                     <Text>{wallet} CC</Text>
                 </View>
-                <View style={{ flex: 1, flexDirection: 'column', alignSelf: 'flex-end', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text>Kalan Kullanım</Text>
-                    <Text>{remaining} Karakter</Text>
-                </View>
+
                 {
-                    this.props.consultationType === 'session' && (
+                    consultationType === 'session' && (
+                        <View style={{ flex: 1, flexDirection: 'column', alignSelf: 'flex-end', alignItems: 'center', justifyContent: 'center' }}>
+                            <Text>Kalan Kullanım</Text>
+                            <Text>{remaining} Karakter</Text>
+                        </View>
+                    )
+                }
+
+                {
+                    this.props.consultationType !== 'subscription' && (
                         <View style={{ flex: 1 }}>
                             <Button
                                 type='clear'
@@ -29,11 +39,22 @@ class ChatScreenWalletInfo extends Component {
                     )
                 }
                 {
-                    this.props.consultationType === 'subscription' && (
+                    this.props.consultationType === 'subscription' && this.props.status === 'expired' && (
                         <View style={{ flex: 1 }}>
                             <Button
                                 type='clear'
-                                title='Abone ol'
+                                title='Aboneliğe devam et'
+                                onPress={() => { this.props.startSubscription() }}
+                            />
+                        </View>
+                    )
+                }
+                {
+                    this.props.consultationType === 'subscription' && this.props.status === 'ongoing' && (
+                        <View style={{ flex: 1 }}>
+                            <Button
+                                type='clear'
+                                title='Aboneliğimi iptal et'
                                 onPress={() => { this.props.cancelSubscription() }}
                             />
                         </View>

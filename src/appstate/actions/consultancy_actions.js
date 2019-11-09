@@ -2,6 +2,7 @@ import {
     CONSULTANTS
 } from './action_types';
 import firebase from 'react-native-firebase';
+import strings from '../../Constants/Strings';
 
 export const fetchConsultants = (callback) => async (dispatch) => {
     const user = firebase.auth().currentUser;
@@ -37,7 +38,8 @@ export const startConsultancy = (user, consultant, callback) => async (dispatch)
     var consultationDetails = consultant.consultationDetails;
     consultationDetails.freeChars = 300;
     consultationDetails.counter = 0;
-
+    consultationDetails.type = 'session';
+    consultationDetails.startedAt = '' + new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear();
 
     var db = firebase.database();
     db.ref(systemNewConsultationRef).once('value', async (consultationSnap) => {
@@ -61,33 +63,48 @@ export const startConsultancy = (user, consultant, callback) => async (dispatch)
 
 export const startSubscription = (userId, consultantID) => async () => {
     let consultationDetailsRef = `consultations/${consultantID}/${userId}/consultationDetails`;
-
+    console.log("Start subscription consultant id ", consultantID)
+    console.log("Start subscription user id ", userId)
     var db = firebase.database();
-    db.ref(consultationDetailsRef).child('subscriptionPrice').once('value', priceSnap => {
-        var price = priceSnap.val();
-        var product = {
-            name: userId + '-' + consultantID
-        }
-
-        var paymentPlan = {
-            productReferenceCode: product.name,
-            name: product.name,
-            price: parseFloat(price),
-            currencyCode: 'TL',
-            paymentInterval: "DAILY",
-            paymentIntervalCount: 1,
-            planPaymentType: 'RECURRING'
-        }
-        db.ref(consultationDetailsRef).child('type').update('subscription');
+    var price = '';
+    await db.ref(consultationDetailsRef).child('subscriptionPrice').once('value', priceSnap => {
+        price = priceSnap.val();
+        console.log("Start subscription price ", price)
+    })
+    db.ref(consultationDetailsRef).update({
+        type: 'subscription',
+        status: 'ongoing',
+        subscriptionStarted: '' + new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear()
+    });
+    db.ref(`moneyTransfer/${consultantID}-${userId}/`).push({
+        from: userId,
+        to: consultantID,
+        value: price
     })
 }
 
 export const cancelSubscription = (userId, consultantID) => async () => {
-    let consultationDetailsRef = `consultations/${consultantID}/${userId}/consultationDetails/type`;
+    let consultationDetailsRef = `consultations/${consultantID}/${userId}/consultationDetails`;
 
     var db = firebase.database();
-    var product = {
-        name: userId + '-' + consultantID
+    db.ref(consultationDetailsRef).update({
+        type: 'session'
+    });
+}
+
+export const updateConsultationDetails = (user, consultationDetails) => async () => {
+    // create consultant profile
+    var consultantProfile = {
+        name: user.name,
+        photoURL: user.photoURL,
+        number: user.number,
+        uid: user.uid,
+        consultationDetails
     }
-    db.ref(consultationDetailsRef).update('session');
+    if (!consultantProfile.photoURL) {
+        consultantProfile.photoURL = strings.DEFAULT_PROFILE_PIC
+    }
+    // save into verifiedConsultants
+    let url = `verifiedConsultants/${user.uid}`
+    firebase.database().ref(url).update(consultantProfile);
 }

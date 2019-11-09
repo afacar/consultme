@@ -6,9 +6,12 @@ const { width, height } = Dimensions.get('window');
 const MODAL_HEIGHT = 4 * height / 5;
 const styles = StyleSheet.create({
     screenCenter: {
+        position: 'absolute',
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
+        bottom: 0,
+        top: 0,
+        right: 0,
+        left: 0
     },
     fullScreen: {
         flex: 1,

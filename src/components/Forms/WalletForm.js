@@ -19,7 +19,7 @@ export class WalletForm extends Component {
                                 label="Bakiye"
                                 labelStyle={{ color: colors.DARK_BLUE }}
                                 inputStyle={{ color: colors.IOS_BLUE }}
-                                value={this.props.wallet ? this.props.wallet + '' : '0'}
+                                value={this.props.user.wallet ? this.props.user.wallet + '' : '0'}
                                 multiline={false}
                                 editable={false}
                                 rightIcon={{

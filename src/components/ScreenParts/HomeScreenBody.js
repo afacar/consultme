@@ -15,7 +15,7 @@ export class HomeScreenBody extends Component {
     renderChatItem = ({ item }) => {
         console.log("render chat item", item)
         return (
-            <ChatItem chat={item.chat} lastMessage={item.lastMessage} user={item.user} currentUser={this.props.user} onPress={this.props.onChatItemPress} />
+            <ChatItem unread={item.unreadCount} chat={item.chat} lastMessage={item.lastMessage} user={item.user} currentUser={this.props.user} onPress={this.props.onChatItemPress} />
         )
     }
     renderEmptyChatItem = () => {

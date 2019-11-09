@@ -16,7 +16,7 @@ class ChatScreen extends Component {
         title: `${navigation.getParam('title')}`,
         headerTitleStyle: { textAlign: 'center', alignSelf: 'center', color: 'white' },
         headerStyle: {
-            backgroundColor: colors.DARK_BLUE,
+            backgroundColor: colors.IOS_BLUE,
         },
         headerTintColor: 'white',
         headerRight: (
@@ -30,7 +30,6 @@ class ChatScreen extends Component {
 
     state = {
         remaining: 0,
-        wallet: 0,
         composerClosed: false
     }
 
@@ -39,8 +38,12 @@ class ChatScreen extends Component {
     }
 
     componentDidMount = () => {
-        const { user, userMode, consultationDetails } = this.props;
-        console.log("Props", this.props)
+        const { userMode, user, chatId } = this.props
+        this.props.resetUnread(userMode, user.uid, chatId);
+    }
+
+    static getDerivedStateFromProps = (nextProps, prevState) => {
+        const { user, userMode, consultationDetails } = nextProps
         if (userMode && consultationDetails.type === 'session') {
             var walletChar = parseInt(user.wallet / parseInt(consultationDetails.textPrice))
             var remaining = 0;
@@ -48,8 +51,9 @@ class ChatScreen extends Component {
             composerClosed = false;
             if (remaining <= 0)
                 composerClosed = true;
-            this.setState({ wallet: user.wallet, remaining, composerClosed });
+            return ({ remaining })
         }
+        return prevState
     }
 
     saveUserMessages = (message) => {
@@ -63,14 +67,70 @@ class ChatScreen extends Component {
     }
 
     startSubscription = () => {
-        this.props.startSubscription(this.props.user.uid, this.props.chatId);
+        Alert.alert(
+            'Abonelik Başlat',
+            'Abonelik başlatınca cüzdanınınzdan tam ücret tutarında kredi düşürülecektir',
+            [
+                {
+                    text: 'Vazgeç',
+                    onPress: () => { },
+                    style: 'cancel',
+                },
+                {
+                    text: 'Başlat',
+                    onPress: () => {
+                        const { consultationDetails, user } = this.props;
+                        if (user.wallet >= consultationDetails.subscriptionPrice)
+                            this.props.startSubscription(this.props.user.uid, this.props.chatId);
+                        else {
+                            Alert.alert(
+                                'Yetersiz kredi',
+                                "Cüzdanınızda yeterli kredi bulunmamaktadır",
+                                [
+                                    {
+                                        text: 'Kapat',
+                                        onPress: () => { },
+                                        style: 'cancel'
+                                    },
+                                    {
+                                        text: 'Kredi al',
+                                        onPress: () => {
+                                            this.props.navigation.navigate("WalletScreen");
+                                        }
+                                    }
+                                ]
+                            )
+                        }
+                    }
+                },
+            ],
+            { cancelable: false }
+        )
     }
 
     cancelSubscription = () => {
-        this.props.cancelSubscription(this.props.user.uid, this.props.chatId);
+        Alert.alert(
+            'Aboneliği bitir',
+            'Aboneliğinizi yeniden başlatmak isterseniz tam ücreti yeniden ödeyeceksiniz',
+            [
+                {
+                    text: 'Vazgeç',
+                    onPress: () => { },
+                    style: 'cancel',
+                },
+                {
+                    text: 'Bitir',
+                    onPress: () => {
+                        this.props.cancelSubscription(this.props.user.uid, this.props.chatId);
+                    }
+                },
+            ],
+            { cancelable: false }
+        )
     }
 
     render() {
+        console.log("Chat Screen Rendered")
         const { messages, user, chatId, userMode, imagesExist, imageArray, consultationDetails } = this.props;
         if (!imagesExist) {
             this.props.saveImages(chatId, userMode, imageArray)
@@ -78,12 +138,13 @@ class ChatScreen extends Component {
         return (
             <View style={[styles.fullScreen, { margin: 0 }]}>
                 {
-                    userMode && consultationDetails.type === 'session' && (
-                        <ChatScreenWalletInfo wallet={this.props.user.wallet} remaining={this.state.remaining} consultationType={consultationDetails.type} startSubscription={this.startSubscription} cancelSubscription={this.cancelSubscription} />
+                    userMode && (
+                        <ChatScreenWalletInfo user={this.props.user} remaining={this.state.remaining} consultationType={consultationDetails.type} status={consultationDetails.status} startSubscription={this.startSubscription} cancelSubscription={this.cancelSubscription} />
                     )
                 }
                 <ChatScreenBody changeRemaining={this.changeRemaining} remaining={this.state.remaining} messages={messages} user={user} closeComposer={this.closeComposer} composerClosed={this.state.composerClosed}
-                    chatId={chatId} userMode={userMode} sendMessage={this.props.sendMessage} saveUserMessages={this.saveUserMessages} saveConsultantMessages={this.saveConsultantMessages} imageArray={imageArray} />
+                    chatId={chatId} userMode={userMode} sendMessage={this.props.sendMessage} saveUserMessages={this.saveUserMessages} saveConsultantMessages={this.saveConsultantMessages} imageArray={imageArray}
+                    consultationType={consultationDetails.type} status={consultationDetails.status} />
             </View>
         )
     }
@@ -107,6 +168,10 @@ class ChatScreen extends Component {
                 resolve({ status: 'success' })
             }
         })
+    }
+    componentWillUnmount() {
+        const { userMode, user, chatId } = this.props
+        this.props.resetUnread(userMode, user.uid, chatId);
     }
 }
 

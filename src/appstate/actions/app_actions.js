@@ -11,6 +11,8 @@ import {
     NEW_MESSAGE,
     CHAT_USER_LAST_MESSAGE,
     CALL_IN_PROGRESS_CONDITION,
+    CHAT_CONSULTANT_UNREAD,
+    CHAT_USER_UNREAD,
 } from './action_types';
 
 export const saveConsultant = (consultant) => (dispatch) => {
@@ -42,6 +44,14 @@ export const saveConsultantLastMessage = (lastMessageObj) => (dispatch) => {
     return dispatch({ type: CHAT_USER_LAST_MESSAGE, payload: lastMessageObj })
 }
 
+export const saveUserUnreadMessageCount = (unreadObj) => (dispatch) => {
+    return dispatch({ type: CHAT_USER_UNREAD, payload: unreadObj })
+}
+
+export const saveConsultantUnreadMessageCount = (unreadObj) => (dispatch) => {
+    return dispatch({ type: CHAT_CONSULTANT_UNREAD, payload: unreadObj })
+}
+
 export const saveConsultantMessages = (message) => (dispatch) => {
     console.log("SCM called")
     return dispatch({ type: NEW_MESSAGE, payload: message })
@@ -56,5 +66,5 @@ export const saveImages = (chatId, userMode, images) => (dispatch) => {
 }
 
 export const setCallInProgress = (condition) => (dispatch) => {
-    return dispatch({ type: CALL_IN_PROGRESS_CONDITION, payload: condition})
+    return dispatch({ type: CALL_IN_PROGRESS_CONDITION, payload: condition })
 };

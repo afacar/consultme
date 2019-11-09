@@ -21,6 +21,10 @@ export const CHAT_CONSULTANT_LAST_MESSAGE = 'chat_consultant_last_message';
 
 export const CHAT_USER_LAST_MESSAGE = 'chat_user_last_message';
 
+export const CHAT_CONSULTANT_UNREAD = 'chat_consultant_unread';
+
+export const CHAT_USER_UNREAD = 'chat_user_unread';
+
 export const CONSULTANT_CHAT = 'consultant_chat';
 
 export const SELECTED_CHAT = 'selected_chat';

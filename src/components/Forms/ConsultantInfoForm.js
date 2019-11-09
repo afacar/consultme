@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Card } from 'react-native-elements';
 
 export default class ConsultantInfoForm extends Component {
@@ -7,53 +7,40 @@ export default class ConsultantInfoForm extends Component {
     renderPricing = () => {
         const { consultant } = this.props;
         const type = this.props.consultant.consultationDetails.type;
-
-        if (type == 'subscription') {
-            return (
-                <Card>
-                    <View
-                        style={{ flex: 1, flexDirection: 'row' }}>
-                        <View style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'flex-start'
-                        }}>
-                            <Text>Aylık abonelik ücreti</Text>
-                        </View>
-
-                        <View style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'flex-start'
-                        }}>
-                            <Text>{consultant.consultationDetails.subscriptionPrice + " tl"}</Text>
-                        </View>
-                    </View>
-                </Card>
-            )
-        } else if (type == 'session') {
-            return (
-                <Card>
-                    <View
-                        style={{ flex: 1, flexDirection: 'row' }}>
-                        <View style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'flex-start'
-                        }}>
-                            <Text>Mesaj ücreti</Text>
-                        </View>
-
-                        <View style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'flex-start'
-                        }}>
-                            <Text>{consultant.consultationDetails.textPrice + " (tl/300 karakter)"}</Text>
-                        </View>
+        return (
+            <Card>
+                <ScrollView
+                    style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'flex-start'
+                    }}>
+                        <Text style={{ textAlign: 'left' }}>Abonelik ücreti</Text>
                     </View>
 
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'flex-start'
+                    }}>
+                        <Text>{consultant.consultationDetails.subscriptionPrice + " tl"}</Text>
+                    </View>
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'flex-start'
+                    }}>
+                        <Text >{'Mesaj ücreti'}</Text>
+                    </View>
 
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'flex-start'
+                    }}>
+                        <Text>{consultant.consultationDetails.textPrice + " \n(tl/ 300 \nkarakter)"}</Text>
+                    </View>
                     <View
                         style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{
@@ -61,7 +48,7 @@ export default class ConsultantInfoForm extends Component {
                             justifyContent: 'center',
                             alignItems: 'flex-start'
                         }}>
-                            <Text>Sesli konuşma ücreti</Text>
+                            <Text style={{ textAlign: 'left' }}>{`Sesli konuşma \nücreti`}</Text>
                         </View>
 
                         <View style={{
@@ -69,7 +56,7 @@ export default class ConsultantInfoForm extends Component {
                             justifyContent: 'center',
                             alignItems: 'flex-start'
                         }}>
-                            <Text>{consultant.consultationDetails.audioPrice + " (tl/dk)"}</Text>
+                            <Text >{consultant.consultationDetails.audioPrice + " (tl/ dk)"}</Text>
                         </View>
                     </View>
 
@@ -80,7 +67,7 @@ export default class ConsultantInfoForm extends Component {
                             justifyContent: 'center',
                             alignItems: 'flex-start'
                         }}>
-                            <Text>Görüntülü arama ücreti</Text>
+                            <Text style={{ textAlign: 'left' }}>{'Görüntülü arama \nücreti'}</Text>
                         </View>
 
                         <View style={{
@@ -88,12 +75,12 @@ export default class ConsultantInfoForm extends Component {
                             justifyContent: 'center',
                             alignItems: 'flex-start'
                         }}>
-                            <Text>{consultant.consultationDetails.videoPrice + " (tl/dk)"}</Text>
+                            <Text>{consultant.consultationDetails.videoPrice + " (tl/ dk)"}</Text>
                         </View>
                     </View>
-                </Card>
-            )
-        }
+                </ScrollView>
+            </Card>
+        )
     }
 
     renderSubBranch = (textType) => {

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { ScrollView, View, StyleSheet, TouchableHighlight } from 'react-native';
-import { ListItem, Button } from 'react-native-elements';
+import { ListItem, Button, Card } from 'react-native-elements';
 
 import { connect } from 'react-redux'
+import colors from '../Constants/Colors';
 
 
 class SettingsScreen extends Component {
@@ -20,8 +21,8 @@ class SettingsScreen extends Component {
                             title='Profil Ayarları'
                             titleStyle={{ fontSize: 21 }}
                             onPress={() => this.navigateNextScreen('profile')}
-                            leftIcon={{ color: '#0066ff', type: 'entypo', name: 'user' }}
-                            // rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
+                            leftIcon={{ color: colors.LIGHT_GREEN, type: 'entypo', name: 'user' }}
+                            rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
                             containerStyle={styles.btn}
                         />
                     </TouchableHighlight>
@@ -34,8 +35,8 @@ class SettingsScreen extends Component {
                             title='Arşiv'
                             titleStyle={{ fontSize: 21 }}
                             onPress={() => this.navigateNextScreen('archive')}
-                            leftIcon={{ color: '#cc3300', type: 'material', name: 'archive' }}
-                            // rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
+                            leftIcon={{ color: colors.CYAN_BLUE, type: 'material', name: 'archive' }}
+                            rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
                             containerStyle={styles.btn}
                         />
                     </TouchableHighlight>
@@ -48,8 +49,8 @@ class SettingsScreen extends Component {
                             title='Cüzdanım'
                             titleStyle={{ fontSize: 21 }}
                             onPress={() => this.navigateNextScreen('wallet')}
-                            leftIcon={{ color: '#009933', type: 'entypo', name: 'wallet' }}
-                            // rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
+                            leftIcon={{ color: colors.ORANGE, type: 'entypo', name: 'wallet' }}
+                            rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
                             containerStyle={styles.btn}
                         />
                     </TouchableHighlight>
@@ -70,6 +71,24 @@ class SettingsScreen extends Component {
                     )
                 }
 
+                {
+                    this.props.user.isProvider && (
+                        <View style={styles.itemStyle}>
+                            <TouchableHighlight onPress={() => this.navigateNextScreen('wallet')} underlayColor='white'>
+                                <ListItem
+                                    key='consultancy_settings'
+                                    title='Danışmanlık Ayarları'
+                                    titleStyle={{ fontSize: 21 }}
+                                    onPress={() => this.navigateNextScreen('consultant_settings')}
+                                    leftIcon={{ color: colors.RED, type: 'FontAwesome', name: 'edit' }}
+                                    rightIcon={{ type: 'material', name: 'keyboard-arrow-right', size: 33 }}
+                                    containerStyle={styles.btn}
+                                />
+                            </TouchableHighlight>
+                        </View>
+                    )
+                }
+
             </ScrollView >
         )
     }
@@ -86,6 +105,8 @@ class SettingsScreen extends Component {
             navigate('ArchivedChatsScreen', { navigation: this.props.navigation });
         } else if (screen === 'consultant') {
             navigate('ConsultantApplicationScreen');
+        } else if ( screen === 'consultant_settings'){
+            navigate('ConsultationSettingsScreen');
         }
     }
 }

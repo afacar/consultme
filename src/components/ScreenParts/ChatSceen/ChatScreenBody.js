@@ -10,6 +10,7 @@ import { Button, Icon } from 'react-native-elements';
 import ImageViewerModal from '../../Modals/ImageViewerModal';
 import styles from '../../../Constants/Styles';
 import Sound from 'react-native-sound';
+import colors from '../../../Constants/Colors';
 
 export class ChatScreenBody extends Component {
 
@@ -54,7 +55,7 @@ export class ChatScreenBody extends Component {
     sendMessage = (messages) => {
         console.log("Message\n", messages);
         let messagesArray = [];
-        const { chatId, user, userMode } = this.props;
+        const { chatId, user, userMode, consultationType } = this.props;
         var success = true;
         var length = 0;
         var text = false;
@@ -66,7 +67,7 @@ export class ChatScreenBody extends Component {
                 message._id = this.randIDGenerator();
             if (message.text) {
                 message._id = this.randIDGenerator();
-                if (userMode)
+                if (userMode && consultationType === 'session')
                     this.props.changeRemaining(message.text.length)
                         .then((result) => {
                             console.log("Promise result", result);
@@ -82,7 +83,7 @@ export class ChatScreenBody extends Component {
                             length = err.length;
                         })
             }
-            else if (message.audio && userMode) {
+            else if (message.audio && userMode && consultationType === 'session') {
                 this.props.changeRemaining(100)
                     .then((result) => {
                         console.log("Promise result", result);
@@ -103,20 +104,22 @@ export class ChatScreenBody extends Component {
                     url: message.image,
                     index: this.props.imageArray.length
                 })
-                this.props.changeRemaining(10)
-                    .then((result) => {
-                        console.log("Promise result", result);
-                        if (result.status !== 'success') {
+                if (userMode && consultationType === 'session') {
+                    this.props.changeRemaining(10)
+                        .then((result) => {
+                            console.log("Promise result", result);
+                            if (result.status !== 'success') {
+                                success = false;
+                                length = result.length;
+                                text = false;
+                            }
+                        })
+                        .catch((err) => {
+                            console.log("Promise err", err);
                             success = false;
-                            length = result.length;
-                            text = false;
-                        }
-                    })
-                    .catch((err) => {
-                        console.log("Promise err", err);
-                        success = false;
-                        length = err.length;
-                    })
+                            length = err.length;
+                        })
+                }
             }
             this.updateState(message);
             messagesArray.push(message);
@@ -177,12 +180,13 @@ export class ChatScreenBody extends Component {
     renderSend = (props) => {
         return (
             <Send {...props} containerStyle={{ justifyContent: "center" }}>
-                <Icon
+                {/* <Icon
                     iconStyle={{ color: '#2fb4dc', marginRight: 10 }}
                     size={24}
                     type={"font-awesome"}
                     name={"send"}>
-                </Icon>
+                </Icon> */}
+                <Text style={{ color: colors.IOS_BLUE }}>Gönder</Text>
             </Send >
         );
     }
@@ -234,7 +238,7 @@ export class ChatScreenBody extends Component {
     renderActions = (props) => {
         if (!this.state.userIsTyping) {
             return (
-                <View style={{ width: '20%', flexDirection: 'row', alignItems: 'center' }} >
+                <View style={{ width: '20%', flexDirection: 'row', alignItems: 'center', marginEnd: 10 }} >
                     <View >
                         <Button type='clear' icon={{ type: 'antDesign', name: 'camera' }} onPress={this.openPicker} />
                     </View>
@@ -268,19 +272,26 @@ export class ChatScreenBody extends Component {
     }
 
     renderInputToolbar = (props) => {
-        const { userMode, remaining, composerClosed } = this.props;
+        const { userMode, remaining, composerClosed, consultationType, status } = this.props;
         console.log("User mode", userMode);
         console.log("Remaining", remaining);
         console.log("composerClosed", composerClosed);
 
-        if (!(userMode && (remaining <= 0 || composerClosed))) {
+        if (!userMode || (userMode && consultationType === 'session' && (remaining >= 0 || !composerClosed)) || (userMode && consultationType === 'subscription' && status === 'ongoing')) {
             return (
                 <InputToolbar {...props} />
             )
-        } else {
+        } else if ((userMode && consultationType === 'subscription' && status === 'expired')) {
             return (
                 <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>Cüzdanınızda yeterli bakiye bulunmamaktadır</Text>
+                    <Text style={{ textAlign: 'center' }}>Aboneliğinizin süresi bitmiştir lütfen aboneliğinizi yenileyin</Text>
+                </View>
+            )
+        }
+        else {
+            return (
+                <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ textAlign: 'center' }}>Cüzdanınızda yeterli bakiye bulunmamaktadır</Text>
                 </View>
             )
         }
@@ -307,7 +318,7 @@ export class ChatScreenBody extends Component {
                     }}
                     renderInputToolbar={this.renderInputToolbar}
                     scrollToBottom={true}
-                    placeholder='Mesaj yazın...'
+                    placeholder='Mesajınızı girin...'
                     renderSend={this.renderSend}
                     renderBubble={this.renderBubble}
                     renderActions={this.renderActions}
@@ -330,11 +341,16 @@ export class ChatScreenBody extends Component {
         // More info on all the options is below in the API Reference... just some common use cases shown here
         const options = {
             title: 'Fotoğraf Seç',
+
+            chooseFromLibraryButtonTitle: 'Galeriden seç',
+            takePhotoButtonTitle: 'Kamerayı aç',
+            cancelButtonTitle: 'Kapat',
+
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
                 allowsEditing: true,
-            },
+            }
         };
 
         ImagePicker.showImagePicker(options, (response) => {
