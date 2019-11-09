@@ -58,10 +58,8 @@ class SplashScreen extends Component {
 
             firebase.database().ref('wallets').child(user.uid).on('value', snapshot => {
                 console.log("Wallet in splash screen", snapshot.val())
-                if (snapshot.exists()) {
-                    user.wallet = snapshot.val() || 0;
-                    console.log("Wallet in splash screen", snapshot.val())
-                }
+                user.wallet = snapshot.val() || 0;
+                console.log("Wallet in splash screen", snapshot.val())
                 this.props.saveUser(user);
             })
             console.log("here 3")

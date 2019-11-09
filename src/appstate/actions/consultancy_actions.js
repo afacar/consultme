@@ -8,6 +8,8 @@ export const fetchConsultants = (callback) => async (dispatch) => {
     const user = firebase.auth().currentUser;
     let url = 'verifiedConsultants/';
     firebase.database().ref(url).limitToFirst(25).on('child_changed', consultantSnap => {
+        console.log("User", user);
+        console.log("ConsultantSnap value", consultantSnap.val());
         if (user) {
             if (consultantSnap.val().uid !== user.uid)
                 callback(consultantSnap.val());
@@ -17,7 +19,8 @@ export const fetchConsultants = (callback) => async (dispatch) => {
         }
     })
     firebase.database().ref(url).limitToFirst(25).on('child_added', consultantSnap => {
-        if (user) {
+        console.log("User", user);
+        console.log("ConsultantSnap value", consultantSnap.val()); if (user) {
             if (consultantSnap.val().uid !== user.uid)
                 callback(consultantSnap.val());
         } else {

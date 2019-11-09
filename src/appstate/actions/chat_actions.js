@@ -26,25 +26,29 @@ export const fetchUserUnreadMessages = (user, callback) => async () => {
     var db = firebase.database();
     db.ref(unreadURL).on('child_added', unreadSnap => {
         console.log("UnreadSnap", unreadSnap.val())
-        var consultantId = unreadSnap.key;
-        var unread = unreadSnap.val()[user.uid].unread;
-        var unreadObj = {
-            id: consultantId,
-            unread
+        if (unreadSnap.val()[user.uid]) {
+            var consultantId = unreadSnap.key;
+            var unread = unreadSnap.val()[user.uid].unread;
+            var unreadObj = {
+                id: consultantId,
+                unread
+            }
+            console.log("UnreadObj in chat actions", unreadObj)
+            callback(unreadObj);
         }
-        console.log("UnreadObj in chat actions", unreadObj)
-        callback(unreadObj);
     })
     db.ref(unreadURL).on('child_changed', unreadSnap => {
         console.log("UnreadSnap", unreadSnap.val())
-        var consultantId = unreadSnap.key;
-        var unread = unreadSnap.val()[user.uid].unread;
-        var unreadObj = {
-            id: consultantId,
-            unread
+        if (unreadSnap.val()[user.uid]) {
+            var consultantId = unreadSnap.key;
+            var unread = unreadSnap.val()[user.uid].unread;
+            var unreadObj = {
+                id: consultantId,
+                unread
+            }
+            console.log("UnreadObj in chat actions", unreadObj)
+            callback(unreadObj);
         }
-        console.log("UnreadObj in chat actions", unreadObj)
-        callback(unreadObj);
     })
 }
 
