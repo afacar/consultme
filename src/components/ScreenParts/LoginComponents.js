@@ -3,7 +3,6 @@ import { Text, ScrollView, View, StyleSheet, TouchableOpacity } from 'react-nati
 import { CardItem } from '../common/CardItem';
 import { Input, Button, Avatar, Card, Icon } from 'react-native-elements';
 import { LoginIcon, VerifyIcon, NextIcon } from '../common/Icons';
-import { Switch } from 'react-native-gesture-handler';
 import SwitchExample from '../common/Switch.js'
 import strings from '../../Constants/Strings';
 

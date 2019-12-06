@@ -30,7 +30,8 @@ class ProfileScreen extends Component {
     profile: {},
     disabled: true,
     loading: false,
-    saveButtonTitle: saveButtonDefaultTitle
+    saveButtonTitle: saveButtonDefaultTitle,
+    switch1Value: false
   }
 
   componentDidMount() {
@@ -162,6 +163,11 @@ class ProfileScreen extends Component {
     })
   }
 
+  toggleSwitch1 = (value) => {
+    console.log("Value", value);
+    this.setState({ switch1Value: value, disabled: false })
+  }
+
   resetState = () => {
     this.setState({
       loading: false,
@@ -182,7 +188,9 @@ class ProfileScreen extends Component {
       <ScrollView>
         <ProfileForm saveButtonTitle={this.state.saveButtonTitle} user={this.props.user}
           onChangeName={this.onChangeName} disabled={this.state.disabled} loading={this.state.loading}
-          saveButtonPressed={this.saveButtonPressed} onAvatarPressed={this.onAvatarPressed} signOut={this.signOut} />
+          saveButtonPressed={this.saveButtonPressed} onAvatarPressed={this.onAvatarPressed} signOut={this.signOut}
+          toggleSwitch1={this.toggleSwitch1}
+          switch1Value={this.state.switch1Value} isProvider={this.props.user.isProvider} />
       </ScrollView>
     )
   }

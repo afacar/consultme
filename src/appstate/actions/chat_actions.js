@@ -263,6 +263,60 @@ const readFromFirebase = (url) => {
     })
 }
 
+export const onIncomingCallListener = (userId, callback) => async () => {
+    firebase.database().ref(`calls/${userId}`).on('value', incomingCallSnap => {
+        var incomingCall = incomingCallSnap.val();
+        if (incomingCall) {
+            callback({ callerId: incomingCall.callerId, type: incomingCall.type, userMode: incomingCall.peerMode, remaining: incomingCall.remaining, price: incomingCall.price })
+        } else {
+            callback({ callerId: -1, type: undefined });
+        }
+    })
+}
+
+export const sendCall = (userId, userMode, peerId, type, callback) => async () => {
+    console.log(peerId)
+    try {
+        firebase.database().ref(`calls/${peerId}`).once('value', async (incomingCallSnap) => {
+            if (incomingCallSnap.exists()) {
+                callback({ code: -1 })
+            } else {
+                var walletRef = userMode ? `wallets/${userId}` : `wallets/${peerId}`
+                var priceRef = userMode ? `consultations/${peerId}/${userId}/consultationDetails/${type}Price` : `consultations/${userId}/${peerId}/consultationDetails/${type}Price`;
+                var wallet = -1;
+                var price = -1;
+                await firebase.database().ref(walletRef).once('value', userWalletSnap => {
+                    wallet = userWalletSnap.val();
+                })
+                await firebase.database().ref(priceRef).once('value', consultationDetailsSnap => {
+                    price = consultationDetailsSnap.val()
+                })
+                var remaining = wallet * 60 / price
+                await firebase.database().ref(`calls/${peerId}`).set({
+                    callerId: userId,
+                    type,
+                    peerMode: !userMode,
+                    remaining,
+                    price
+                })
+                callback({ code: 1, remaining, price })
+            }
+        })
+    } catch (e) {
+        callback(0);
+    }
+}
+
+export const endCall = (userId, peerId, callback) => async () => {
+    try {
+        firebase.database().ref(`calls/${peerId}`).remove();
+        firebase.database().ref(`calls/${userId}`).remove();
+        callback(1)
+    } catch (e) {
+        callback(0);
+    }
+}
+
 export const setAudio = (id) => async (dispatch) => {
     return dispatch({ type: CHATS_AUDIO, payload: { id } })
 }

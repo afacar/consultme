@@ -103,6 +103,60 @@ const styles = StyleSheet.create({
         height: height,
         margin: 10,
         backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR
+    },
+    buttonBar: {
+        height: 50,
+        backgroundColor: colors.IOS_BLUE,
+        display: 'flex',
+        width: '100%',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignContent: 'space-around'
+    },
+    customHeader: {
+        height: 50,
+        backgroundColor: colors.IOS_BLUE,
+        display: 'flex',
+        width: '100%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#F4F4F4'
+    },
+    absView: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'space-between',
+    },
+    videoView: {
+        padding: 5,
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        zIndex: 100
+    },
+    localView: {
+        flex: 1
+    },
+    remoteView: {
+        width: (width - 40) / 3,
+        height: (width - 40) / 3,
+        margin: 5
+    },
+    bottomView: {
+        padding: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-around'
     }
 })
 

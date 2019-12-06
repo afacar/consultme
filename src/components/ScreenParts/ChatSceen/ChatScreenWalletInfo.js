@@ -12,7 +12,7 @@ class ChatScreenWalletInfo extends Component {
         if (remaining < 0)
             remaining = 0;
         return (
-            <View style={{ width: '100%', backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR, flexDirection: 'row', marginVertical: 5 }}>
+            <View style={{ width: '100%', backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR, flexDirection: 'row', marginVertical: 5, marginTop: 55 }}>
                 <View style={{ flex: 1, flexDirection: 'column', alignSelf: 'flex-start', alignItems: 'center', justifyContent: 'center' }}>
                     <Text>Kalan Kredi</Text>
                     <Text>{wallet} CC</Text>

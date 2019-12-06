@@ -1,22 +1,21 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import { KeyboardAvoidingView, View, Text } from 'react-native';
 
-import { Card, Input, Avatar } from 'react-native-elements';
+import { Card, Input, Avatar, Button, Icon } from 'react-native-elements';
 import { SaveButton, SignOutButton } from '../common/Buttons';
 
 import strings from '../../Constants/Strings';
 import colors from '../../Constants/Colors';
+import SwitchExample from '../common/Switch.js'
 
 class ProfileForm extends Component {
 
-
   render() {
-
     return (
       <KeyboardAvoidingView style={{ flexDirection: 'column' }}>
         <Card title="Bilgileriniz" containerStyle={styles.containerStyle}>
 
-          <View style={{ margin: 10, alignItems: 'center', flexDirection: 'column', flex: 1 }}>
+          <View style={{ alignItems: 'center', flexDirection: 'column', flex: 1 }}>
             <Avatar
               onPress={this.props.onAvatarPressed}
               size="xlarge"
@@ -30,6 +29,17 @@ class ProfileForm extends Component {
               placeholder="Ör. Ahmet Yılmaz"
               onChangeText={(name) => { this.props.onChangeName(name) }}
             />
+            {
+              this.props.isProvider && (
+                <View style={{ flexDirection: 'row' }} >
+                  <Text style={{ textAlign: 'center', fontSize: 18, color: colors.IOS_BLUE }}>Sadece Danışman Hesabı</Text>
+                  <SwitchExample
+                    toggleSwitch1={this.props.toggleSwitch1}
+                    switch1Value={this.props.switch1Value} />
+                  <Icon name='info' type='Feather' color={colors.CYAN_BLUE} />
+                </View>
+              )
+            }
           </View>
         </Card>
 

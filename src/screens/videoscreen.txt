@@ -1,0 +1,197 @@
+import React, { Component } from 'react';
+import { View, NativeModules, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { AgoraView, RtcEngine } from 'react-native-agora';
+
+import * as actions from '../appstate/actions';
+import { connect } from 'react-redux';
+
+
+import styles from '../Constants/Styles';
+import { Button } from 'react-native-elements';
+
+const { Agora } = NativeModules;
+
+const {
+    FPS30,
+    AudioProfileDefault,
+    AudioScenarioDefault,
+    Host,
+    Adaptative
+} = Agora
+
+class VideoScreen extends Component {
+    state = {
+        uid: Math.floor(Math.random() * 100),
+        peerIds: [],
+        appid: 'a0ee6b5742ca4cfe84d1e9fa4c97b946',
+        channelName: 'channel',
+        vidMute: false,
+        audMute: false,
+        joinSucceed: false,
+    };
+
+    componentWillMount() {
+        const config = {
+            appid: this.state.appid,
+            channelName: this.state.channelName,
+            videoEncoderConfig: {
+                width: 360,
+                height: 480,
+                bitrate: 1,
+                frameRate: FPS30,
+                orientationMode: Adaptative
+            },
+            audioProfile: AudioProfileDefault,
+            audioScenario: AudioScenarioDefault
+        };
+        RtcEngine.init(config)
+    }
+
+    componentDidMount() {
+        RtcEngine.on('videoSizeChanged', (data) => {
+            console.log("[RtcEngine] videoSizeChanged ", data)
+        })
+
+        RtcEngine.on('userJoined', (data) => {
+            console.log("User joined", data)
+            const { peerIds } = this.state;
+            console.log("Peer ids ", peerIds)
+            if (peerIds.indexOf(data.uid) === -1) {
+                this.setState({
+                    peerIds: [...this.state.peerIds, data.uid]
+                })
+            }
+        })
+        RtcEngine.on('joinChannelSuccess', (data) => {
+            this.setState({
+                joinSucceed: true
+            })
+            RtcEngine.startPreview();
+        })
+        RtcEngine.on('userOffline', (data) => {
+            this.setState({
+                peerIds: this.state.peerIds.filter(uid => uid !== data.uid),
+            })
+
+        })
+        RtcEngine.joinChannel(this.state.channelName, this.state.uid).then(_ => {
+            console.log('my id is ', this.state.uid);
+            var { peerIds } = this.state;
+            peerIds.unshift(this.state.uid);
+            this.setState({
+                peerIds
+            })
+        });
+        RtcEngine.enableAudio();
+        RtcEngine.enableVideo();
+    }
+
+    toggleAudio = () => {
+        let mute = this.state.audMute
+        RtcEngine.muteLocalAudioStream(!mute);
+        this.setState({
+            audMute: !mute
+        })
+    }
+
+    toggleVideo = () => {
+        let mute = this.state.vidMute
+        RtcEngine.muteLocalVideoStream(!mute);
+        this.setState({
+            vidMute: !mute
+        })
+    }
+
+    endCall = () => {
+        RtcEngine.destroy();
+        this.props.navigation.goBack();
+    }
+
+    componentWillUnmount() {
+        if (this.state.joinSucceed) {
+            RtcEngine.leaveChannel().then(res => {
+                RtcEngine.destroy();
+            }).catch(err => {
+                RtcEngine.destroy();
+                console.log("leave channel failed", err);
+            })
+        } else {
+            RtcEngine.destroy();
+        }
+    }
+
+    peerClick = (data) => {
+        console.log("peer click data ", data)
+        let peerIdToSwap = this.state.peerIds.indexOf(data);
+        this.setState(prevState => {
+            let currentPeers = [...prevState.peerIds];
+            let tmp = currentPeers[peerIdToSwap];
+            currentPeers[peerIdToSwap] = currentPeers[0];
+            currentPeers[0] = tmp;
+            return { peerIds: currentPeers }
+        })
+    }
+
+    videoView() {
+        return (
+            <View style={{ flex: 1 }}>
+                <AgoraView style={{ flex: 1 }} showLocalVideo={true} mode={1} />
+                {/* {
+                    this.state.peerIds.length > 1 ?
+                        <View style={{ flex: 1 }}>
+                            <View style={{ height: Dimensions.get('window').height * 3 / 4 - 50 }}>
+                                 <AgoraView style={{ flex: 1 }} remoteUid={this.state.peerIds[0]} mode={1} />
+                                <Text>SELAMMMMMM</Text>
+                            </View>
+                            <View style={{ height: Dimensions.get('window').height / 4 }}>
+                                {
+                                    this.state.peerIds.slice(1).map((data) => {
+                                        <TouchableOpacity style={{ flex: 1 }} onPress={() => this.peerClick(data)} key={data}>
+                                             <AgoraView style={{ flex: 1 }} remoteUid={data} mode={1} key={data} />
+                                            <Text style={{ color: 'white' }}>UID: {data}</Text>
+                                        </TouchableOpacity>
+                                    })
+                                }
+                            </View>
+                        </View> :
+                        this.state.peerIds.length > 0 ?
+                            <View style={{ flex: 1 }}>
+                                <Text >UID: {this.state.peerIds[0]}</Text>
+                                <Text >UID: {this.state.peerIds[1]}</Text>
+                                <AgoraView style={{ flex: 1 }} remoteUid={this.state.peerIds[0]} mode={1} />
+                            </View> :
+                            <Text>
+                                No users connected
+                            </Text>
+                }
+                {
+                    !this.state.vidMute
+                        ?
+                        <AgoraView style={{ flex: 1 }} showLocalVideo={true} mode={1} />
+                        : <View style={{ flex: 1 }}><Text>Selam</Text></View>
+                }
+                <View style={styles.buttonBar} >
+                    <Button type='clear' title={this.state.audMute ? 'micOn' : 'micOff'}
+                        titleStyle={{ color: 'white' }}
+                        onPress={() => this.toggleAudio()} />
+                    <Button type='clear' title={this.state.vidMute ? 'vidOn' : 'vidOff'}
+                        titleStyle={{ color: 'white' }}
+                        onPress={() => this.toggleVideo()} />
+                    <Button type='clear' title={'end call'}
+                        titleStyle={{ color: 'white' }}
+                        onPress={() => this.endCall()} />
+                </View> */}
+            </View>
+        )
+    }
+
+    render() {
+        return this.videoView();
+    }
+}
+const mapStateToProps = (state) => {
+    const { auth } = state;
+    const { user } = auth
+    return { user }
+}
+export default connect(mapStateToProps, actions)(VideoScreen);

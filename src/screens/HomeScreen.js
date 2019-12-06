@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity, PermissionsAndroid, Alert } from 'react-native';
+import InCallManager from 'react-native-incall-manager';
 
 import { Icon } from 'react-native-elements';
 
@@ -114,10 +115,65 @@ class HomeScreen extends Component {
 
     componentDidMount() {
         // call listeners
-        this.setupListeners();
+        // this.setupListeners();
         // preparation for Audio
         this.checkAudioPermission();
+        this.checkCameraPermission();
         this.checkNotificationPermission();
+        this.checkRecordPermission() // return promise
+        this.setUpCallListener();
+    }
+
+    checkCameraPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.CAMERA);
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('You can use the camera');
+            } else {
+                console.log('Camera permission denied');
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    }
+
+    setUpCallListener = () => {
+        const { user } = this.props;
+        this.props.onIncomingCallListener(user.uid, (call) => {
+            var callerId = call.callerId;
+            var type = call.type;
+            var userMode = call.peerMode;
+            var remaining = call.remaining;
+            var price = call.price;
+            console.log("CAll", call)
+            if (callerId != -1) {
+                if (type === 'audio') {
+                    InCallManager.startRingtone();
+                    this.props.setSelectedChatId(callerId, this.state.consultantsSelected)
+                    this.props.navigation.navigate('AudioScreen', { incomingCall: callerId + "-" + user.uid, userMode, remaining, price })
+                } else if (type === 'video') {
+                    InCallManager.startRingtone();
+                    this.props.setSelectedChatId(callerId, this.state.consultantsSelected)
+                    this.props.navigation.navigate('VideoScreen', { incomingCall: callerId + "-" + user.uid, userMode, remaining, price })
+                }
+            } else {
+                InCallManager.stopRingtone();
+                this.props.navigation.goBack();
+            }
+        })
+    }
+
+    checkRecordPermission = () => {
+        if (InCallManager.recordPermission !== 'granted') {
+            InCallManager.requestRecordPermission()
+                .then((requestedRecordPermissionResult) => {
+                    console.log("InCallManager.requestRecordPermission() requestedRecordPermissionResult: ", requestedRecordPermissionResult);
+                })
+                .catch((err) => {
+                    console.log("InCallManager.requestRecordPermission() catch: ", err);
+                });
+        }
     }
 
     checkNotificationPermission = async () => {
@@ -182,9 +238,9 @@ class HomeScreen extends Component {
             return Promise.resolve(true);
         }
         const rationale = {
-            title: "Microphone Permission",
+            title: "Mikrofon Kullanma Izni",
             message:
-                "AudioExample needs access to your microphone so you can record audio."
+                "Uygulama içi mikrofon kullanımına izin gerekmektedir.."
         };
         const result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, rationale);
         return result === true || result === PermissionsAndroid.RESULTS.GRANTED;

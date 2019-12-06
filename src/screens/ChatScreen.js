@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, Text } from 'react-native';
 import { connect } from 'react-redux';
+
 
 import * as actions from '../appstate/actions';
 import styles from '../Constants/Styles';
@@ -9,23 +10,26 @@ import strings from '../Constants/Strings';
 import { Button } from 'react-native-elements';
 import ChatScreenWalletInfo from '../components/ScreenParts/ChatSceen/ChatScreenWalletInfo';
 import colors from '../Constants/Colors';
+import firebase from 'react-native-firebase';
 
 class ChatScreen extends Component {
 
     static navigationOptions = ({ navigation }) => ({
-        title: `${navigation.getParam('title')}`,
-        headerTitleStyle: { textAlign: 'center', alignSelf: 'center', color: 'white' },
-        headerStyle: {
-            backgroundColor: colors.IOS_BLUE,
-        },
-        headerTintColor: 'white',
-        headerRight: (
-            <View>
-                <Button icon={{ name: 'video', type: 'feather', color: 'white', size: 24 }} type='clear' onPress={() => {
-                    navigation.navigate('VideoScreen')
-                }} />
-            </View>
-        )
+        header: null
+        // title: `${navigation.getParam('title')}`,
+        // headerTitleStyle: { textAlign: 'center', alignSelf: 'center', color: 'white' },
+        // headerStyle: {
+        //     backgroundColor: colors.IOS_BLUE,
+        // },
+        // headerTintColor: 'white',
+        // headerRight: (
+        //     <View style={{ flexDirection: 'row' }}>
+        //         <Button icon={{ name: 'phone', type: 'feather', color: 'white', size: 24 }} type='clear' onPress={async () => {
+        //             navigation.navigate('AudioScreen')
+        //         }} />
+        //         <Button icon={{ name: 'video', type: 'feather', color: 'white', size: 24 }} type='clear' onPress={() => navigation.navigate("VideoScreen")} />
+        //     </View>
+        // )
     });
 
     state = {
@@ -44,7 +48,8 @@ class ChatScreen extends Component {
 
     static getDerivedStateFromProps = (nextProps, prevState) => {
         const { user, userMode, consultationDetails } = nextProps
-        if (userMode && consultationDetails.type === 'session') {
+        var consultationType = consultationDetails.type
+        if (userMode && consultationType === 'session') {
             var walletChar = parseInt(user.wallet / parseInt(consultationDetails.textPrice))
             var remaining = 0;
             remaining = parseInt(walletChar * 300) + parseInt(consultationDetails.freeChars) - parseInt(consultationDetails.counter);
@@ -129,14 +134,89 @@ class ChatScreen extends Component {
         )
     }
 
+    makeCall = (callType) => {
+        const { user, userMode, consultationDetails } = this.props
+        var consultationType = consultationDetails.type;
+        if (callType === 'audio') {
+            if (userMode && consultationType === 'session') {
+                if (user.wallet <= 0) {
+                    Alert.alert(
+                        'Yetersiz Kredi',
+                        'Sesli arama yapmak için yeterli krediniz yok.',
+                        [
+                            {
+                                text: 'Tamam',
+                                onPress: () => { },
+                                style: 'cancel',
+                            },
+                            {
+                                text: 'Kredi al',
+                                onPress: () => {
+                                    this.props.navigation.navigate("WalletScreen");
+                                }
+                            },
+                        ]
+                    )
+                } else {
+                    this.props.navigation.navigate("AudioScreen", {
+                        userMode
+                    })
+                }
+            }
+            else {
+                this.props.navigation.navigate("AudioScreen")
+            }
+        } else if (callType === 'video') {
+            if (userMode && consultationType === 'session') {
+                if (user.wallet <= 0) {
+                    Alert.alert(
+                        'Yetersiz Kredi',
+                        'Görüntülü arama yapmak için yeterli krediniz yok.',
+                        [
+                            {
+                                text: 'Tamam',
+                                onPress: () => { },
+                                style: 'cancel',
+                            },
+                            {
+                                text: 'Kredi al',
+                                onPress: () => {
+                                    this.props.navigation.navigate("WalletScreen");
+                                }
+                            },
+                        ]
+                    )
+                } else {
+                    this.props.navigation.navigate("VideoScreen", {
+                        userMode
+                    })
+                }
+            }
+            else {
+                this.props.navigation.navigate("VideoScreen")
+            }
+        }
+    }
+
     render() {
-        console.log("Chat Screen Rendered")
+        console.log("Chat Screen Rendered", this.props);
         const { messages, user, chatId, userMode, imagesExist, imageArray, consultationDetails } = this.props;
         if (!imagesExist) {
             this.props.saveImages(chatId, userMode, imageArray)
         }
         return (
             <View style={[styles.fullScreen, { margin: 0 }]}>
+                <View style={styles.customHeader}>
+                    <Button type='clear' icon={{ name: 'arrow-back', type: 'MaterialIcons', color: 'white' }}
+                        onPress={() => { this.props.navigation.goBack() }} />
+                    <Text style={{ marginLeft: 15, color: 'white', fontSize: 18 }}>{this.props.peer.name}</Text>
+                    <View style={{ position: 'absolute', right: 0 }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Button icon={{ name: 'phone', type: 'feather', color: 'white', size: 24 }} type='clear' onPress={async () => this.makeCall('audio')} />
+                            <Button icon={{ name: 'video', type: 'feather', color: 'white', size: 24 }} type='clear' onPress={() => this.makeCall('video')} />
+                        </View>
+                    </View>
+                </View>
                 {
                     userMode && (
                         <ChatScreenWalletInfo user={this.props.user} remaining={this.state.remaining} consultationType={consultationDetails.type} status={consultationDetails.status} startSubscription={this.startSubscription} cancelSubscription={this.cancelSubscription} />
@@ -215,12 +295,14 @@ const mapStateToProps = (state) => {
         }
     }
 
+    const peer = chat['consultant_profiles'][app.selectedChat.chatId] || chat['user_profiles'][app.selectedChat.chatId]
+
     if (!app.selectedChat.images) {
         console.log("messages updated")
-        return ({ messages: selectedChat.chat, user: auth.user, chatId, userMode, imageArray, imagesExist: false, consultationDetails })
+        return ({ messages: selectedChat.chat, user: auth.user, chatId, userMode, peer, imageArray, imagesExist: false, consultationDetails })
     } else {
         console.log("messages updated 1")
-        return ({ messages: selectedChat.chat, user: auth.user, chatId, userMode, imageArray: app.selectedChat.images, imagesExist: true, consultationDetails })
+        return ({ messages: selectedChat.chat, user: auth.user, chatId, userMode, peer, imageArray: app.selectedChat.images, imagesExist: true, consultationDetails })
     }
 }
 

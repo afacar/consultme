@@ -9,6 +9,8 @@ import store from './src/appstate/store';
 import firebase from 'react-native-firebase';
 import ConnectyCube from 'connectycube-reactnative';
 
+import {} from 'react-native-agora'
+
 class App extends Component {
 
 
@@ -22,6 +24,8 @@ class App extends Component {
       messagingSenderId: "384797318674",
       appId: "1:384797318674:web:88fd84a89629934f"
     };
+
+
     // Initialize Firebase
     if (!firebase.apps.length)
       firebase.initializeApp(firebaseConfig)
@@ -32,7 +36,7 @@ class App extends Component {
       authSecret: '97CA47KGt8vsa7c'
     };
 
-    ConnectyCube.init(CREDENTIALS, { debug: 1 })
+    // ConnectyCube.init(CREDENTIALS, { debug: 1 })
   }
 
   render() {

@@ -51,8 +51,6 @@ class SplashScreen extends Component {
                 } else {
                     user.isProvider = false;
                 }
-                ccid = snapshot.child('CCID').val();
-                ccpass = snapshot.child("CCPASS").val()
             })
             console.log("here 2")
 
@@ -111,37 +109,30 @@ class SplashScreen extends Component {
                     this.props.saveConsultantUnreadMessageCount(unread);
                 })
             }
-            console.log("CCID", ccid)
-            // Connecty Cube login
-            let userProfile = {
-                id: ccid,
-                login: user.number.slice(1),
-                password: ccpass
-            }
-            ConnectyCube.createSession((error, session) => {
-                if (session) {
-                    console.log("session", session);
-                    this.props.userIsLogging(true);
-                    UserService.signin(userProfile)
-                        .then((user) => {
-                            ChatService.connect(userProfile)
-                                .then((contacts) => {
-                                    console.log("User", user);
-                                    console.log("Contacts", contacts);
-                                    this.props.userLogin(user);
-                                    this.props.userIsLogging(false);
-                                })
-                                .catch(e => {
-                                    this.props.userIsLogging(false);
-                                })
-                        })
-                        .catch(e => {
-                            this.props.userIsLogging(false);
-                        })
-                } else {
-                    console.log("session err", error);
-                }
-            })
+            // ConnectyCube.createSession((error, session) => {
+            //     if (session) {
+            //         console.log("session", session);
+            //         this.props.userIsLogging(true);
+            //         UserService.signin(userProfile)
+            //             .then((user) => {
+            //                 ChatService.connect(userProfile)
+            //                     .then((contacts) => {
+            //                         console.log("User", user);
+            //                         console.log("Contacts", contacts);
+            //                         this.props.userLogin(user);
+            //                         this.props.userIsLogging(false);
+            //                     })
+            //                     .catch(e => {
+            //                         this.props.userIsLogging(false);
+            //                     })
+            //             })
+            //             .catch(e => {
+            //                 this.props.userIsLogging(false);
+            //             })
+            //     } else {
+            //         console.log("session err", error);
+            //     }
+            // })
         }
         this.props.saveUser(user);
         this.props.fetchConsultants((consultant) => {

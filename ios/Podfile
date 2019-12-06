@@ -41,6 +41,8 @@ target 'consultme' do
   pod 'react-native-webrtc', :path => '../node_modules/react-native-webrtc'
 
 
+  pod 'react-native-agora', :path => '../node_modules/react-native-agora'
+
   target 'consultmeTests' do
     inherit! :search_paths
     # Pods for testing
