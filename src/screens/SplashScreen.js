@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import firebase from 'react-native-firebase';
 import * as actions from '../appstate/actions';
-import ConnectyCube from 'connectycube-reactnative'
-
 import { connect } from 'react-redux';
-
-import UserService from '../Backend/ConnectyCube/services/UserService'
-import ChatService from '../Backend/ConnectyCube/services/ChatService'
 
 const preparingText1 = 'Uygulama Başlatılıyor.';
 const preparingText2 = 'Uygulama Başlatılıyor..';

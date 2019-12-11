@@ -5,6 +5,13 @@ import { Button } from 'react-native-elements';
 
 class ChatScreenWalletInfo extends Component {
 
+
+    shouldComponentUpdate =  (nextProps) => {
+        console.log(nextProps.user.wallet)
+        console.log(this.props.wallet)
+        
+        return nextProps.user.wallet === this.props.wallet
+    }
     render() {
         var { user, remaining, consultationType } = this.props;
         console.log("User in CSWI", user)

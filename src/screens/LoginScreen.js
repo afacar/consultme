@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, Alert, ActivityIndicator, Platform, KeyboardAvoidingView } from 'react-native';
+import { Text, Alert, ActivityIndicator, Platform, KeyboardAvoidingView } from 'react-native';
 
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
-import ConnectyCube from 'connectycube-reactnative'
 
 import { connect } from 'react-redux';
 import * as actions from '../appstate/actions';
 
 import styles from '../Constants/Styles';
 import { LoginPhoneNumberComponent, ProfilePictureComponent, PhoneNumberVerificationComponent } from '../components/ScreenParts/LoginComponents';
-
-import UserService from '../Backend/ConnectyCube/services/UserService';
-import ChatService from '../Backend/ConnectyCube/services/ChatService';
 
 class LoginScreen extends Component {
 
@@ -81,7 +77,6 @@ class LoginScreen extends Component {
                 message: 'İsim boş bırakılamaz'
             })
         } else {
-            this.handleConnectyCubeLogin();
             if (!this.state.switch1Value) {
                 this.setState({
                     loading: true,
@@ -150,11 +145,6 @@ class LoginScreen extends Component {
                     var credential = firebase.auth.PhoneAuthProvider.credential(confirmResult.verificationId, verificationCode);
                     firebase.auth().signInWithCredential(credential).then((result) => {
                         console.log("Sign in result", result)
-                        var user = result.user;
-                        user.getIdToken().then((idToken) => {
-                            console.log("Get id token", idToken)
-                            // this.handleConnectyCubeLogin(idToken);
-                        })
                     })
                 })
                 .catch(error => {
@@ -167,93 +157,6 @@ class LoginScreen extends Component {
 
     generateRandomPass = () => {
         return Math.random().toString(36).slice(-8);
-    }
-
-    handleConnectyCubeLogin = () => {
-        var pass = this.generateRandomPass();
-        console.log("pass", pass)
-        // ConnectyCube.createSession((error, session) => {
-        //     if (session) {
-        //         console.log("session", session);
-        //         firebase.database().ref(`users/${this.state.profile.uid}/CCID`).once('value', async ccidSnap => {
-        //             if (ccidSnap.exists()) {
-        //                 var ccid = '';
-        //                 var ccpass = '';
-        //                 await firebase.database().ref('users').child(this.state.profile.uid).once('value', snapshot => {
-        //                     ccid = snapshot.child('CCID').val();
-        //                     ccpass = snapshot.child("CCPASS").val()
-        //                 });
-        //                 let userProfile = {
-        //                     id: ccid,
-        //                     login: this.state.profile.number.slice(1),
-        //                     password: ccpass
-        //                 }
-        //                 UserService.signin(userProfile)
-        //                     .then((user) => {
-        //                         ChatService.connect(userProfile)
-        //                             .then((contacts) => {
-        //                                 console.log("User", user);
-        //                                 console.log("Contacts", contacts);
-        //                                 this.props.userLogin(user);
-        //                                 this.props.userIsLogging(false);
-        //                             })
-        //                             .catch(e => {
-        //                                 this.props.userIsLogging(false);
-        //                                 alert(`Error inside.\n\n${JSON.stringify(e)}`);
-        //                             })
-        //                     })
-        //                     .catch(e => {
-        //                         this.props.userIsLogging(false);
-        //                         alert(`Error.\n\n${JSON.stringify(e)}`);
-        //                     })
-        //             } else {
-        //                 let userProfile = {
-        //                     login: this.state.profile.number.slice(1),
-        //                     password: pass,
-        //                     phone: this.state.profile.number
-        //                 }
-        //                 ConnectyCube.users.signup(userProfile, (error, user) => {
-        //                     if (user) {
-        //                         console.log("User in login screen", user);
-        //                         let userCredentials = {
-        //                             id: user.id,
-        //                             login: this.state.profile.number.slice(1),
-        //                             password: pass
-        //                         }
-        //                         console.log("User creds", userCredentials)
-        //                         firebase.database().ref(`users/${this.state.profile.uid}/CCID`).set(userCredentials.id);
-        //                         firebase.database().ref(`users/${this.state.profile.uid}/CCPASS`).set(userCredentials.password);
-        //                         this.props.userIsLogging(true);
-        //                         UserService.signin(userCredentials)
-        //                             .then((user) => {
-        //                                 ChatService.connect(userCredentials)
-        //                                     .then((contacts) => {
-        //                                         console.log("User", user);
-        //                                         console.log("Contacts", contacts);
-        //                                         this.props.userLogin(user);
-        //                                         this.props.userIsLogging(false);
-        //                                     })
-        //                                     .catch(e => {
-        //                                         this.props.userIsLogging(false);
-        //                                         alert(`Error inside.\n\n${JSON.stringify(e)}`);
-        //                                     })
-        //                             })
-        //                             .catch(e => {
-        //                                 this.props.userIsLogging(false);
-        //                                 alert(`Error.\n\n${JSON.stringify(e)}`);
-        //                             })
-        //                     } else {
-        //                         console.log("sign up error ", error)
-        //                     }
-        //                 })
-        //             }
-        //         })
-        //     } else {
-        //         console.log("session err", error);
-        //     }
-        // })
-
-
     }
 
     onVerificationCodeChanged = (number) => {

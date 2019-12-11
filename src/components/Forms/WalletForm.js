@@ -8,6 +8,7 @@ import colors from '../../Constants/Colors';
 export class WalletForm extends Component {
 
     render() {
+        const wallet = this.props.user.wallet || 0;
         return (
             <ScrollView>
                 <View style={{ flex: 1 }}>
@@ -19,7 +20,7 @@ export class WalletForm extends Component {
                                 label="Bakiye"
                                 labelStyle={{ color: colors.DARK_BLUE }}
                                 inputStyle={{ color: colors.IOS_BLUE }}
-                                value={this.props.user.wallet ? this.props.user.wallet + '' : '0'}
+                                value={wallet + ''}
                                 multiline={false}
                                 editable={false}
                                 rightIcon={{

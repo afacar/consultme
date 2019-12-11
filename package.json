@@ -8,7 +8,6 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "connectycube-reactnative": "^1.7.3",
     "deprecated-react-native-listview": "0.0.5",
     "react": "16.8.6",
     "react-native": "0.60.5",

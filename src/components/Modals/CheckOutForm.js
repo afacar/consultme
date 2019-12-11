@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Dimensions, ActivityIndicator } from 'react-native';
+import { ScrollView, View, Dimensions, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
 import { Button, Input, CheckBox, Text, Overlay } from 'react-native-elements';
 import colors from '../../Constants/Colors';
 import { SuccessIcon, FailIcon } from '../common/Icons';
 import styles from '../../Constants/Styles';
 import { WebView } from 'react-native-webview'
-
-const { width, height } = Dimensions.get('window');
 
 import Base64 from '../../Utils/Base64';
 
@@ -15,15 +13,16 @@ export default class CheckOutForm extends Component {
     render() {
         console.log("Render", this.props.threedsPaymentResult)
         return (
-            <View style={styles.checkOutFormStyle}>
-                <Overlay
-                    isVisible={this.props.showCheckOutForm}
-                    animationType='slide'
-                    onRequestClose={() => { this.props.onCancelPayment() }}>
-                    <>
-                        {
-                            !this.props.checkOutFormSubmitted && (
-                                <ScrollView style={styles.checkoutFormStyle} contentContainerStyle={{ justifyContent: 'flex-start', }}>
+            <Overlay
+                isVisible={this.props.showCheckOutForm}
+                animationType='slide'
+                onRequestClose={() => { this.props.onCancelPayment() }}
+                containerStyle={{ justifyContent: 'center'}}>
+                <>
+                    {
+                        !this.props.checkOutFormSubmitted && (
+                            <ScrollView style={styles.checkOutFormStyle} contentContainerStyle={{ justifyContent: 'center', }}>
+                                <KeyboardAvoidingView style={{flex: 1}}>
                                     <Input
                                         style={{ flex: 1 }}
                                         editable={!this.props.disabled}
@@ -100,52 +99,51 @@ export default class CheckOutForm extends Component {
                                     <Button disabled={this.props.disabled} title={'Ödemeyi iptal et'} titleStyle={{ color: 'white' }}
                                         type='solid' buttonStyle={{ backgroundColor: colors.IOS_RED, marginTop: 10 }}
                                         onPress={() => { this.props.onCancelPayment() }} />
-
-                                </ScrollView>
-                            )
-                        }
-                        {
-                            this.props.checkOutFormSubmitted && (!this.props.threedsPaymentResult || this.props.threedsPaymentLoading || this.props.paymentLoading) && (
-                                <View style={styles.screenCenter}>
-                                    <ActivityIndicator size='large' color={colors.IOS_BLUE} />
-                                </View>
-                            )
-                        }
-                        {this.props.checkOutFormSubmitted && this.props.threedsPaymentResult && this.props.threeDSChecked && (
-                            <View style={{ flex: 1 }}>
-                                <WebView
-                                    source={{ html: Base64.atob(this.props.threedsPaymentResult.data.htmlContent) }}
-                                    onTouchCancel={() => this.props.resetState()} />
+                                </KeyboardAvoidingView>
+                            </ScrollView>
+                        )
+                    }
+                    {
+                        this.props.checkOutFormSubmitted && (!this.props.threedsPaymentResult || this.props.threedsPaymentLoading || this.props.paymentLoading) && (
+                            <View style={styles.screenCenter}>
+                                <ActivityIndicator size='large' color={colors.IOS_BLUE} />
                             </View>
-                        )}
-                        {
-                            this.props.checkOutFormSubmitted && ((this.props.threedsPaymentResult && !this.props.threedsPaymentLoading) || this.props.paymentFinished) && this.props.paymentSuccessfull && (
-                                <ScrollView style={styles.checkOutFormStyle} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
-                                    <Button
-                                        disabled={true}
-                                        icon={<SuccessIcon size={48} />}
-                                        type='clear'
-                                    />
-                                    <Text style={{fontSize: 24, textAlign: 'center'}}>Ödeme işleminiz başarı ile gerçekleşmiştir</Text>
-                                </ScrollView>
-                            )
-                        }
-                        {
-                            this.props.checkOutFormSubmitted && this.props.threedsPaymentResult && !this.props.threedsPaymentLoading && this.props.paymentFailed && (
-                                <ScrollView style={styles.checkOutFormStyle} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
-                                    <Button
-                                        disabled={true}
-                                        icon={<FailIcon size={48} />}
-                                        type='clear'
-                                    />
-                                    <Text style={{ fontSize: 24, textAlign: 'center' }}>Ödeme işleminiz başarısız oldu</Text>
-                                    <Text style={{ fontSize: 24, textAlign: 'center', color: colors.IOS_RED }}>{this.props.paymentErrorMessage}</Text>
-                                </ScrollView>
-                            )
-                        }
-                    </>
-                </Overlay>
-            </View>
+                        )
+                    }
+                    {this.props.checkOutFormSubmitted && this.props.threedsPaymentResult && this.props.threeDSChecked && (
+                        <View style={{ flex: 1 }}>
+                            <WebView
+                                source={{ html: Base64.atob(this.props.threedsPaymentResult.data.htmlContent) }}
+                                onTouchCancel={() => this.props.resetState()} />
+                        </View>
+                    )}
+                    {
+                        this.props.checkOutFormSubmitted && ((this.props.threedsPaymentResult && !this.props.threedsPaymentLoading) || this.props.paymentFinished) && this.props.paymentSuccessfull && (
+                            <ScrollView style={styles.checkOutFormStyle} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <Button
+                                    disabled={true}
+                                    icon={<SuccessIcon size={48} />}
+                                    type='clear'
+                                />
+                                <Text style={{ fontSize: 24, textAlign: 'center' }}>Ödeme işleminiz başarı ile gerçekleşmiştir</Text>
+                            </ScrollView>
+                        )
+                    }
+                    {
+                        this.props.checkOutFormSubmitted && this.props.threedsPaymentResult && !this.props.threedsPaymentLoading && this.props.paymentFailed && (
+                            <ScrollView style={styles.checkOutFormStyle} contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <Button
+                                    disabled={true}
+                                    icon={<FailIcon size={48} />}
+                                    type='clear'
+                                />
+                                <Text style={{ fontSize: 24, textAlign: 'center' }}>Ödeme işleminiz başarısız oldu</Text>
+                                <Text style={{ fontSize: 24, textAlign: 'center', color: colors.IOS_RED }}>{this.props.paymentErrorMessage}</Text>
+                            </ScrollView>
+                        )
+                    }
+                </>
+            </Overlay>
         )
     }
 }

@@ -100,10 +100,9 @@ const styles = StyleSheet.create({
         padding: 8
     },
     checkOutFormStyle: {
-        height: height,
-        margin: 10,
-        backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR
-    },
+        backgroundColor: colors.LIGHT_GRAY_BACKGROUND_COLOR,
+        borderWidth: 1
+     },
     buttonBar: {
         height: 50,
         backgroundColor: colors.IOS_BLUE,

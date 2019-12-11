@@ -9,8 +9,6 @@ import { ChatScreenBody } from '../components/ScreenParts/ChatSceen/ChatScreenBo
 import strings from '../Constants/Strings';
 import { Button } from 'react-native-elements';
 import ChatScreenWalletInfo from '../components/ScreenParts/ChatSceen/ChatScreenWalletInfo';
-import colors from '../Constants/Colors';
-import firebase from 'react-native-firebase';
 
 class ChatScreen extends Component {
 
